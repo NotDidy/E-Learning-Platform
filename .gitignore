@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.Python
+
+# --- Virtual envs (never commit) ---
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+
+# --- Django ---
+db.sqlite3
+/media/
+/staticfiles/
+
+/*.log
+*.sqlite3
+
+# --- Node (if you add a frontend later) ---
+node_modules/
+dist/
+.build/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
