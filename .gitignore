@@ -21,13 +21,7 @@ db.sqlite3
 /*.log
 *.sqlite3
 
-# --- Node (if you add a frontend later) ---
-node_modules/
-dist/
-.build/
-
 # --- IDE / OS ---
 .vscode/
-.idea/
 .DS_Store
 Thumbs.db
