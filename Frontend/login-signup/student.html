@@ -1,0 +1,109 @@
+<html lang="en">
+
+<head>
+
+    <title>Login and Register Page </title>
+    <link rel="stylesheet" href="style-login.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="item">
+            <h2 class="logo"><i class='bx  bx-devices'  ></i>  Hydra Explorer</h2>
+            <div class="text-item">
+                <h2>Welcome! <br><span>
+                    To Our Learning Website
+                </span></h2>
+                <p>We're here to make studying easier, fun and interative!</p>
+                </div>
+            </div>
+        <div class="login-section">
+            <div class="form-box login">
+                <form action="">
+                    <h2>Welcome, User!</h2>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx  bx-envelope'  ></i></span>
+                        <input type="email" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx  bx-lock'  ></i></span>
+                        <input type="password" required> 
+                        <label>Password</label>
+                    </div>
+                    <div class="remember-password">
+                        <label for=""><input type="checkbox">Remember Me</label>
+                        <a href="#">Forget Password</a>
+                    </div>
+                    <button class="btn">Login In</button>
+                    <div class="create-account">
+                        <p>Create A New Account? <a href="#" class="register-link">Sign Up</a></p>
+                    </div>
+                </form>
+            </div>
+            <div class="form-box register">
+                <form action="">
+
+                    <h2>Sign Up</h2>
+
+                    <div class="input-box">
+                        <span class="icon"><i class='bx  bx-user'  ></i></span>
+                        <input type="text" required>
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx  bx-envelope'  ></i></i></span>
+                        <input type="email" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx  bx-lock'  ></i></span>
+                        <input type="password" required> 
+                        <label>Password</label>
+                    </div>
+
+                    <div class="auto-fields">
+                        <h3>User Account Details</h3>
+                        <div class="auto-field">
+                            <span>Status:</span>
+                            <span id="statusValue">Inactive</span>
+                        </div>
+                        <div class="auto-field">
+                            <span>Courses Enrolled:</span>
+                            <span id="coursesValue">None</span>
+                        </div>
+                        <div class="auto-field">
+                            <span>Lessons Completed:</span>
+                            <span id="lessonsValue">0</span>
+                        </div>
+                    </div>
+                    <div class="remember-password">
+                        <label for=""><input type="checkbox">I agree with this statement</label>
+                    </div>
+                    <button class="btn">Login In</button>
+                    <div class="create-account">
+                        <p>Already Have An Account? <a href="#" class="login-link">Sign In</a></p>
+                    </div>
+                </form>
+            </div> 
+        </div>
+    </div>
+    <script>
+        const loginSection = document.querySelector('.login-section');
+        const registerLink = document.querySelector('.register-link');
+        const loginLink = document.querySelector('.login-link');
+
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSection.classList.add('active');
+        });
+
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSection.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
