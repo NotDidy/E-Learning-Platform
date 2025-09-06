@@ -1,11 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
 
-from .models import Course
+from .models import Course, Enrollment
 
 class InstructorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -27,3 +28,25 @@ class CourseCreateView(InstructorRequiredMixin, CreateView):
         form.instance.instructor = self.request.user
         messages.success(self.request, "Course created")
         return super().form_valid(form)
+
+class CourseListView(LoginRequiredMixin, ListView):
+    model = Course
+    template_name = "courses/course_list.html"
+
+class CourseDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = "courses/course_detail.html"
+
+@login_required
+def course_enroll(request, course_id):
+    course = get_object_or_404(Course, id = course_id)
+
+    _, enrolled = Enrollment.objects.get_or_create( student=request.user,
+    course=course)
+
+    if enrolled:
+        messages.success(request, f"You have successfully enrolled in {course.title}")
+    else:
+        messages.info(request, f"You are already enrolled in {course.title}")
+    
+    return redirect("courses")
