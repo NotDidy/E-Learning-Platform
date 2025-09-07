@@ -84,3 +84,15 @@ class AdminLoginForm(forms.Form):
         widget = forms.PasswordInput(attrs = {'placeholder': 'Enter password'}),
         label = "Password"
     )
+
+class InstructorCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ["email", "title", "password1", "password2"]
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = User.Roles.INSTRUCTOR
+        if commit:
+            user.save()
+        return user
