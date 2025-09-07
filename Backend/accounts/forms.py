@@ -72,3 +72,15 @@ class StudentSignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class AdminLoginForm(forms.Form):
+    
+    username = forms.CharField(
+        max_length = 150,
+        label = "Email or Username",
+        widget = forms.TextInput(attrs = {'placeholder': 'Enter email or username'})
+    )
+    password = forms.CharField(
+        widget = forms.PasswordInput(attrs = {'placeholder': 'Enter password'}),
+        label = "Password"
+    )

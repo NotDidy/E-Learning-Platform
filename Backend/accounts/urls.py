@@ -1,5 +1,5 @@
 from django.urls import path
-
+from . import views
 from .views import (
     LMSLoginView,
     LoginStudentView,
@@ -14,4 +14,6 @@ urlpatterns = [
     path("login/", LMSLoginView.as_view(), name="login"),
     path("login/student/", LoginStudentView.as_view(), name="login_student"),
     path("signup/student/", StudentSignupView.as_view(), name="signup_student"),
+    path("admin-login/", views.admin_login, name="admin_login"),
+    path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
 ]

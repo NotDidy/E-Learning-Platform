@@ -7,6 +7,9 @@ from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .forms import AdminLoginForm
 
 from .forms import StudentSignupForm
 
@@ -62,3 +65,28 @@ class LMSLoginView(LoginView):
 class LoginStudentView(LMSLoginView):
     template_name = "accounts/login_student.html"
     extra_context = {"role": "Student", "show_signup": True}
+
+
+def admin_login(request):
+
+    if request.method == "POST":
+        form = AdminLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None and user.is_staff:
+                auth_login(request, user)
+                messages.success(request, "Welcome, Admin!")
+                return redirect("admin_dashboard")
+            else:
+                messages.error(request, "Invalid credentials or not an admin.")
+    else:
+        form = AdminLoginForm()
+    return render(request, "accounts/admin_login.html", {"form": form})
+
+@login_required
+def admin_dashboard(request):
+    return render(request, "accounts/admin_dashboard.html")
