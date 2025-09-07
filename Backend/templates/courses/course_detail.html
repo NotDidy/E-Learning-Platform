@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ object.title }}</h2>
+  
+    <p><strong>Start:</strong> {{ object.start_date }} | 
+     <strong>End:</strong> {{ object.end_date }}</p>
+
+    <p>{{ object.description }}</p>
+
+    {% if user.is_authenticated %}
+    {% if not user.enrollments.filter(course=object).exists %}
+      <form method="post" action="{% url 'course_enroll' object.id %}">
+        {% csrf_token %}
+
+        <button type="submit">Enroll</button>
+      </form>
+    {% else %}
+      <p>You are already enrolled in this course</p>
+    {% endif %}
+
+  {% else %}
+    <p><a href="{% url 'login' %}">Log in</a> </p>
+  {% endif %}
+
+  <p>
+    <a href="{% url 'courses' %}"> Back to Courses</a>
+  </p>
+{% endblock %}
