@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <style>
-      .errors{color:#fff;background:rgba(0,0,0,0.2);border-radius:6px;padding:8px 10px;margin:8px 0;font-size:13px}
+    .errors{color:#fff;background:rgba(0,0,0,0.2);border-radius:6px;padding:8px 10px;margin:8px 0;font-size:13px}
+    .login-section .form-box.register { overflow-y: auto; align-items: flex-start; padding-top: 24px; }
+    .input-box select { width: 100%; height: 100%; background: transparent; border: none; outline: none; font-size: 16px; color: #fff; }
+    .input-box select ~ label { top: -5px; }
+    .input-box select option { color: #000; }
     </style>
-    {# Standalone login/register page; does not extend base.html #}
 </head>
 <body>
     <div class="background"></div>
@@ -58,11 +61,6 @@
                         {% endif %}
                     </div>
 
-                    <div class="remember-password">
-                        <label><input type="checkbox" name="remember_me">Remember Me</label>
-                        <!-- Hook up your password reset URL here if/when available -->
-                        <a href="#">Forgot Password</a>
-                    </div>
                     <button class="btn" type="submit">Log In</button>
                     <div class="create-account">
                         <p>Create A New Account? <a href="#" class="register-link">Sign Up</a></p>
@@ -134,9 +132,22 @@
                         {% endif %}
                     </div>
 
-                    <div class="remember-password">
-                        <label><input type="checkbox" required>I agree with this statement</label>
+                    <div class="auto-fields">
+                        <h3>User Account Details</h3>
+                        <div class="auto-field">
+                            <span>Status:</span>
+                            <span id="statusValue">Inactive</span>
+                        </div>
+                        <div class="auto-field">
+                            <span>Courses Enrolled:</span>
+                            <span id="coursesValue">None</span>
+                        </div>
+                        <div class="auto-field">
+                            <span>Lessons Completed:</span>
+                            <span id="lessonsValue">0</span>
+                        </div>
                     </div>
+
                     <button class="btn" type="submit">Create Account</button>
                     <div class="create-account">
                         <p>Already Have An Account? <a href="#" class="login-link">Sign In</a></p>
