@@ -23,7 +23,7 @@ class StudentSignupView(View):
         form = StudentSignupForm()
         return render(
             request,
-            "accounts/login_student.html",
+            "accounts/student_login.html",
             {"signup_form": form, "role": "Student", "show_signup": True, "open_register": True},
         )
 
@@ -53,7 +53,7 @@ class StudentSignupView(View):
             return redirect(resolve_url(getattr(settings, "LOGIN_URL", "login")))
         return render(
             request,
-            "accounts/login_student.html",
+            "accounts/student_login.html",
             {"signup_form": form, "role": "Student", "show_signup": True, "open_register": True},
         )
 
@@ -63,8 +63,15 @@ class LMSLoginView(LoginView):
 
 
 class LoginStudentView(LMSLoginView):
-    template_name = "accounts/login_student.html"
-    extra_context = {"role": "Student", "show_signup": True}
+    template_name = "accounts/student_login.html"
+    extra_context = {"role": "Student", "show_signup": True, "open_register": False}
+    redirect_authenticated_user = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Provide signup form so the template can render both panes
+        ctx.setdefault("signup_form", StudentSignupForm())
+        return ctx
 
 
 def admin_login(request):
