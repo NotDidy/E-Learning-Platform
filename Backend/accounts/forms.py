@@ -32,7 +32,14 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ("email", "username")
+        fields = (
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "title",
+            "role",
+        )
         widgets = {"username": forms.HiddenInput()}
 
 
