@@ -133,3 +133,6 @@ AUTH_USER_MODEL = 'accounts.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# After logout, send users to role selection
+LOGOUT_REDIRECT_URL = ''

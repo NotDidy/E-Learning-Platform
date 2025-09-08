@@ -16,7 +16,6 @@ from .models import User
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
 
-
 class StudentSignupView(View):
     def get(self, request):
         form = StudentSignupForm()
@@ -39,7 +38,7 @@ class StudentSignupView(View):
                 pass
 
             messages.success(request, "Account created. Please log in.")
-            return redirect(resolve_url(getattr(settings, "LOGIN_URL", "login")))
+            return redirect("login_student")
         return render(
             request,
             "accounts/student_login.html",
@@ -49,14 +48,15 @@ class StudentSignupView(View):
 class LoginStudentView(LoginView):
     template_name = "accounts/student_login.html"
     extra_context = {"role": "Student", "show_signup": True, "open_register": False}
-    #redirect_authenticated_user = True
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        # Provide signup form so the template can render both panes
         ctx.setdefault("signup_form", StudentSignupForm())
         return ctx
 
+class LoginInstructorView(LoginView):
+    template_name = "accounts/instructor_login.html"
+    extra_context = {"role": "Instructor", "show_signup": False}
 
 def admin_login(request):
 
