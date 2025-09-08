@@ -22,7 +22,7 @@ class StudentSignupView(View):
         form = StudentSignupForm()
         return render(
             request,
-            "accounts/login_student.html",
+            "accounts/student_login.html",
             {"signup_form": form, "role": "Student", "show_signup": True, "open_register": True},
         )
 
@@ -38,32 +38,24 @@ class StudentSignupView(View):
             except Group.DoesNotExist:
                 pass
 
-            # Try to authenticate and log in the user immediately
-            raw_password = form.cleaned_data.get("password1")
-            authed = None
-            if raw_password:
-                authed = authenticate(request, username=user.username, password=raw_password)
-            if authed is not None:
-                auth_login(request, authed)
-                messages.success(request, "Welcome! Your student account is ready.")
-                return redirect(resolve_url(getattr(settings, "LOGIN_REDIRECT_URL", "/")))
-
             messages.success(request, "Account created. Please log in.")
             return redirect(resolve_url(getattr(settings, "LOGIN_URL", "login")))
         return render(
             request,
-            "accounts/login_student.html",
+            "accounts/student_login.html",
             {"signup_form": form, "role": "Student", "show_signup": True, "open_register": True},
         )
 
+class LoginStudentView(LoginView):
+    template_name = "accounts/student_login.html"
+    extra_context = {"role": "Student", "show_signup": True, "open_register": False}
+    #redirect_authenticated_user = True
 
-class LMSLoginView(LoginView):
-    template_name = "accounts/login.html"
-
-
-class LoginStudentView(LMSLoginView):
-    template_name = "accounts/login_student.html"
-    extra_context = {"role": "Student", "show_signup": True}
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Provide signup form so the template can render both panes
+        ctx.setdefault("signup_form", StudentSignupForm())
+        return ctx
 
 
 def admin_login(request):
