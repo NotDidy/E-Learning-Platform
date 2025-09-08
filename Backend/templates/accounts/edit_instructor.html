@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Edit Instructor: {{ instructor.first_name }} {{ instructor.last_name }}</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <a href="{% url 'admin_dashboard' %}">Back to Dashboard</a>
+{% endblock %}

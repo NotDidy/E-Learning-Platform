@@ -96,3 +96,8 @@ class InstructorCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+class InstructorChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ("title", "first_name", "last_name", "email")

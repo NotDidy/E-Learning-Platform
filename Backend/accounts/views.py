@@ -3,14 +3,13 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
 from django.conf import settings
-from django.shortcuts import render, redirect, resolve_url
+from django.shortcuts import render, redirect, resolve_url, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.utils.decorators import method_decorator
-from .forms import AdminLoginForm
-from .forms import InstructorCreationForm
+from .forms import InstructorCreationForm, InstructorChangeForm, AdminLoginForm
 from .forms import StudentSignupForm
 from .models import User
 
@@ -108,3 +107,19 @@ def create_instructor(request):
         form = InstructorCreationForm()
 
     return render(request, "accounts/create_instructor.html", {"form": form})
+
+@login_required
+@user_passes_test(is_admin)
+def edit_instructor(request, instructor_id):
+    instructor = get_object_or_404(User, id=instructor_id, role=User.Roles.INSTRUCTOR)
+
+    if request.method == "POST":
+        form = InstructorChangeForm(request.POST, instance=instructor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Instructor updated successfully.")
+            return redirect("admin_dashboard")
+    else:
+        form = InstructorChangeForm(instance=instructor)
+
+    return render(request, "accounts/edit_instructor.html", {"form": form, "instructor": instructor})
