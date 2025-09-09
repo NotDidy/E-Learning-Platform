@@ -107,4 +107,11 @@ class InstructorCreationForm(UserCreationForm):
 class InstructorChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ("title", "first_name", "last_name", "email")
+        fields = ("title", "first_name", "last_name", "email", "is_active")
+        widgets = {
+            "title": forms.Select(attrs={"class": "form-input"}),
+            "first_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Enter first name"}),
+            "last_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Enter last name"}),
+            "email": forms.EmailInput(attrs={"class": "form-input", "placeholder": "name@example.com"}),
+            "is_active": forms.CheckboxInput(attrs={}),
+        }

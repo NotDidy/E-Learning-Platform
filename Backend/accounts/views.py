@@ -14,6 +14,8 @@ from .forms import StudentSignupForm
 from .models import User
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages as dj_messages
+from django.db.models import Count
+from django.views.decorators.http import require_POST
 
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
@@ -152,6 +154,36 @@ def edit_instructor(request, instructor_id):
         form = InstructorChangeForm(instance=instructor)
 
     return render(request, "accounts/edit_instructor.html", {"form": form, "instructor": instructor})
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_instructors(request):
+    instructors = (
+        User.objects.filter(role=User.Roles.INSTRUCTOR)
+        .annotate(course_count=Count("courses"))
+        .order_by("id")
+    )
+    return render(request, "accounts/manage_instructor.html", {"instructors": instructors})
+
+
+@login_required
+@user_passes_test(is_admin)
+@require_POST
+def set_instructor_status(request, instructor_id: int):
+    instructor = get_object_or_404(User, id=instructor_id, role=User.Roles.INSTRUCTOR)
+    action = request.POST.get("action")
+    if action == "activate":
+        instructor.is_active = True
+        instructor.save(update_fields=["is_active"])
+        messages.success(request, f"Activated {instructor.get_full_name() or instructor.email}.")
+    elif action == "deactivate":
+        instructor.is_active = False
+        instructor.save(update_fields=["is_active"])
+        messages.success(request, f"Deactivated {instructor.get_full_name() or instructor.email}.")
+    else:
+        messages.error(request, "Invalid action.")
+    return redirect("manage_instructors")
 
 @login_required
 def instructor_dashboard(request):
