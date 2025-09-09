@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{% if object %}Edit Course{% else %}Create Course{% endif %}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" name="save">Save as draft</button>
+        <button type="submit" name="publish" value="1">Publish now</button>
+    </form>
+
+<p><a href="{% url 'courses' %}">Back to course list</a></p>
+{% endblock %}
