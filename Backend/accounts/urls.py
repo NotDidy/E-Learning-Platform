@@ -18,4 +18,5 @@ urlpatterns = [
     path("admin/dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("admin/create-instructor/", views.create_instructor, name="create_instructor"),
     path("admin/edit-instructor/<int:instructor_id>/", views.edit_instructor, name="edit_instructor"),
+    path("instructor/dashboard/", views.instructor_dashboard, name="instructor_dashboard"),
 ]
