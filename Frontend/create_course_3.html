@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        a{
+            text-decoration: none;
+        }
+
+
+        li{
+            list-style: none;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left-sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+       /* .left-sidebar ul li {
+            margin-bottom: 10px;
+        } */
+
+        .left-sidebar ul li a {
+            color: #333;
+            display: block;
+            border-radius: 0.3px;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* .left-sidebar ul li a:hover {
+            background-color: #e0e0e0;
+        } */
+
+        .left-sidebar ul li a h3 {
+            margin-bottom: 15px;
+        }
+
+        .right-content {
+            flex: 1;
+            padding: 50px;
+            background: linear-gradient(135deg,#f6d365 0%, #fda085 100%);
+        }
+
+       .course-card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5 ease;
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: scale(1.005)
+
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-draft-top{
+            background-color: #fff;
+            color: #333;
+        }
+        .btn-draft{
+            background-color: #ffc107;
+            color: #333;
+        }
+        .btn-publish {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            color: #222;
+            margin-bottom: 10px;
+        }
+        .course-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .status-draft {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-published {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .course-card h3 {
+            color: #222;
+            margin-bottom: 8px;
+        }
+        .course-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .card-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .left-sidebar a.active {
+            background-color: #ddd;
+            font-weight: 700;
+        }
+
+        .course-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-sidebar">
+            <ul>
+                <li><a href="#"><h3>course manage</h3></a></li>
+                <li><a href="#">My Courses</a></li>
+                <li><a href="#">drafts</a></li>
+                <li><a href="#" class = active >published</a></li>
+            </ul>
+        </div>
+        <div class="right-content">
+            <div class="page-header">
+                <h2>Published</h2>
+                <button class="btn btn-draft-top">+ Create New Draft</button>
+            </div>
+            <div class="course-list">
+                <div class="course-card">
+                    <span class="course-status status-published">Published</span>
+                    <h3>title1</h3>
+                    <p>content</p>
+                    <div class="card-btns">
+                        <button class="btn btn-draft">Edit</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
