@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href="style-menu.css">
+</head>
+
+<body>
+    <nav class ="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <h2 class="logo"><i class='bx  bx-devices'  ></i></h2>
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Hydra Explorer</span>
+                    <span class="profession">Admin Page</span>
+                </div>
+            </div>
+
+            <i class='bx bx-caret-left bx-flip-horizontal'  onclick="toggleSidebar()"></i> 
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-book-content icon'  ></i>  
+                            <span class="text nav-text">Courses</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-calendar-week icon'  ></i> 
+                            <span class="text nav-text">Classrooms</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-user icon'  ></i>  
+                            <span class="text nav-text">Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-bar-chart icon'  ></i> 
+                            <span class="text nav-text">Report</span>
+                        </a>
+                    </li>
+                </ul>
+            </div> 
+            <div class="bottom-content">
+                <li class="">
+                    <a href="#">
+                        <<i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div id ="dashboard-main">
+            <div class="white-cover">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <p class="welcome message">Welcome Admin!</p>
+                <div class="admin-badge">Administrator Access</div>
+            </div>
+
+            <div class="create-instructor-card" onclick="showInstructorForm()">
+                <div class="card-header">
+                    <div class="card title">
+                        <div class="card-icon">
+                            <i class='bx  bx-user icon'  ></i> 
+                        </div>
+                        Create An Instructor Account
+                    </div>
+                    <div class="card-arrow">
+                        <i class='bx  bx-chess-knight'  ></i> 
+                    </div>
+                </div>
+                <p class="card-description">
+                    Add new instructors to your Learning Management System.
+                </p>
+                <div class="card-features">
+                    <span class="feature-tag">Personal Details</span>
+                    <span class="feature-tag">Department Assignment</span>
+                    <span class="feature-tag">Credentials Setup></span>
+                    <span class="feature-tag">Instant Access></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="instructor-form" class="instructor-form-section">
+            <div class="form-header">
+                <div class="form-title">
+                    <div class="card-icon">
+                        <i class='bx  bx-user icon'  ></i> 
+                    </div>
+                    Create Instructor Account
+                </div>
+                <button class="back-button" onclick="showDashboard()">
+                    <i class='bx  bx-arrow-left'  ></i> 
+                    Back to Dashboard
+                </button>
+            </div>
+
+            <form class="signup-form">
+                <div class="form-group">
+                    <label class="form-label"> First Name *</label>
+                    <input type="text" class="form-input" placeholder="Enter first name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"> Last Name *</label>
+                    <input type="text" class="form-input" placeholder="Enter last name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"> Email Address *</label>
+                    <input type="email" class="form-input" placeholder="instructor@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"> Password *</label>
+                    <input type="password" class="form-input" placeholder="Enter passsord" required>
+                </div>
+            </form>
+
+            <div class="form-actions">
+                <button type="button" class="btn-primary" onclick="createInstructor()">
+                    <i class='bx  bx-plus'  ></i> 
+                    Create Account
+                </button>
+                <button type="button" class="btn-secondary" onclick="clearForm()">
+                    <i class='bx  bx-refresh-cw'  ></i> 
+                    Clear Form
+                </button>
+            </div>
+        </div>
+    </section>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('close');
+        }
+
+        function showInstructorForm() {
+            document.getElementById('dashboard-main').classList.add('hidden');
+            document.getElementById('instructor-form').classList.add('active');
+        }
+
+        function showDashboard() {
+            document.getElementById('instructor-form').classList.remove('active');
+            document.getElementById('dashboard-main').classList.remove('hidden');
+        }
+
+        function createInstructor() {
+            // Get form data
+            const firstName = document.querySelector('input[placeholder="Enter first name"]').value;
+            const lastName = document.querySelector('input[placeholder="Enter last name"]').value;
+            const email = document.querySelector('input[placeholder="instructor@example.com"]').value;
+            const password = document.querySelector('input[placeholder="Enter password"]').value;
+            
+            if (!firstName || !lastName || !email || !password) {
+                alert('Please fill in all required fields (First Name, Last Name, Email, Password)');
+                return;
+            }
+            
+            // Simulate account creation
+            alert(`Instructor account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\n\nLogin credentials will be sent via email.`);
+            clearForm();
+            showDashboard();
+        }
+
+        function clearForm() {
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+    </script>
+
+</body>
+</html>
