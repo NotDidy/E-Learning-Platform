@@ -21,7 +21,7 @@
                         {% elif request.user.role == 'STUDENT' %}
                             {% url 'student_dashboard' as home_url %}
                         {% elif request.user.role == 'INSTRUCTOR' %}
-                            {% url 'courses' as home_url %}
+                            {% url 'instructor_courses' as home_url %}
                         {% else %}
                             {% url 'role_select' as home_url %}
                         {% endif %}
