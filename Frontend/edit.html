@@ -21,62 +21,38 @@
             list-style: none;
         }
 
-        .container {
-            display: flex;
+        body {
             min-height: 100vh;
-        }
-
-        /* 左侧边栏 */
-        .left-sidebar {
-            width: 20%;
-            background-color: #ffffff;
-            padding: 20px;
-        }
-
-        .sidebar-title {
-            color: #222;
-            margin: 20px 0 25px 15px;
-            font-size: 20px;
-        }
-
-        .left-sidebar ul li a {
-            color: #333;
-            display: block;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 4px;
-        }
-
-        .left-sidebar a.active {
-            background-color: #ddd;
-            font-weight: 700;
-        }
-
-        /* 右侧内容区 */
-        .right-content {
-            flex: 1;
-            padding: 30px;
             background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 30px;
+        }
+
+        /* 右侧内容区 - 现在是唯一的内容区域 */
+        .right-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .page-header {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .page-header h2 {
             color: #222;
             margin-bottom: 10px;
+            font-size: 28px;
         }
 
         .form-container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
@@ -88,24 +64,38 @@
 
         .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #fda085;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(253, 160, 133, 0.2);
         }
 
         textarea.form-control {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
         .btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            margin-right: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .btn-cancel {
@@ -113,58 +103,80 @@
             color: #333;
         }
 
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+
         .btn-save {
             background-color: #4CAF50;
             color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #43a047;
         }
 
         .btn-publish {
             background-color: #ffc107;
             color: #333;
         }
+
+        .btn-publish:hover {
+            background-color: #ffb300;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="left-sidebar">
-            <h3 class="sidebar-title">Course Management</h3>
-            <ul>
-                <li><a href="#">My Courses</a></li>
-                <li><a href="#" class="active">Edit Course</a></li>
-                <li><a href="#">Drafts</a></li>
-                <li><a href="#">Published</a></li>
-            </ul>
+    <div class="right-content">
+        <div class="page-header">
+            <h2>Edit Course</h2>
         </div>
         
-        <div class="right-content">
-            <div class="page-header">
-                <h2>Edit Course</h2>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="course-title">Course Title</label>
+                <input type="text" id="course-title" class="form-control" placeholder="Enter course title">
             </div>
             
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="course-title">Course Title</label>
-                    <input type="text" id="course-title" class="form-control" placeholder="Enter course title">
-                </div>
-                
-                <div class="form-group">
-                    <label for="course-description">Description</label>
-                    <textarea id="course-description" class="form-control" placeholder="Enter course description..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="time">Time</label>
-                    <input type="text" id="Time" class="form-control" placeholder="Enter Time">
-                </div>
-                <div class="form-group">
-                    <label for="classroom">classroom</label>
-                    <input type="text" id="classroom" class="form-control" placeholder="Enter classroom">
-                </div>
-                <div>
-                    <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-save">Save as Draft</button>
-                    <button class="btn btn-publish">Publish</button>
-                </div>
+            <div class="form-group">
+                <label for="course-description">Description</label>
+                <textarea id="course-description" class="form-control" placeholder="Enter course description..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="text" id="time" class="form-control" placeholder="Enter Time">
+            </div>
+            
+            <div class="form-group">
+                <label for="classroom">Classroom</label>
+                <input type="text" id="classroom" class="form-control" placeholder="Enter classroom">
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-cancel">Cancel</button>
+                <button class="btn btn-save">Save as Draft</button>
+                <button class="btn btn-publish">Publish</button>
             </div>
         </div>
     </div>
