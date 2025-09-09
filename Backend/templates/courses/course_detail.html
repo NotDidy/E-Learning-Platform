@@ -9,21 +9,18 @@
     <p>{{ object.description }}</p>
 
     {% if user.is_authenticated %}
-    {% if not user.enrollments.filter(course=object).exists %}
-      <form method="post" action="{% url 'course_enroll' object.id %}">
-        {% csrf_token %}
-
-        <button type="submit">Enroll</button>
-      </form>
+        {% if not user.enrollments.filter(course=object).exists %}
+            <a href="{% url 'course_enroll' object.id %}">
+                <button type="button">Enroll</button>
+            </a>
+        {% else %}
+            <p>You are already enrolled in this course</p>
+        {% endif %}
     {% else %}
-      <p>You are already enrolled in this course</p>
+        <p><a href="{% url 'login' %}">Log in</a> </p>
     {% endif %}
 
-  {% else %}
-    <p><a href="{% url 'login' %}">Log in</a> </p>
-  {% endif %}
-
-  <p>
-    <a href="{% url 'courses' %}"> Back to Courses</a>
-  </p>
+    <p>
+        <a href="{% url 'courses' %}">Back to Courses</a>
+    </p>
 {% endblock %}
