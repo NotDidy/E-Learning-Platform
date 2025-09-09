@@ -60,6 +60,9 @@ class LoginInstructorView(LoginView):
     template_name = "accounts/instructor_login.html"
     extra_context = {"role": "Instructor", "show_signup": False}
 
+    def get_success_url(self):
+        return reverse("instructor_dashboard")
+
 def admin_login(request):
 
     if request.method == "POST":
@@ -143,3 +146,10 @@ def edit_instructor(request, instructor_id):
         form = InstructorChangeForm(instance=instructor)
 
     return render(request, "accounts/edit_instructor.html", {"form": form, "instructor": instructor})
+
+@login_required
+def instructor_dashboard(request):
+    if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
+        messages.error(request, "Access denied. Instructors only.")
+        return redirect("role_select")
+    return render(request, "main-menu/instructor-menu.html")
