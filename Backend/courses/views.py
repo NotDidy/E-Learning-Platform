@@ -29,7 +29,7 @@ class CourseCreateView(InstructorRequiredMixin, CreateView):
     model = Course
     fields = ["title", "course_code", "description", "credit_points", "status"]
     template_name = "courses/course_form.html"
-    success_url = reverse_lazy("courses")
+    success_url = reverse_lazy("instructor_courses")
 
     def form_valid(self, form):
         form.instance.instructor = self.request.user
