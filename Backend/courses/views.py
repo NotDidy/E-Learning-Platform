@@ -39,12 +39,11 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 
 @login_required
 def course_enroll(request, course_id):
-    course = get_object_or_404(Course, id = course_id)
+    course = get_object_or_404(Course, id=course_id)
 
-    _, enrolled = Enrollment.objects.get_or_create( student=request.user,
-    course=course)
+    _, created = Enrollment.objects.get_or_create(student=request.user,course=course)
 
-    if enrolled:
+    if created:
         messages.success(request, f"You have successfully enrolled in {course.title}")
     else:
         messages.info(request, f"You are already enrolled in {course.title}")

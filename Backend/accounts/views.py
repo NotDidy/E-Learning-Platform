@@ -84,7 +84,6 @@ def admin_login(request):
 
             user = authenticate(request, username=username, password=password)
 
-            # Only allow users with ADMIN role into custom admin
             if user is not None and getattr(user, "role", None) == User.Roles.ADMIN:
                 auth_login(request, user)
                 messages.success(request, "Welcome, Admin!")
@@ -98,7 +97,6 @@ def admin_login(request):
 @login_required
 @user_passes_test(lambda u: getattr(u, "role", None) == User.Roles.ADMIN)
 def admin_dashboard(request):
-    # Render the custom admin dashboard template with a blank instructor form
     ctx = {
         "form": InstructorCreationForm(),
         "show_instructor_form": False,
@@ -139,7 +137,6 @@ def create_instructor(request):
     else:
         form = InstructorCreationForm()
 
-    # Fallback to standalone create page
     return render(request, "accounts/create_instructor.html", {"form": form})
 
 @login_required
@@ -194,3 +191,11 @@ def instructor_dashboard(request):
         messages.error(request, "Access denied. Instructors only.")
         return redirect("role_select")
     return render(request, "main-menu/instructor-menu.html")
+
+@login_required
+def instructor_courses(request):
+    if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
+        messages.error(request, "Access denied. Instructors only.")
+        return redirect("role_select")
+
+    return render(request, "courses/courses-instructor.html")
