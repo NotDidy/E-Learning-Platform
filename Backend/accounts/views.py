@@ -12,6 +12,8 @@ from django.utils.decorators import method_decorator
 from .forms import InstructorCreationForm, InstructorChangeForm, AdminLoginForm
 from .forms import StudentSignupForm
 from .models import User
+from django.contrib.auth import logout as auth_logout
+from django.contrib import messages as dj_messages
 
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
@@ -68,7 +70,8 @@ def admin_login(request):
 
             user = authenticate(request, username=username, password=password)
 
-            if user is not None and user.is_staff:
+            # Only allow users with ADMIN role into custom admin
+            if user is not None and getattr(user, "role", None) == User.Roles.ADMIN:
                 auth_login(request, user)
                 messages.success(request, "Welcome, Admin!")
                 return redirect("admin_dashboard")
@@ -79,8 +82,25 @@ def admin_login(request):
     return render(request, "accounts/admin_login.html", {"form": form})
 
 @login_required
+@user_passes_test(lambda u: getattr(u, "role", None) == User.Roles.ADMIN)
 def admin_dashboard(request):
-    return render(request, "accounts/admin_dashboard.html")
+    # Render the custom admin dashboard template with a blank instructor form
+    ctx = {
+        "form": InstructorCreationForm(),
+        "show_instructor_form": False,
+    }
+    return render(request, "accounts/admin-menu.html", ctx)
+
+
+def logout_view(request):
+    """Custom logout that allows GET and POST, then redirects to role select."""
+    auth_logout(request)
+    # Clear any queued messages so they don't appear after logout
+    storage = dj_messages.get_messages(request)
+    for _ in storage:
+        pass
+    storage.used = True
+    return redirect("role_select")
 
 #Only allow Admins
 def is_admin(user):
@@ -95,9 +115,17 @@ def create_instructor(request):
             form.save()
             messages.success(request, "Instructor account created successfully.")
             return redirect("admin_dashboard")
+        # If coming from embedded form on dashboard, re-render dashboard with errors
+        if request.POST.get("from_dashboard"):
+            return render(
+                request,
+                "accounts/admin-menu.html",
+                {"form": form, "show_instructor_form": True},
+            )
     else:
         form = InstructorCreationForm()
 
+    # Fallback to standalone create page
     return render(request, "accounts/create_instructor.html", {"form": form})
 
 @login_required
