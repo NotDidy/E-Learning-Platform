@@ -190,7 +190,7 @@ def instructor_dashboard(request):
     if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
         messages.error(request, "Access denied. Instructors only.")
         return redirect("role_select")
-    return render(request, "main-menu/instructor-menu.html")
+    return render(request, "accounts/instructor-menu.html")
 
 @login_required
 def instructor_courses(request):
