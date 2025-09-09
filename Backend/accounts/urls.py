@@ -12,6 +12,7 @@ urlpatterns = [
     path("", RoleSelectView.as_view(), name="role_select"),
     path("login/student/", LoginStudentView.as_view(), name="login_student"),
     path("signup/student/", StudentSignupView.as_view(), name="signup_student"),
+    path("student/dashboard/", views.student_dashboard, name="student_dashboard"),
     path("login/instructor/", LoginInstructorView.as_view(), name="login_instructor"),
     path("logout/", views.logout_view, name="logout"),
     path("admin/login/", views.admin_login, name="login_admin"),

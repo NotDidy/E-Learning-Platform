@@ -56,12 +56,21 @@ class LoginStudentView(LoginView):
         ctx.setdefault("signup_form", StudentSignupForm())
         return ctx
 
+    def get_success_url(self):
+        return reverse("student_dashboard")
+
 class LoginInstructorView(LoginView):
     template_name = "accounts/instructor_login.html"
     extra_context = {"role": "Instructor", "show_signup": False}
 
     def get_success_url(self):
         return reverse("instructor_dashboard")
+
+def is_admin(user):
+    return user.is_authenticated and user.role == User.Roles.ADMIN
+
+def is_student(user):
+    return user.is_authenticated and user.role == User.Roles.STUDENT
 
 def admin_login(request):
 
@@ -94,6 +103,10 @@ def admin_dashboard(request):
     }
     return render(request, "accounts/admin-menu.html", ctx)
 
+@login_required
+@user_passes_test(is_student)
+def student_dashboard(request):
+    return render(request, "accounts/student-menu.html")
 
 def logout_view(request):
     """Custom logout that allows GET and POST, then redirects to role select."""
@@ -104,10 +117,6 @@ def logout_view(request):
         pass
     storage.used = True
     return redirect("role_select")
-
-#Only allow Admins
-def is_admin(user):
-    return user.is_authenticated and user.role == User.Roles.ADMIN
 
 @login_required
 @user_passes_test(is_admin)
