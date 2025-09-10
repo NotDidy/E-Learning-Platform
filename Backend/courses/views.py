@@ -48,14 +48,74 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
 def course_enroll(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
-    _, created = Enrollment.objects.get_or_create(student=request.user,course=course)
+    # Enforce student-only and max 4 course limit
+    user = request.user
+    try:
+        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+    except Exception:
+        is_student = False
 
-    if created:
-        messages.success(request, f"You have successfully enrolled in {course.title}")
+    if not user.is_authenticated or not is_student:
+        return HttpResponseForbidden("Student role required")
+
+    current_count = Enrollment.objects.filter(student=user).count()
+    if current_count >= 4:
+        messages.error(request, "You have reached the maximum of 4 enrolled courses.")
     else:
-        messages.info(request, f"You are already enrolled in {course.title}")
-    
-    return redirect("courses")
+        _, created = Enrollment.objects.get_or_create(student=user, course=course)
+        if created:
+            messages.success(request, f"You have successfully enrolled in {course.title}")
+        else:
+            messages.info(request, f"You are already enrolled in {course.title}")
+
+    next_url = request.POST.get("next") or request.GET.get("next")
+    if next_url:
+        return redirect(next_url)
+    return redirect("available_courses")
+
+
+@login_required
+def student_courses(request):
+    """List courses the student is enrolled in."""
+    user = request.user
+    try:
+        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+    except Exception:
+        is_student = False
+    if not is_student:
+        return HttpResponseForbidden("Student role required")
+
+    enrollments = (
+        Enrollment.objects.filter(student=user)
+        .select_related("course", "course__instructor")
+    )
+    courses = [e.course for e in enrollments]
+    return render(request, "courses/course-student.html", {"courses": courses})
+
+
+@login_required
+def available_courses(request):
+    """List courses the student is NOT enrolled in, up to max 4 allowed."""
+    user = request.user
+    try:
+        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+    except Exception:
+        is_student = False
+    if not is_student:
+        return HttpResponseForbidden("Student role required")
+
+    enrolled_ids = Enrollment.objects.filter(student=user).values_list("course_id", flat=True)
+    courses = (
+        Course.objects.exclude(id__in=enrolled_ids)
+        .annotate(student_count=Count("enrollments"))
+        .order_by("-created_at")
+    )
+    enrolled_count = len(enrolled_ids)
+    return render(
+        request,
+        "courses/available-course.html",
+        {"courses": courses, "enrolled_count": enrolled_count, "max_courses": 4},
+    )
 
 
 @login_required
