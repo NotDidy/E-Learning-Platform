@@ -61,6 +61,17 @@ class LoginStudentView(LoginView):
     def get_success_url(self):
         return reverse("student_dashboard")
 
+    def form_valid(self, form):
+        user = form.get_user()
+        if getattr(user, "role", None) != User.Roles.STUDENT:
+            messages.error(self.request, "Invalid email or password.")
+            return redirect("login_student")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Invalid email or password.")
+        return super().form_invalid(form)
+
 class LoginInstructorView(LoginView):
     template_name = "accounts/instructor_login.html"
     extra_context = {"role": "Instructor", "show_signup": False}
@@ -68,6 +79,17 @@ class LoginInstructorView(LoginView):
     def get_success_url(self):
         return reverse("instructor_dashboard")
 
+    def form_valid(self, form):
+        user = form.get_user()
+        if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
+            messages.error(self.request, "Invalid email or password.")
+            return redirect("login_instructor")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Invalid email or password.")
+        return super().form_invalid(form)
+    
 def is_admin(user):
     return user.is_authenticated and user.role == User.Roles.ADMIN
 
@@ -89,7 +111,7 @@ def admin_login(request):
                 messages.success(request, "Welcome, Admin!")
                 return redirect("admin_dashboard")
             else:
-                messages.error(request, "Invalid credentials or not an admin.")
+                messages.error(request, "Invalid email or password.")
     else:
         form = AdminLoginForm()
     return render(request, "accounts/admin_login.html", {"form": form})

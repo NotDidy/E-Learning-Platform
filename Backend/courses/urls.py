@@ -8,6 +8,8 @@ from .views import (
     course_instructor_list,
     CourseUpdateView,
     course_delete,
+    student_courses,
+    available_courses,
 )
 
 urlpatterns = [
@@ -15,7 +17,8 @@ urlpatterns = [
     path("instructor/courses/", course_instructor_list, name="instructor_courses"),
     path("instructor/courses/<int:pk>/edit/", CourseUpdateView.as_view(), name="course_edit"),
     path("instructor/courses/<int:pk>/delete/", course_delete, name="course_delete"),
-    path("courses/", CourseListView.as_view(), name="courses"),
     path("courses/<int:pk>/", CourseDetailView.as_view(), name="course_detail"),
     path("courses/<int:course_id>/enroll/", course_enroll, name="course_enroll"),
+    path("student/courses/", student_courses, name="student_courses"),
+    path("student/courses/available/", available_courses, name="available_courses"),
 ]
