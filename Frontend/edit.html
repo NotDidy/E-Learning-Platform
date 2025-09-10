@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 30px;
+        }
+
+        /* 右侧内容区 - 现在是唯一的内容区域 */
+        .right-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            color: #222;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #fda085;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(253, 160, 133, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-save {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #43a047;
+        }
+
+        .btn-publish {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .btn-publish:hover {
+            background-color: #ffb300;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="right-content">
+        <div class="page-header">
+            <h2>Edit Course</h2>
+        </div>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <label for="course-title">Course Title</label>
+                <input type="text" id="course-title" class="form-control" placeholder="Enter course title">
+            </div>
+            
+            <div class="form-group">
+                <label for="course-description">Description</label>
+                <textarea id="course-description" class="form-control" placeholder="Enter course description..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="text" id="time" class="form-control" placeholder="Enter Time">
+            </div>
+            
+            <div class="form-group">
+                <label for="classroom">Classroom</label>
+                <input type="text" id="classroom" class="form-control" placeholder="Enter classroom">
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-cancel">Cancel</button>
+                <button class="btn btn-save">Save as Draft</button>
+                <button class="btn btn-publish">Publish</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+    

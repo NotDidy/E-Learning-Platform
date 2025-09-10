@@ -1,15 +1,72 @@
 {% extends "base.html" %}
 
+{% block title %}{% if object %}Edit Course{% else %}Create Course{% endif %}{% endblock %}
+
 {% block content %}
-    <h2>{% if object %}Edit Course{% else %}Create Course{% endif %}</h2>
+  <div class="white-cover" style="margin-bottom: 20px;">
+    <h1 class="dashboard-title">{% if object %}Edit Course{% else %}Create Course{% endif %}</h1>
+  </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+  {% if messages %}
+    <div class="errors" style="margin:12px 20px; padding:10px; border-radius:6px; background:rgba(0,0,0,0.05);">
+      {% for message in messages %}
+        {{ message }}<br/>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-        <button type="submit" name="save">Save as draft</button>
-        <button type="submit" name="publish" value="1">Publish now</button>
+  <div class="instructor-form-section active" style="display:block;">
+    <div class="form-header">
+      <div class="form-title">
+        <div class="card-icon"><i class='bx bx-book-content'></i></div>
+        Course Details
+      </div>
+    </div>
+
+    <form class="signup-form" method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        {{ form.title }}
+        {% if form.title.errors %}<div class="errors">{{ form.title.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Course Code</label>
+        {{ form.course_code }}
+        {% if form.course_code.errors %}<div class="errors">{{ form.course_code.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group" style="grid-column:1 / -1;">
+        <label class="form-label">Description</label>
+        {{ form.description }}
+        {% if form.description.errors %}<div class="errors">{{ form.description.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Credit Points</label>
+        {{ form.credit_points }}
+        {% if form.credit_points.errors %}<div class="errors">{{ form.credit_points.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        {{ form.status }}
+        {% if form.status.errors %}<div class="errors">{{ form.status.errors }}</div>{% endif %}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">
+          <i class='bx bx-save'></i>
+          {% if object %}Save Changes{% else %}Create Course{% endif %}
+        </button>
+        <a class="btn-secondary" href="{% url 'instructor_courses' %}">
+          <i class='bx bx-x'></i>
+          Cancel
+        </a>
+      </div>
     </form>
-
-<p><a href="{% url 'courses' %}">Back to course list</a></p>
+  </div>
 {% endblock %}
+

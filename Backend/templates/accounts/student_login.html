@@ -39,9 +39,7 @@
                     {% csrf_token %}
                     <h2>Welcome, Student!</h2>
 
-                    {% if form.non_field_errors %}
-                    <div class="errors">{{ form.non_field_errors }}</div>
-                    {% endif %}
+                    {# Errors are handled via Django messages for consistent layout #}
 
                     <div class="input-box">
                         <span class="icon"><i class='bx bx-envelope'></i></span>

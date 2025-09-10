@@ -1,27 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if object.is_draft and not user.groups.filter(name="Instructor").exists %}
-        <p>This course is not published yet.</p>
-        <p><a href="{% url 'courses' %}">Back to Courses</a></p>
-    {% else %}
-        <h2>{{ object.title }}</h2>
-
-    <p><strong>Start:</strong> {{ object.start_date }} |
+    <h2>{{ object.title }}</h2>
+  
+    <p><strong>Start:</strong> {{ object.start_date }} | 
      <strong>End:</strong> {{ object.end_date }}</p>
 
     <p>{{ object.description }}</p>
 
-    {% if object.is_draft %}
-        <p style="color: orange;"><em>Draft (only visible to instructors)</em></p>
-    {% endif %}
-
     {% if user.is_authenticated %}
         {% if not user.enrollments.filter(course=object).exists %}
-            <form method="post" action="{% url 'course_enroll' object.id %}">
-                {% csrf_token %}
-                <button type="submit">Enroll</button>
-            </form>
+            <a href="{% url 'course_enroll' object.id %}">
+                <button type="button">Enroll</button>
+            </a>
         {% else %}
             <p>You are already enrolled in this course</p>
         {% endif %}
@@ -29,6 +20,7 @@
         <p><a href="{% url 'login' %}">Log in</a> </p>
     {% endif %}
 
-    <p><a href="{% url 'courses' %}"> Back to Courses</a></p>
-{% endif %}
+    <p>
+        <a href="{% url 'courses' %}">Back to Courses</a>
+    </p>
 {% endblock %}

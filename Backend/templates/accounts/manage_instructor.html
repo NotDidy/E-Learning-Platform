@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block title %}Manage Instructors{% endblock %}
+
+{% block menu_links %}
+    <li class="nav-link">
+        <a href="#">
+            <i class='bx bx-book-content icon'></i>
+            <span class="text nav-text">Courses</span>
+        </a>
+    </li>
+    <li class="nav-link">
+        <a href="#">
+            <i class='bx bx-calendar-week icon'></i>
+            <span class="text nav-text">Classrooms</span>
+        </a>
+    </li>
+    <li class="nav-link">
+        <a href="#">
+            <i class='bx bx-user icon'></i>
+            <span class="text nav-text">Students</span>
+        </a>
+    </li>
+    <li class="nav-link">
+        <a href="#">
+            <i class='bx bx-bar-chart icon'></i>
+            <span class="text nav-text">Reports</span>
+        </a>
+    </li>
+    <li class="nav-link">
+        <a href="{% url 'manage_instructors' %}">
+            <i class='bx bx-user-check icon'></i>
+            <span class="text nav-text">Manage Instructors</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="white-cover">
+        <h1 class="dashboard-title">Manage Instructors</h1>
+        <p class="welcome message">Administrative Area</p>
+    </div>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+        .admin-actions {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            flex: 0 0 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-add {
+            background-color: green;
+            color: white;
+        }
+
+        .instructors-table {
+            width: 100%;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+        }
+
+        .instructors-table th,
+        .instructors-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .instructors-table th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+
+        .instructors-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            margin-right: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 3px;
+            border: none;
+        }
+
+        .edit-btn {
+            background-color: blue;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background-color: lightgreen;
+            color: darkgreen;
+        }
+        .inactive {
+            background-color: lightcoral;
+            color: darkred;
+        }
+    </style>
+
+    <div class="admin-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search instructors...">
+            </div>
+    </div>
+
+    <table class="instructors-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Courses</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inst in instructors %}
+                <tr>
+                    <td><a href="{% url 'edit_instructor' inst.id %}">{{ inst.id }}</a></td>
+                    <td><a href="{% url 'edit_instructor' inst.id %}">{{ inst.get_full_name|default:inst.email }}</a></td>
+                    <td><a href="mailto:{{ inst.email }}">{{ inst.email }}</a></td>
+                    <td>{{ inst.course_count }}</td>
+                    <td>
+                        {% if inst.is_active %}
+                            <span class="status active">Active</span>
+                        {% else %}
+                            <span class="status inactive">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="action-btn edit-btn" href="{% url 'edit_instructor' inst.id %}">Edit</a>
+                        <form method="post" action="{% url 'set_instructor_status' inst.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            {% if inst.is_active %}
+                                <input type="hidden" name="action" value="deactivate" />
+                                <button class="action-btn delete-btn" type="submit">Deactivate</button>
+                            {% else %}
+                                <input type="hidden" name="action" value="activate" />
+                                <button class="action-btn edit-btn" type="submit" style="background-color: green;">Activate</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">No instructors found.</td></tr>
+                {% endfor %}
+            </tbody>
+    </table>
+
+    {% block extra_js %}
+    <script>
+        const input = document.querySelector('.search-box input');
+        const rows = document.querySelectorAll('.instructors-table tbody tr');
+        if (input) {
+            input.addEventListener('input', function() {
+                const q = this.value.toLowerCase();
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(q) ? '' : 'none';
+                });
+            });
+        }
+    </script>
+    {% endblock %}
+{% endblock %}
