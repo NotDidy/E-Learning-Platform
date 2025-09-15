@@ -12,6 +12,10 @@ from django.utils.decorators import method_decorator
 from .forms import InstructorCreationForm, InstructorChangeForm, AdminLoginForm
 from .forms import StudentSignupForm
 from .models import User
+from django.contrib.auth import logout as auth_logout
+from django.contrib import messages as dj_messages
+from django.db.models import Count
+from django.views.decorators.http import require_POST
 
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
@@ -54,9 +58,43 @@ class LoginStudentView(LoginView):
         ctx.setdefault("signup_form", StudentSignupForm())
         return ctx
 
+    def get_success_url(self):
+        return reverse("student_dashboard")
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if getattr(user, "role", None) != User.Roles.STUDENT:
+            messages.error(self.request, "Invalid email or password.")
+            return redirect("login_student")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Invalid email or password.")
+        return super().form_invalid(form)
+
 class LoginInstructorView(LoginView):
     template_name = "accounts/instructor_login.html"
     extra_context = {"role": "Instructor", "show_signup": False}
+
+    def get_success_url(self):
+        return reverse("instructor_dashboard")
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
+            messages.error(self.request, "Invalid email or password.")
+            return redirect("login_instructor")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Invalid email or password.")
+        return super().form_invalid(form)
+    
+def is_admin(user):
+    return user.is_authenticated and user.role == User.Roles.ADMIN
+
+def is_student(user):
+    return user.is_authenticated and user.role == User.Roles.STUDENT
 
 def admin_login(request):
 
@@ -68,23 +106,39 @@ def admin_login(request):
 
             user = authenticate(request, username=username, password=password)
 
-            if user is not None and user.is_staff:
+            if user is not None and getattr(user, "role", None) == User.Roles.ADMIN:
                 auth_login(request, user)
                 messages.success(request, "Welcome, Admin!")
                 return redirect("admin_dashboard")
             else:
-                messages.error(request, "Invalid credentials or not an admin.")
+                messages.error(request, "Invalid email or password.")
     else:
         form = AdminLoginForm()
     return render(request, "accounts/admin_login.html", {"form": form})
 
 @login_required
+@user_passes_test(lambda u: getattr(u, "role", None) == User.Roles.ADMIN)
 def admin_dashboard(request):
-    return render(request, "accounts/admin_dashboard.html")
+    ctx = {
+        "form": InstructorCreationForm(),
+        "show_instructor_form": False,
+    }
+    return render(request, "accounts/admin-menu.html", ctx)
 
-#Only allow Admins
-def is_admin(user):
-    return user.is_authenticated and user.role == User.Roles.ADMIN
+@login_required
+@user_passes_test(is_student)
+def student_dashboard(request):
+    return render(request, "accounts/student-menu.html")
+
+def logout_view(request):
+    """Custom logout that allows GET and POST, then redirects to role select."""
+    auth_logout(request)
+    # Clear any queued messages so they don't appear after logout
+    storage = dj_messages.get_messages(request)
+    for _ in storage:
+        pass
+    storage.used = True
+    return redirect("role_select")
 
 @login_required
 @user_passes_test(is_admin)
@@ -95,6 +149,13 @@ def create_instructor(request):
             form.save()
             messages.success(request, "Instructor account created successfully.")
             return redirect("admin_dashboard")
+        # If coming from embedded form on dashboard, re-render dashboard with errors
+        if request.POST.get("from_dashboard"):
+            return render(
+                request,
+                "accounts/admin-menu.html",
+                {"form": form, "show_instructor_form": True},
+            )
     else:
         form = InstructorCreationForm()
 
@@ -115,3 +176,48 @@ def edit_instructor(request, instructor_id):
         form = InstructorChangeForm(instance=instructor)
 
     return render(request, "accounts/edit_instructor.html", {"form": form, "instructor": instructor})
+
+
+@login_required
+@user_passes_test(is_admin)
+def manage_instructors(request):
+    instructors = (
+        User.objects.filter(role=User.Roles.INSTRUCTOR)
+        .annotate(course_count=Count("courses"))
+        .order_by("id")
+    )
+    return render(request, "accounts/manage_instructor.html", {"instructors": instructors})
+
+
+@login_required
+@user_passes_test(is_admin)
+@require_POST
+def set_instructor_status(request, instructor_id: int):
+    instructor = get_object_or_404(User, id=instructor_id, role=User.Roles.INSTRUCTOR)
+    action = request.POST.get("action")
+    if action == "activate":
+        instructor.is_active = True
+        instructor.save(update_fields=["is_active"])
+        messages.success(request, f"Activated {instructor.get_full_name() or instructor.email}.")
+    elif action == "deactivate":
+        instructor.is_active = False
+        instructor.save(update_fields=["is_active"])
+        messages.success(request, f"Deactivated {instructor.get_full_name() or instructor.email}.")
+    else:
+        messages.error(request, "Invalid action.")
+    return redirect("manage_instructors")
+
+@login_required
+def instructor_dashboard(request):
+    if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
+        messages.error(request, "Access denied. Instructors only.")
+        return redirect("role_select")
+    return render(request, "accounts/instructor-menu.html")
+
+@login_required
+def instructor_courses(request):
+    if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
+        messages.error(request, "Access denied. Instructors only.")
+        return redirect("role_select")
+
+    return render(request, "courses/courses-instructor.html")

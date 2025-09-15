@@ -85,17 +85,17 @@ class AdminLoginForm(forms.Form):
     username = forms.CharField(
         max_length = 150,
         label = "Email or Username",
-        widget = forms.TextInput(attrs = {'placeholder': 'Enter email or username'})
+        widget = forms.TextInput()
     )
     password = forms.CharField(
-        widget = forms.PasswordInput(attrs = {'placeholder': 'Enter password'}),
+        widget = forms.PasswordInput(),
         label = "Password"
     )
 
 class InstructorCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ["email", "title", "password1", "password2"]
+        fields = ["title", "first_name", "last_name", "email", "password1", "password2"]
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -107,4 +107,11 @@ class InstructorCreationForm(UserCreationForm):
 class InstructorChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ("title", "first_name", "last_name", "email")
+        fields = ("title", "first_name", "last_name", "email", "is_active")
+        widgets = {
+            "title": forms.Select(attrs={"class": "form-input"}),
+            "first_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Enter first name"}),
+            "last_name": forms.TextInput(attrs={"class": "form-input", "placeholder": "Enter last name"}),
+            "email": forms.EmailInput(attrs={"class": "form-input", "placeholder": "name@example.com"}),
+            "is_active": forms.CheckboxInput(attrs={}),
+        }

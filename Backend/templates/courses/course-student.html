@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Courses{% endblock %}
+
+{% block menu_links %}
+<li class="nav-link">
+    <a href="{% url 'student_courses' %}">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Courses</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-calendar-week icon'></i>
+        <span class="text nav-text">Classrooms</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-user icon'></i>
+        <span class="text nav-text">Students</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Reports</span>
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
+
+<div class="courses-header">
+    <div class="courses-title-section">
+        <div class="courses-title">
+            <div class="course-icon">
+                <i class='bx  bx-book-content icon'  ></i>
+            </div>
+            My Available Courses
+        </div>
+        <a class="view-courses" href="{% url 'available_courses' %}">
+            <i class='bx bx-book-bookmark'></i>
+            View Available Courses
+        </a>
+    </div>
+</div>
+
+<div class="courses-grid" id="coursesGrid">
+    {% for course in courses %}
+    <div class="course-card">
+        <div class="course-card-header">
+            <div class="course-info">
+                <h3>{{ course.title }}</h3>
+                {% if course.course_code %}<span class="course-code">{{ course.course_code }}</span>{% endif %}
+            </div>
+        </div>
+        {% if course.description %}
+        <p class="courses-description">{{ course.description }}</p>
+        {% endif %}
+        <div class="course-stats">
+            <span class="course-current-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">
+                {{ course.get_status_display }}
+            </span>
+        </div>
+    </div>
+    {% empty %}
+    <div class="white-cover" style="text-align:center;">
+        <p>You haven't enrolled in any courses yet. Check Available Courses to start.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
