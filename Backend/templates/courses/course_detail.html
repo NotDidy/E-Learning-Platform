@@ -1,26 +1,58 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }}{% endblock %}
 
 {% block content %}
-    <h2>{{ object.title }}</h2>
-  
-    <p><strong>Start:</strong> {{ object.start_date }} | 
-     <strong>End:</strong> {{ object.end_date }}</p>
+<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
 
-    <p>{{ object.description }}</p>
-
-    {% if user.is_authenticated %}
-        {% if not user.enrollments.filter(course=object).exists %}
-            <a href="{% url 'course_enroll' object.id %}">
-                <button type="button">Enroll</button>
-            </a>
-        {% else %}
-            <p>You are already enrolled in this course</p>
-        {% endif %}
-    {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> </p>
+<div class="white-cover" style="padding: 20px;">
+    <h2 style="margin-bottom: 8px;">{{ object.title }}</h2>
+    {% if object.course_code %}
+        <div style="color:#666; margin-bottom: 8px;">Code: {{ object.course_code }}</div>
+    {% endif %}
+    {% if object.description %}
+        <p style="margin-top: 0;">{{ object.description }}</p>
     {% endif %}
 
-    <p>
-        <a href="{% url 'courses' %}">Back to Courses</a>
-    </p>
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-top: 16px;">
+        <h3 style="margin:0;">Lessons</h3>
+        {% if request.user == object.instructor %}
+            <a class="create-course-btn" href="{% url 'lesson_create' object.id %}">
+                <i class='bx bx-plus'></i>
+                Add Lesson
+            </a>
+        {% endif %}
+    </div>
+    <div class="courses-grid" style="margin-top: 12px;">
+        {% for lesson in lessons %}
+            <div class="course-card">
+                <div class="course-card-header">
+                    <div class="course-info">
+                        <h3>{{ lesson.title }}</h3>
+                    </div>
+                </div>
+                {% if lesson.description %}
+                    <p class="courses-description">{{ lesson.description|truncatewords:30 }}</p>
+                {% endif %}
+                <div style="display:flex; justify-content:flex-end;">
+                    <a class="action-btn edit-btn" href="{% url 'lesson_detail' lesson.id %}"><i class='bx bx-right-arrow-alt'></i></a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No lessons yet.</p>
+        {% endfor %}
+    </div>
+
+    {% if user.is_authenticated and is_student %}
+        {% if not is_enrolled %}
+            <form method="post" action="{% url 'course_enroll' object.id %}">
+                {% csrf_token %}
+                <button type="submit" class="create-course-btn">Enroll</button>
+            </form>
+        {% else %}
+            <p style="margin-top:12px; color:#2a7;">You are enrolled in this course.</p>
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock %}

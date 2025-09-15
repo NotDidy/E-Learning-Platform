@@ -219,5 +219,14 @@ def instructor_courses(request):
     if getattr(request.user, "role", None) != User.Roles.INSTRUCTOR:
         messages.error(request, "Access denied. Instructors only.")
         return redirect("role_select")
+    # Provide courses context for instructor's own courses
+    from courses.models import Course
+    from django.db.models import Count
 
-    return render(request, "courses/courses-instructor.html")
+    courses = (
+        Course.objects.filter(instructor=request.user)
+        .annotate(student_count=Count("enrollments"))
+        .prefetch_related("lessons")
+        .order_by("-created_at")
+    )
+    return render(request, "courses/courses-instructor.html", {"courses": courses})

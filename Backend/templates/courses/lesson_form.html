@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}New Lesson{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
+
+<div class="white-cover" style="padding: 20px; max-width: 800px;">
+    <h2 style="margin-bottom: 16px;">Create Lesson for "{{ course.title }}"</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            {{ form.non_field_errors }}
+            <label>Title {{ form.title }}</label>
+            <label>Description {{ form.description }}</label>
+            <label>Learning Objectives {{ form.learning_objectives }}</label>
+            <label>Reading List {{ form.reading_list }}</label>
+            <label>Order {{ form.order }}</label>
+        </div>
+        <div style="margin-top:16px;">
+            <button class="create-course-btn" type="submit"><i class='bx bx-save'></i> Save Lesson</button>
+            <a class="view-courses" href="{% url 'course_detail' course.id %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
