@@ -6,8 +6,10 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.utils import timezone
 
-from .models import Course, Enrollment
+from .models import Course, Enrollment, Lesson, Section, SectionProgress
+from .forms import LessonForm, SectionForm
 
 class InstructorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -43,6 +45,22 @@ class CourseListView(LoginRequiredMixin, ListView):
 class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = "courses/course_detail.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        course: Course = self.object
+        ctx["lessons"] = course.lessons.all()
+        user = self.request.user
+        # Compute enrollment status for student users for template logic
+        try:
+            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+        except Exception:
+            is_student = False
+        ctx["is_student"] = is_student
+        ctx["is_enrolled"] = False
+        if is_student:
+            ctx["is_enrolled"] = Enrollment.objects.filter(student=user, course=course).exists()
+        return ctx
 
 @login_required
 def course_enroll(request, course_id):
@@ -86,8 +104,9 @@ def student_courses(request):
         return HttpResponseForbidden("Student role required")
 
     enrollments = (
-        Enrollment.objects.filter(student=user)
+        Enrollment.objects.filter(student=user, course__status=Course.STATUS_ACTIVE)
         .select_related("course", "course__instructor")
+        .prefetch_related("course__lessons")
     )
     courses = [e.course for e in enrollments]
     return render(request, "courses/course-student.html", {"courses": courses})
@@ -106,7 +125,8 @@ def available_courses(request):
 
     enrolled_ids = Enrollment.objects.filter(student=user).values_list("course_id", flat=True)
     courses = (
-        Course.objects.exclude(id__in=enrolled_ids)
+        Course.objects.filter(status=Course.STATUS_ACTIVE)
+        .exclude(id__in=enrolled_ids)
         .annotate(student_count=Count("enrollments"))
         .order_by("-created_at")
     )
@@ -133,6 +153,7 @@ def course_instructor_list(request):
     courses = (
         Course.objects.filter(instructor=user)
         .annotate(student_count=Count("enrollments"))
+        .prefetch_related("lessons")
         .order_by("-created_at")
     )
     return render(request, "courses/courses-instructor.html", {"courses": courses})
@@ -157,3 +178,123 @@ def course_delete(request, pk: int):
         messages.success(request, f"Deleted course '{title}'.")
         return redirect("instructor_courses")
     return HttpResponseForbidden("Deletion requires POST")
+
+
+class LessonCreateView(InstructorRequiredMixin, CreateView):
+    model = Lesson
+    form_class = LessonForm
+    template_name = "courses/lesson_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.course = get_object_or_404(Course, pk=kwargs.get("course_id"), instructor=request.user)
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.course = self.course
+        messages.success(self.request, "Lesson created")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("lesson_detail", args=[self.object.id])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["course"] = self.course
+        return ctx
+
+
+class LessonDetailView(LoginRequiredMixin, DetailView):
+    model = Lesson
+    template_name = "courses/lesson_detail.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        lesson = get_object_or_404(Lesson, pk=kwargs.get("pk"))
+        user = request.user
+        # Allow course instructor
+        if user.is_authenticated and lesson.course.instructor_id == user.id:
+            self.object = lesson
+            return super().dispatch(request, *args, **kwargs)
+        # Allow enrolled students only
+        try:
+            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+        except Exception:
+            is_student = False
+        if is_student and Enrollment.objects.filter(student=user, course=lesson.course).exists():
+            self.object = lesson
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponseForbidden("Not allowed to view this lesson")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        lesson: Lesson = self.object
+        sections = lesson.sections.all()
+        ctx["sections"] = sections
+        # For students, annotate which sections are completed by current user
+        user = self.request.user
+        try:
+            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+        except Exception:
+            is_student = False
+        completed_ids = set()
+        if is_student:
+            completed_ids = set(
+                SectionProgress.objects.filter(student=user, section__lesson=lesson, completed=True)
+                .values_list("section_id", flat=True)
+            )
+        ctx["completed_ids"] = completed_ids
+        return ctx
+
+
+class SectionCreateView(InstructorRequiredMixin, CreateView):
+    model = Section
+    form_class = SectionForm
+    template_name = "courses/section_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.lesson = get_object_or_404(
+            Lesson, pk=kwargs.get("lesson_id"), course__instructor=request.user
+        )
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.lesson = self.lesson
+        messages.success(self.request, "Section added to lesson")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("lesson_detail", args=[self.lesson.id])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["lesson"] = self.lesson
+        return ctx
+
+
+@login_required
+def toggle_section_progress(request, section_id: int):
+    if request.method != "POST":
+        return HttpResponseForbidden("POST required")
+
+    user = request.user
+    # Only students can toggle
+    try:
+        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
+    except Exception:
+        is_student = False
+    if not is_student:
+        return HttpResponseForbidden("Student role required")
+
+    section = get_object_or_404(Section, pk=section_id)
+    course = section.lesson.course
+
+    # Must be enrolled in course
+    if not Enrollment.objects.filter(student=user, course=course).exists():
+        return HttpResponseForbidden("Not enrolled in this course")
+
+    sp, _ = SectionProgress.objects.get_or_create(student=user, section=section)
+    sp.completed = not sp.completed
+    sp.completed_at = timezone.now() if sp.completed else None
+    sp.save(update_fields=["completed", "completed_at"])
+    messages.success(request, f"Marked section '{section.title}' as {'done' if sp.completed else 'not done'}.")
+    next_url = request.POST.get("next") or reverse("lesson_detail", args=[section.lesson.id])
+    return redirect(next_url)
