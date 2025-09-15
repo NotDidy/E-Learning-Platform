@@ -3,6 +3,33 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 
+{% block menu_links %}
+<li class="nav-link">
+    <a href="{% url 'student_courses' %}">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Courses</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-calendar-week icon'></i>
+        <span class="text nav-text">Classrooms</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-user icon'></i>
+        <span class="text nav-text">Students</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Reports</span>
+    </a>
+</li>
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
 
