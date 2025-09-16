@@ -7,6 +7,8 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.utils import timezone
+from django.db.models.functions import Coalesce
+from django.db.models import F, Value
 
 from .models import Course, Enrollment, Lesson, Section, SectionProgress
 from .forms import LessonForm, SectionForm
@@ -42,9 +44,37 @@ class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     template_name = "courses/course_list.html"
 
+    def get_queryset(self):
+        user = self.request.user
+        try:
+            is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR 
+        except Exception:
+            is_instructor = False
+
+        if is_instructor:
+            return Course.objects.filter(instructor=user)
+        else:
+            return Course.objects.filter(status=Course.STATUS_ACTIVE, is_draft=False)
+
+
 class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     template_name = "courses/course_detail.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        course = self.get_object()
+        user = request.user
+
+        try:
+            is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR  # type: ignore[attr-defined]
+        except Exception:
+            is_instructor = False
+
+        # Students cannot view drafts
+        if not is_instructor and (course.is_draft or course.status != Course.STATUS_ACTIVE):
+            return HttpResponseForbidden("This course is not available")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -125,7 +155,7 @@ def available_courses(request):
 
     enrolled_ids = Enrollment.objects.filter(student=user).values_list("course_id", flat=True)
     courses = (
-        Course.objects.filter(status=Course.STATUS_ACTIVE)
+        Course.objects.filter(status=Course.STATUS_ACTIVE, is_draft=False)
         .exclude(id__in=enrolled_ids)
         .annotate(student_count=Count("enrollments"))
         .order_by("-created_at")
@@ -152,10 +182,16 @@ def course_instructor_list(request):
 
     courses = (
         Course.objects.filter(instructor=user)
-        .annotate(student_count=Count("enrollments"))
-        .prefetch_related("lessons")
+        .annotate(
+            student_count=Count("enrollments", distinct=True),
+            lesson_count=Count("lessons", distinct=True),
+            active_classrooms=Value(1),  #placeholder
+            duration_weeks=Coalesce(F("credit_points"), Value(12)),  # fallback
+        )
+        .prefetch_related("lessons", "enrollments__student")
         .order_by("-created_at")
     )
+
     return render(request, "courses/courses-instructor.html", {"courses": courses})
 
 
