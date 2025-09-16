@@ -220,6 +220,19 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
         except Exception:
             is_student = False
         if is_student and Enrollment.objects.filter(student=user, course=lesson.course).exists():
+            
+            prereq_ids = list(lesson.prerequisites.values_list("id", flat=True))
+            if prereq_ids:
+                completed_lesson_ids = list(
+                    SectionProgress.objects.filter(student=user, completed=True)
+                    .values_list("section__lesson_id", flat=True)
+                    .distinct()
+                )
+                # if any prereq not satisfied -> forbid
+                missing = set(prereq_ids) - set(completed_lesson_ids)
+                if missing:
+                    return HttpResponseForbidden("You must complete the prerequisite lessons first.")
+
             self.object = lesson
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseForbidden("Not allowed to view this lesson")

@@ -87,7 +87,12 @@
                 <div class="detail-value">
                     <div class="lessons-list">
                         {% for l in course.lessons.all|slice:":5" %}
-                            <span class="lesson-tag">{{ l.title }}</span>
+                            <span class="lesson-tag">
+                                {{ l.title }}
+                                {% if l.prerequisite %}
+                                    (Prerequisite: {{ l.prerequisite.title }})
+                                {% endif %}
+                            </span>
                         {% empty %}
                             <span style="color:#888;">No lessons yet</span>
                         {% endfor %}

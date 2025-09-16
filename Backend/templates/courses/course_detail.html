@@ -62,6 +62,13 @@
                 {% if lesson.description %}
                     <p class="courses-description">{{ lesson.description|truncatewords:30 }}</p>
                 {% endif %}
+
+                {% if lesson.prerequisite %}
+                    <p style="font-size:14px; color:#666;">
+                        <strong>Prerequisite:</strong> {{ lesson.prerequisite.title }}
+                    </p>
+                {% endif %}
+
                 <div style="display:flex; justify-content:flex-end;">
                     <a class="action-btn edit-btn" href="{% url 'lesson_detail' lesson.id %}"><i class='bx bx-right-arrow-alt'></i></a>
                 </div>
