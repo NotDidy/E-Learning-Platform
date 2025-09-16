@@ -64,12 +64,22 @@ class Lesson(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    prerequisites = models.ManyToManyField(
+        "self",
+        symmetrical=False,
+        blank=True,
+        related_name="unlocks",
+        help_text="Select lessons that must be completed before this one"
+    )
+
     class Meta:
         ordering = ["order", "created_at"]
         db_table = "lesson"
 
     def __str__(self) -> str:
         return f"{self.title} ({self.course.title})"
+    
+
 
 
 class Section(models.Model):

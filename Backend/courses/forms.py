@@ -12,7 +12,14 @@ class LessonForm(forms.ModelForm):
             "learning_objectives",
             "reading_list",
             "order",
+            "prerequisites",
         ]
+
+        def __init__(self, *args, **kwargs):
+            course = kwargs.pop("course", None)
+            super().__init__(*args, **kwargs)
+            if course:
+                self.fields["prerequisites"].queryset = course.lessons.exclude(pk=self.instance.pk)
 
 
 class SectionForm(forms.ModelForm):
