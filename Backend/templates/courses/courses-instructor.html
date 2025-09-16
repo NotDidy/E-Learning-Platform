@@ -106,6 +106,18 @@
                     <i class='bx bx-group'></i>
                     <span>{{ course.student_count|default:0 }} Students</span>
                 </div>
+                <div class="course-stat">
+                    <i class='bx bx-list-ul'></i>
+                    <span>{{ course.lesson_count|default:0 }} Lessons</span>
+                </div>
+                <div class="course-stat">
+                    <i class='bx bx-chalkboard'></i>
+                    <span>{{ course.active_classrooms|default:0 }} Active Classrooms</span>
+                </div>
+                <div class="course-stat">
+                    <i class='bx bx-time'></i>
+                    <span>{{ course.duration_weeks }} Weeks</span>
+                </div>
                 {% if course.course_code %}
                 <div class="course-stat">
                     <i class='bx bx-hash'></i>
