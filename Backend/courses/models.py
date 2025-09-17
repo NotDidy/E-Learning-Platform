@@ -14,6 +14,8 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     credit_points = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default=STATUS_ACTIVE)
+    duration_weeks = models.PositiveIntegerField(default=12)
+    max_students = models.PositiveIntegerField(default=50)
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="courses"
     )
