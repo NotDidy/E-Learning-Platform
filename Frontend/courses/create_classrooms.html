@@ -26,10 +26,10 @@
             --shadow: 0 4px 20px rgba(0,0,0,0.1);
             --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
             --success-color: #4CAF50;
-            --warning-color: #ff9800; /* 橙色 - 用于Back to Classroom和Save as draft按钮 */
+            --warning-color: #ff9800; 
             --danger-color: #f44336;
-            --cancel-color: #f0f0f0; /* 灰白色 - Cancel使用 */
-            --cancel-text: #888; /* 灰白色按钮文本 */
+            --cancel-color: #f0f0f0; 
+            --cancel-text: #888;
 
             --tran-02: all 0.2s ease;
             --tran-03: all 0.3s ease;
@@ -252,7 +252,7 @@
             background-color: #5a4bdb;
         }
 
-        /* 橙色按钮 - 用于Back to Classroom和Save as draft */
+        
         .btn-orange {
             background-color: var(--warning-color);
             color: white;
@@ -262,7 +262,7 @@
             background-color: #e68a00;
         }
 
-        /* Cancel按钮 - 灰白色 */
+       
         .btn-cancel {
             background-color: var(--cancel-color);
             color: var(--cancel-text);
@@ -272,7 +272,7 @@
             background-color: #e8e8e8;
         }
 
-        /* 垃圾桶按钮样式 */
+       
         .remove-row {
             background-color: var(--cancel-color);
             color: var(--cancel-text);
@@ -311,7 +311,7 @@
                 justify-content: center;
             }
             
-            /* 表格在小屏幕上允许水平滚动 */
+           
             .table-container {
                 overflow-x: auto;
             }
@@ -326,7 +326,7 @@
                 <h2>Course Manager</h2>
             </div>
             <div>
-                <!-- 右上角Back to Classroom按钮 - 使用橙色 -->
+                
                 <a href="classrooms.html" class="btn btn-orange">
                     <i class='bx bx-arrow-left'></i> Back to Classrooms
                 </a>
@@ -451,11 +451,11 @@
                 </div>
                 
                 <div class="form-actions">
-                    <!-- Cancel按钮 - 使用灰白色 -->
+                   
                     <button type="button" class="btn btn-cancel" onclick="window.location.href='classrooms.html'">
                         <i class='bx bx-x'></i> Cancel
                     </button>
-                    <!-- Save as draft按钮 - 改为橙色 -->
+                    
                     <button type="button" class="btn btn-orange" id="saveDraftBtn">
                         <i class='bx bx-save'></i> Save as draft
                     </button>
@@ -468,39 +468,38 @@
     </div>
 
     <script>
-        // 设置页面加载完成后的初始化操作
+      
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化删除按钮状态
+            
             updateRemoveButtons();
             
-            // 添加时长选择验证事件监听
+            
             document.getElementById('duration').addEventListener('change', validateDuration);
             
-            // 添加表单提交验证
+            
             document.getElementById('createClassroomForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (validateForm()) {
-                    // 表单验证通过，可以提交数据
+                   
                     alert('Classroom created successfully!');
-                    // 这里可以添加AJAX提交代码
-                    // this.submit();
+                    
                 }
             });
             
-            // 添加保存草稿按钮事件
+            
             document.getElementById('saveDraftBtn').addEventListener('click', function() {
-                // 保存草稿不需要严格验证所有必填项
+               
                 alert('Classroom saved as draft successfully!');
-                // 这里可以添加保存草稿的AJAX代码
+               
             });
             
-            // 为所有时间输入添加验证
+            
             document.querySelectorAll('.time-input').forEach(input => {
                 input.addEventListener('change', validateTime);
             });
         });
         
-        // 添加新行到时间表
+        
         document.getElementById('addRowBtn').addEventListener('click', function() {
             const table = document.getElementById('scheduleTable').getElementsByTagName('tbody')[0];
             const newRow = table.insertRow();
@@ -529,40 +528,40 @@
                 <td><button type="button" class="btn remove-row"><i class='bx bx-trash'></i></button></td>
             `;
             
-            // 更新删除按钮状态
+            
             updateRemoveButtons();
             
-            // 为新的删除按钮添加事件监听
+            
             newRow.querySelector('.remove-row').addEventListener('click', function() {
                 table.deleteRow(newRow.rowIndex - 1);
                 updateRemoveButtons();
             });
             
-            // 为新的时间输入添加验证
+            
             const timeInputs = newRow.querySelectorAll('.time-input');
             timeInputs.forEach(input => {
                 input.addEventListener('change', validateTime);
             });
         });
         
-        // 更新删除按钮状态
+        
         function updateRemoveButtons() {
             const table = document.getElementById('scheduleTable').getElementsByTagName('tbody')[0];
             const rows = table.getElementsByTagName('tr');
             const removeButtons = document.getElementsByClassName('remove-row');
             
-            // 如果只有一行，禁用其删除按钮
+            
             if (rows.length <= 1) {
                 removeButtons[0].setAttribute('disabled', 'disabled');
             } else {
-                // 否则启用所有删除按钮
+                
                 for (let i = 0; i < removeButtons.length; i++) {
                     removeButtons[i].removeAttribute('disabled');
                 }
             }
         }
         
-        // 验证时长选择
+       
         function validateDuration() {
             const duration = document.getElementById('duration');
             const durationError = document.getElementById('durationError');
@@ -578,7 +577,7 @@
             }
         }
         
-        // 验证时间（结束时间必须晚于开始时间）
+        
         function validateTime(e) {
             const row = e.target.closest('tr');
             const startTime = row.querySelector('input[name="startTime[]"]');
@@ -593,16 +592,16 @@
             }
         }
         
-        // 验证整个表单
+        
         function validateForm() {
             let isValid = true;
             
-            // 验证时长选择
+           
             if (!validateDuration()) {
                 isValid = false;
             }
             
-            // 验证所有时间对
+            
             const rows = document.querySelectorAll('#scheduleTable tbody tr');
             rows.forEach(row => {
                 const startTime = row.querySelector('input[name="startTime[]"]');
