@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Lesson</title>
+    <link rel="stylesheet" href="lesson-edit.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="lesson-details-header">
+        <div class="lessons-title-section">
+            <div class="lessons-title">
+                <div class="lesson-icon">
+                    <i class='bx bx-edit-alt'></i>
+                </div>
+                Edit Lesson
+            </div>
+            <div class="header-actions">
+                <button class="back-btn" onclick="window.location.href='lesson-details.html'">
+                    <i class='bx bx-left-arrow-alt'></i>
+                    Back to Lesson
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Form Container -->
+    <div class="lesson-details-container">
+        <form class="edit-form">
+            <!-- Lesson Title -->
+            <div class="form-group">
+                <label for="lesson-title"><i class='bx bx-book'></i> Lesson Title</label>
+                <input type="text" id="lesson-title" name="lesson-title" value="Introduction to Python Programming">
+            </div>
+
+            <!-- Lesson ID -->
+            <div class="form-group">
+                <label for="lesson-id"><i class='bx bx-id-card'></i> Lesson ID</label>
+                <input type="text" id="lesson-id" name="lesson-id" value="L001" readonly>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="lesson-description"><i class='bx bx-align-left'></i> Description</label>
+                <textarea id="lesson-description" rows="4">This lesson introduces students to the fundamentals of Python Programming...</textarea>
+            </div>
+
+            <!-- Objectives -->
+            <div class="form-group">
+                <label><i class='bx bx-target-lock'></i> Objectives</label>
+                <textarea rows="3">Understand Python syntax and indentation
+Learn variables, constants, and data types
+Perform input/output operations
+Write simple Python scripts</textarea>
+            </div>
+
+            <!-- Reading List -->
+            <div class="form-group">
+                <label><i class='bx bx-book-reader'></i> Reading List</label>
+                <textarea rows="3">📘 Python Crash Course - Chapter 1 | https://example.com/book1
+📗 Official Python Tutorial - Sections 1–3 | https://docs.python.org/3/tutorial/
+📕 Think Python - Chapter 2 | https://example.com/book2</textarea>
+            </div>
+
+            <!-- Assignments -->
+            <div class="form-group">
+                <label><i class='bx bx-clipboard'></i> Assignments</label>
+                <textarea rows="3">Basic Operations Program
+Variable Practice Exercises
+Mini Project: Simple Calculator</textarea>
+            </div>
+
+            <!-- Classroom Schedule -->
+            <div class="form-group">
+                <label><i class='bx bx-chalkboard'></i> Classroom Schedule</label>
+                <textarea rows="3">Room A-204 | Monday, 10:00 AM – 1:00 PM
+Room B-101 | Wednesday, 2:00 PM – 5:00 PM
+Lab C-310 | Friday, 9:00 AM – 12:00 PM</textarea>
+            </div>
+
+            <!-- Metadata -->
+            <div class="form-group inline">
+                <div>
+                    <label for="duration"><i class='bx bx-time'></i> Duration</label>
+                    <input type="text" id="duration" value="3 hours">
+                </div>
+                <div>
+                    <label for="credits"><i class='bx bx-medal'></i> Credits</label>
+                    <input type="number" id="credits" value="3">
+                </div>
+            </div>
+
+            <div class="form-group inline">
+                <div>
+                    <label for="instructor"><i class='bx bx-user'></i> Instructor</label>
+                    <input type="text" id="instructor" value="John Smith">
+                </div>
+                <div>
+                    <label for="status"><i class='bx bx-toggle-left'></i> Status</label>
+                    <select id="status">
+                        <option selected>Published</option>
+                        <option>Draft</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-actions">
+                <button type="submit" class="action-btn edit-btn"><i class='bx bx-save'></i> Save Changes</button>
+                <button type="reset" class="action-btn delete-btn"><i class='bx bx-x-circle'></i> Reset</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
