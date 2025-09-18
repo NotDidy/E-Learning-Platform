@@ -265,4 +265,39 @@ body {
 .lesson-section ul.styled-list li a:hover {
     color: #2ecc71;
     text-decoration: underline;
+    
+}
+
+.classroom-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.classroom-session {
+    background: #f9faff;
+    border-left: 3px solid var(--primary-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+}
+
+.classroom-session:hover {
+    transform: translateY(-3px);
+}
+
+.classroom-session p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.classroom-session i {
+    color: var(--primary-color);
+    font-size: 16px;
 }
