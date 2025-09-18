@@ -207,3 +207,52 @@ body {
     background: #eaf8ea;
     color: #339238;
 }
+
+/* Buttons */
+.header-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+/* Edit Button */
+.edit-btn {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.edit-btn:hover {
+    background: #bbdefb;
+    transform: translateY(-2px);
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.delete-btn:hover {
+    background: #ffcdd2;
+    transform: translateY(-2px);
+}
+
+/* Keep Back Button as is */
