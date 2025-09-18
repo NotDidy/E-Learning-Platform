@@ -31,7 +31,7 @@ class InstructorRequiredMixin(UserPassesTestMixin):
 
 class CourseCreateView(InstructorRequiredMixin, CreateView):
     model = Course
-    fields = ["title", "course_code", "description", "credit_points", "status"]
+    fields = ["title", "course_code", "description", "credit_points", "status","duration_weeks", "max_students"]
     template_name = "courses/course_form.html"
     success_url = reverse_lazy("instructor_courses")
 
@@ -170,9 +170,10 @@ def available_courses(request):
 
 @login_required
 def course_instructor_list(request):
-    """List courses owned by the logged-in instructor."""
+    """List courses owned by the logged-in instructor, with counts."""
     user = request.user
-    # Simple role check; if not instructor, forbid
+
+    # Simple role check
     try:
         is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR  # type: ignore[attr-defined]
     except Exception:
@@ -180,13 +181,13 @@ def course_instructor_list(request):
     if not is_instructor:
         return HttpResponseForbidden("Instructor role required")
 
+    # Fetch courses with student count, lesson count, and a placeholder for active classrooms
     courses = (
         Course.objects.filter(instructor=user)
         .annotate(
             student_count=Count("enrollments", distinct=True),
             lesson_count=Count("lessons", distinct=True),
-            active_classrooms=Value(1),  #placeholder
-            duration_weeks=Coalesce(F("credit_points"), Value(12)),  # fallback
+            active_classrooms=Value(1),  
         )
         .prefetch_related("lessons", "enrollments__student")
         .order_by("-created_at")
@@ -197,7 +198,7 @@ def course_instructor_list(request):
 
 class CourseUpdateView(InstructorRequiredMixin, UpdateView):
     model = Course
-    fields = ["title", "course_code", "description", "credit_points", "status"]
+    fields = ["title", "course_code", "description", "credit_points", "status", "duration_weeks", "max_students"]
     template_name = "courses/course_form.html"
     success_url = reverse_lazy("instructor_courses")
 
