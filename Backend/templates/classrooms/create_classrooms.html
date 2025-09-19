@@ -1,6 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
 <form method="POST">
     {% csrf_token %}
-
+    
     <div class="form-section">
         <h2>Basic Information</h2>
         {{ form.name.label_tag }} {{ form.name }}
@@ -26,3 +30,4 @@
 
     <button type="submit" class="btn btn-primary">Create Classroom</button>
 </form>
+{% endblock %}

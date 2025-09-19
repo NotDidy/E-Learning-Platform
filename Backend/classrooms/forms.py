@@ -7,11 +7,6 @@ class ClassroomForm(forms.ModelForm):
         model = Classroom
         fields = ["name", "course", "supervisor", "duration_weeks", "description", "class_code"]
 
-    def clean_duration_weeks(self):
-        duration = self.cleaned_data["duration_weeks"]
-        if duration < 1:
-            raise forms.ValidationError("Duration must be at least 1 week.")
-        return duration
 
 
 class ScheduleForm(forms.ModelForm):
