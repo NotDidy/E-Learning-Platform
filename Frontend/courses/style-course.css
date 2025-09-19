@@ -25,8 +25,11 @@
     --tran-05: all 0.5s ease;
 }
 
-
-
+body {
+    background: var(--body-color);
+    min-height: 100vh;
+    padding: 20px 0;
+}
 .courses-header {
     background: var(--sidebar-color);
     margin: 20px;
@@ -231,10 +234,10 @@
 .detail-label {
     font-weight: 600;
     color: var(--black-color);
-    min-width: 140px;
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .detail-value {
@@ -326,7 +329,7 @@
 }
 
 .status-active {
-    background: #e8f5e8;
+    background: #eaf8ea;
     color: #339238;
 }
 
