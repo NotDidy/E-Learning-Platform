@@ -5,7 +5,7 @@
 
 {% block menu_links %}
 <li class="nav-link">
-    <a href="{% url 'student_courses' %}">
+    <a href="{% if request.user.role == 'INSTRUCTOR' %}{% url 'instructor_courses' %}{% elif request.user.role == 'STUDENT' %}{% url 'student_courses' %}{% else %}{% url 'role_select' %}{% endif %}">
         <i class='bx bx-book-content icon'></i>
         <span class="text nav-text">Courses</span>
     </a>
@@ -56,7 +56,7 @@
             <div class="course-card">
                 <div class="course-card-header">
                     <div class="course-info">
-                        <h3>{{ lesson.title }}</h3>
+                        <h3>{{ lesson.lesson_code }}</h3>
                     </div>
                 </div>
                 {% if lesson.description %}

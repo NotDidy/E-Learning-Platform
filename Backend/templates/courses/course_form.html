@@ -46,8 +46,8 @@
 
       <div class="form-group">
         <label class="form-label">Credit Points</label>
-        {{ form.credit_points }}
-        {% if form.credit_points.errors %}<div class="errors">{{ form.credit_points.errors }}</div>{% endif %}
+        <input type="text" value="30" disabled>
+        <div class="help-text">Courses are fixed at 30 credits. Manage lesson credits to stay within 30.</div>
       </div>
 
       <div class="form-group">
