@@ -1,0 +1,28 @@
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-section">
+        <h2>Basic Information</h2>
+        {{ form.name.label_tag }} {{ form.name }}
+        {{ form.course.label_tag }} {{ form.course }}
+        {{ form.supervisor.label_tag }} {{ form.supervisor }}
+    </div>
+
+    <div class="form-section">
+        <h2>Class Duration</h2>
+        {{ form.duration_weeks.label_tag }} {{ form.duration_weeks }}
+    </div>
+
+    <div class="form-section">
+        <h2>Class Schedule</h2>
+        {{ formset.management_form }}
+        {% for schedule_form in formset %}
+            {{ schedule_form.day.label_tag }} {{ schedule_form.day }}
+            {{ schedule_form.lesson.label_tag }} {{ schedule_form.lesson }}
+            {{ schedule_form.start_time.label_tag }} {{ schedule_form.start_time }}
+            {{ schedule_form.end_time.label_tag }} {{ schedule_form.end_time }}
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Classroom</button>
+</form>
