@@ -14,6 +14,7 @@ from .views import (
     LessonDetailView,
     LessonUpdateView,
     lesson_delete,
+    CoursePreviewView,
 )
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path("courses/<int:course_id>/enroll/", course_enroll, name="course_enroll"),
     path("student/courses/", student_courses, name="student_courses"),
     path("student/courses/available/", available_courses, name="available_courses"),
+    path("courses/<int:pk>/preview/", CoursePreviewView.as_view(), name="course_preview"),
 ]
