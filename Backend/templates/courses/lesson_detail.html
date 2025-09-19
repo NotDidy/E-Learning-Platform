@@ -1,69 +1,112 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Lesson: {{ object.title }}{% endblock %}
+{% block title %}Lesson Details{% endblock %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
-
-<div class="white-cover" style="padding: 20px;">
-    <div style="display:flex; justify-content: space-between; align-items:center;">
-        <div>
-            <h2 style="margin-bottom: 6px;">{{ object.title }}</h2>
-            <div style="color:#666">Course: <a href="{% url 'course_detail' object.course.id %}">{{ object.course.title }}</a></div>
-        </div>
-        {% if request.user == object.course.instructor %}
-            <a class="create-course-btn" href="{% url 'section_create' object.id %}"><i class='bx bx-plus'></i> Add Section</a>
-        {% endif %}
-    </div>
-
-    {% if object.description %}
-        <h3 style="margin-top:16px;">Description</h3>
-        <p>{{ object.description }}</p>
-    {% endif %}
-
-    {% if object.learning_objectives %}
-        <h3>Learning Objectives</h3>
-        <pre style="white-space: pre-wrap;">{{ object.learning_objectives }}</pre>
-    {% endif %}
-
-    {% if object.reading_list %}
-        <h3>Reading List</h3>
-        <pre style="white-space: pre-wrap;">{{ object.reading_list }}</pre>
-    {% endif %}
-
-    <h3 style="margin-top: 16px;">Sections</h3>
-    <div class="courses-grid" style="margin-top: 12px;">
-        {% for s in sections %}
-            <div class="course-card" style="width:100%;">
-                <div class="course-card-header" style="align-items:center;">
-                    <div class="course-info" style="display:flex; align-items:center; gap:10px;">
-                        {% if user.role == 'STUDENT' %}
-                            <form method="post" action="{% url 'toggle_section_progress' s.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="next" value="{% url 'lesson_detail' object.id %}">
-                                <button class="action-btn edit-btn" style="border:none; background:transparent;" title="Mark done" type="submit">
-                                    {% if s.id in completed_ids %}
-                                        <i class='bx bx-checkbox-checked' style="color:#2a7;"></i>
-                                    {% else %}
-                                        <i class='bx bx-checkbox'></i>
-                                    {% endif %}
-                                </button>
-                            </form>
-                        {% else %}
-                            <i class='bx bx-list-check'></i>
-                        {% endif %}
-                        <h3 style="margin:0;">{{ s.title }}</h3>
-                    </div>
-                </div>
-                {% if s.content %}
-                    <p class="courses-description">{{ s.content|linebreaks }}</p>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p>No sections yet.</p>
-        {% endfor %}
-    </div>
-</div>
+{% block menu_links %}
+<li class="nav-link">
+    <a href="{% if request.user.role == 'INSTRUCTOR' %}{% url 'instructor_courses' %}{% elif request.user.role == 'STUDENT' %}{% url 'student_courses' %}{% else %}{% url 'role_select' %}{% endif %}">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Courses</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-calendar-week icon'></i>
+        <span class="text nav-text">Classrooms</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-user icon'></i>
+        <span class="text nav-text">Students</span>
+    </a>
+</li>
+<li class="nav-link">
+    <a href="#">
+        <i class='bx bx-book-content icon'></i>
+        <span class="text nav-text">Reports</span>
+    </a>
+</li>
 {% endblock %}
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'lessons/lesson-details.css' %}">
+
+<div class="lesson-details-header">
+    <div class="lessons-title-section">
+        <div class="lessons-title">
+            <div class="lesson-icon">
+                <i class='bx bx-book-open'></i>
+            </div>
+            Lesson Details
+        </div>
+        <div class="header-actions">
+            {% if request.user == object.course.instructor %}
+                <a class="action-btn edit-btn" href="{% url 'lesson_edit' object.id %}"><i class='bx bx-edit'></i> Edit</a>
+                <form method="post" action="{% url 'lesson_delete' object.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="action-btn delete-btn" type="submit"><i class='bx bx-trash'></i> Delete</button>
+                </form>
+            {% endif %}
+            <a class="back-btn" href="{% url 'course_detail' object.course.id %}"><i class='bx bx-left-arrow-alt'></i> Back to Lessons</a>
+        </div>
+    </div>
+    </div>
+
+<div class="lesson-details-container">
+    <div class="lesson-header">
+        <h1>{{ object.title }}</h1>
+        {% if object.lesson_code %}<span class="lesson-id">Lesson ID: {{ object.lesson_code }}</span>{% endif %}
+    </div>
+
+    {% if object.description %}<p class="lesson-full-description">{{ object.description }}</p>{% endif %}
+
+    {% if objectives_list %}
+    <div class="lesson-section">
+        <h2><i class='bx bx-target-lock'></i> Objectives</h2>
+        <ul class="normal-list">{% for item in objectives_list %}<li>{{ item }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if reading_list %}
+    <div class="lesson-section">
+        <h2><i class='bx bx-book-reader'></i> Reading List</h2>
+        <ul class="styled-list">
+        {% for item in reading_list %}
+            {% if item.url %}<li><a href="{{ item.url }}" target="_blank">{{ item.text }}</a></li>{% else %}<li>{{ item.text }}</li>{% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="lesson-section">
+        <h2><i class='bx bx-list-check'></i> Prerequisites</h2>
+        {% with prereqs=object.prerequisites.all %}
+            {% if prereqs %}
+                {% for l in prereqs %}<span class="prerequisite-tag">{{ l.title }}</span>{% empty %}<span class="prerequisite-tag">None</span>{% endfor %}
+            {% else %}
+                <span class="prerequisite-tag">None</span>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    {% if assignments_list %}
+    <div class="lesson-section">
+        <h2><i class='bx bx-clipboard'></i> Assignments</h2>
+        <ul class="normal-list">{% for a in assignments_list %}<li>{{ a }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    <div class="lesson-meta">
+        {% if object.duration_hours %}<div class="meta-item"><i class='bx bx-time'></i> Duration: {{ object.duration_hours }} hours</div>{% endif %}
+        {% if object.credit_points %}<div class="meta-item"><i class='bx bx-medal'></i> Credits: {{ object.credit_points }}</div>{% endif %}
+        {% if object.instructor %}<div class="meta-item"><i class='bx bx-user'></i> Instructor: {{ object.instructor.get_full_name|default:object.instructor.email }}</div>{% endif %}
+        <div class="meta-item"><i class='bx bx-calendar'></i> Created: {{ object.created_at|date:"d/m/Y" }}</div>
+        <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: {{ object.updated_at|date:"d/m/Y" }}</div>
+        <div class="lesson-status {% if course_published %}status-published{% else %}status-draft{% endif %}">{{ course_status_label }}</div>
+    </div>
+
+    
+</div>
+{% endblock %}

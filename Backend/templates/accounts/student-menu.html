@@ -37,12 +37,5 @@
             <p class="welcome message">Welcome Student!</p>
             <div class="admin-badge">Student Access</div>
         </div>
-        {% if messages %}
-          <div class="errors">
-            {% for message in messages %}
-              {{ message }}<br/>
-            {% endfor %}
-          </div>
-        {% endif %}
     </div>
 {% endblock %}
