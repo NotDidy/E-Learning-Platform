@@ -1,0 +1,10 @@
+<h1>Add Student to {{ classroom.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <select name="student_id">
+        {% for s in available_students %}
+        <option value="{{ s.id }}">{{ s.email }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Add</button>
+</form>
