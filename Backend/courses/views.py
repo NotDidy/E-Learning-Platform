@@ -9,9 +9,10 @@ from django.db.models import Count
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import F, Value
+from django.utils.decorators import method_decorator
 
-from .models import Course, Enrollment, Lesson, Section, SectionProgress
-from .forms import LessonForm, SectionForm
+from .models import Course, Enrollment, Lesson
+from .forms import LessonForm
 
 class InstructorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -31,7 +32,7 @@ class InstructorRequiredMixin(UserPassesTestMixin):
 
 class CourseCreateView(InstructorRequiredMixin, CreateView):
     model = Course
-    fields = ["title", "course_code", "description", "credit_points", "status"]
+    fields = ["title", "course_code", "description", "status","duration_weeks", "max_students"]
     template_name = "courses/course_form.html"
     success_url = reverse_lazy("instructor_courses")
 
@@ -170,9 +171,10 @@ def available_courses(request):
 
 @login_required
 def course_instructor_list(request):
-    """List courses owned by the logged-in instructor."""
+    """List courses owned by the logged-in instructor, with counts."""
     user = request.user
-    # Simple role check; if not instructor, forbid
+
+    # Simple role check
     try:
         is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR  # type: ignore[attr-defined]
     except Exception:
@@ -180,13 +182,13 @@ def course_instructor_list(request):
     if not is_instructor:
         return HttpResponseForbidden("Instructor role required")
 
+    # Fetch courses with student count, lesson count, and a placeholder for active classrooms
     courses = (
         Course.objects.filter(instructor=user)
         .annotate(
             student_count=Count("enrollments", distinct=True),
             lesson_count=Count("lessons", distinct=True),
-            active_classrooms=Value(1),  #placeholder
-            duration_weeks=Coalesce(F("credit_points"), Value(12)),  # fallback
+            active_classrooms=Value(1),  
         )
         .prefetch_related("lessons", "enrollments__student")
         .order_by("-created_at")
@@ -197,7 +199,7 @@ def course_instructor_list(request):
 
 class CourseUpdateView(InstructorRequiredMixin, UpdateView):
     model = Course
-    fields = ["title", "course_code", "description", "credit_points", "status"]
+    fields = ["title", "course_code", "description", "status", "duration_weeks", "max_students"]
     template_name = "courses/course_form.html"
     success_url = reverse_lazy("instructor_courses")
 
@@ -225,8 +227,15 @@ class LessonCreateView(InstructorRequiredMixin, CreateView):
         self.course = get_object_or_404(Course, pk=kwargs.get("course_id"), instructor=request.user)
         return super().dispatch(request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["course"] = self.course
+        return kwargs
+
     def form_valid(self, form):
         form.instance.course = self.course
+        if not form.instance.instructor_id:
+            form.instance.instructor = self.request.user or self.course.instructor
         messages.success(self.request, "Lesson created")
         return super().form_valid(form)
 
@@ -257,17 +266,7 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
             is_student = False
         if is_student and Enrollment.objects.filter(student=user, course=lesson.course).exists():
             
-            prereq_ids = list(lesson.prerequisites.values_list("id", flat=True))
-            if prereq_ids:
-                completed_lesson_ids = list(
-                    SectionProgress.objects.filter(student=user, completed=True)
-                    .values_list("section__lesson_id", flat=True)
-                    .distinct()
-                )
-                # if any prereq not satisfied -> forbid
-                missing = set(prereq_ids) - set(completed_lesson_ids)
-                if missing:
-                    return HttpResponseForbidden("You must complete the prerequisite lessons first.")
+            # Prerequisite enforcement via sections removed
 
             self.object = lesson
             return super().dispatch(request, *args, **kwargs)
@@ -276,74 +275,81 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         lesson: Lesson = self.object
-        sections = lesson.sections.all()
-        ctx["sections"] = sections
-        # For students, annotate which sections are completed by current user
-        user = self.request.user
-        try:
-            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
-        except Exception:
-            is_student = False
-        completed_ids = set()
-        if is_student:
-            completed_ids = set(
-                SectionProgress.objects.filter(student=user, section__lesson=lesson, completed=True)
-                .values_list("section_id", flat=True)
-            )
-        ctx["completed_ids"] = completed_ids
+        # sections removed
+        # Split multi-line fields for styled lists
+        def _split(text):
+            return [line.strip() for line in (text or "").splitlines() if line.strip()]
+        ctx["objectives_list"] = _split(lesson.learning_objectives)
+        # Reading lines: best-effort link detection (http/https)
+        readings = []
+        for line in _split(lesson.reading_list):
+            txt = line
+            url = None
+            idx_http = line.find('http://') if 'http://' in line else line.find('https://')
+            if idx_http != -1:
+                txt = line[:idx_http].strip() or line[idx_http:].strip()
+                url = line[idx_http:].strip()
+            readings.append({"text": txt, "url": url})
+        ctx["reading_list"] = readings
+        ctx["assignments_list"] = _split(getattr(lesson, "assignments", ""))
+        # Publish status mirrors course state
+        course = lesson.course
+        course_published = (getattr(course, "status", None) == Course.STATUS_ACTIVE) and (not getattr(course, "is_draft", False))
+        ctx["course_published"] = course_published
+        ctx["course_status_label"] = "Published" if course_published else "Draft"
+        # section progress removed
         return ctx
 
 
-class SectionCreateView(InstructorRequiredMixin, CreateView):
-    model = Section
-    form_class = SectionForm
-    template_name = "courses/section_form.html"
+class LessonUpdateView(InstructorRequiredMixin, UpdateView):
+    model = Lesson
+    form_class = LessonForm
+    template_name = "courses/lesson_form.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        self.lesson = get_object_or_404(
-            Lesson, pk=kwargs.get("lesson_id"), course__instructor=request.user
-        )
-        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        return Lesson.objects.filter(course__instructor=self.request.user)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        obj = getattr(self, 'object', None)
+        if obj:
+            kwargs["course"] = obj.course
+        return kwargs
 
     def form_valid(self, form):
-        form.instance.lesson = self.lesson
-        messages.success(self.request, "Section added to lesson")
+        if not form.instance.instructor_id:
+            form.instance.instructor = self.request.user
+        messages.success(self.request, "Lesson updated")
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("lesson_detail", args=[self.lesson.id])
+        return reverse("lesson_detail", args=[self.object.id])
+
+@login_required
+def lesson_delete(request, lesson_id: int):
+    lesson = get_object_or_404(Lesson, pk=lesson_id, course__instructor=request.user)
+    if request.method != "POST":
+        return HttpResponseForbidden("Deletion requires POST")
+    course_id = lesson.course_id
+    title = lesson.title
+    lesson.delete()
+    messages.success(request, f"Deleted lesson '{title}'.")
+    return redirect("course_detail", pk=course_id)
+
+@method_decorator(login_required, name="dispatch")
+class CoursePreviewView(DetailView):
+    model = Course
+    template_name = "courses/course_preview.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        course = self.get_object()
+        if course.is_draft or course.status != Course.STATUS_ACTIVE:
+            return HttpResponseForbidden("This course is not available for preview")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["lesson"] = self.lesson
+        course: Course = self.object
+        ctx["lessons"] = course.lessons.all()[:3]  # preview only first 3 lessons
+        ctx["preview_mode"] = True
         return ctx
-
-
-@login_required
-def toggle_section_progress(request, section_id: int):
-    if request.method != "POST":
-        return HttpResponseForbidden("POST required")
-
-    user = request.user
-    # Only students can toggle
-    try:
-        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT  # type: ignore[attr-defined]
-    except Exception:
-        is_student = False
-    if not is_student:
-        return HttpResponseForbidden("Student role required")
-
-    section = get_object_or_404(Section, pk=section_id)
-    course = section.lesson.course
-
-    # Must be enrolled in course
-    if not Enrollment.objects.filter(student=user, course=course).exists():
-        return HttpResponseForbidden("Not enrolled in this course")
-
-    sp, _ = SectionProgress.objects.get_or_create(student=user, section=section)
-    sp.completed = not sp.completed
-    sp.completed_at = timezone.now() if sp.completed else None
-    sp.save(update_fields=["completed", "completed_at"])
-    messages.success(request, f"Marked section '{section.title}' as {'done' if sp.completed else 'not done'}.")
-    next_url = request.POST.get("next") or reverse("lesson_detail", args=[section.lesson.id])
-    return redirect(next_url)

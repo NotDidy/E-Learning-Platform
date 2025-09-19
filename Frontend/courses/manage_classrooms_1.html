@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Classrooms | Course Manager</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --body-color: #f5f7fa;
+            --sidebar-color: #FFF;
+            --primary-color: #695CFE;
+            --primary-color-light: #F6F5FF;
+            --toggle-color: #DDD;
+            --text-color: #707070;
+            --black-color: #0a0909;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+            --success-color: #4CAF50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --info-color: #2196F3;
+            --purple-color: #9C27B0;
+            --cancel-color: #f0f0f0;
+            --cancel-text: #888;
+
+            --tran-02: all 0.2s ease;
+            --tran-03: all 0.3s ease;
+            --tran-04: all 0.4s ease;
+            --tran-05: all 0.5s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            background-attachment: fixed;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: var(--tran-02);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--black-color);
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .header-actions .btn {
+             margin-left: 10px;
+        }
+
+        .page-title {
+            margin: 20px 0 30px;
+        }
+
+        .page-title h1 {
+            color: var(--black-color);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: var(--text-color);
+            font-size: 15px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-header h2 {
+            font-size: 20px;
+            color: var(--black-color);
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-bar .form-control {
+            width: 300px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(105, 92, 254, 0.1);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .classrooms-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .classrooms-table th, .classrooms-table td {
+            border: 1px solid #eee;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .classrooms-table th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            color: var(--black-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        .classrooms-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+        
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+        }
+        
+        .badge-success {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .btn i {
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a4bdb;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #3d9140;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        
+        .btn-purple {
+            background-color: var(--purple-color);
+            color: white;
+        }
+        
+        .btn-purple:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .btn-orange {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-orange:hover {
+            background-color: #e68a00;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .no-classes {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-color);
+            font-style: italic;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        /* Schedule Table Styles */
+        .schedule-container {
+            background-color: #f9f9f9;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .schedule-container.expanded {
+            max-height: 500px;
+            transition: max-height 0.6s ease-in;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .schedule-table th {
+            background-color: #f0f0f0;
+            padding: 8px 10px;
+            font-weight: 500;
+        }
+        
+        .schedule-table td {
+            padding: 8px 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .schedule-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .schedule-toggle {
+            cursor: pointer;
+            color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        
+        .schedule-toggle:hover {
+            text-decoration: underline;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal.show {
+            display: block;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .modal-header {
+            padding: 10px 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 10px 0 0;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 20px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .search-bar .form-control {
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .schedule-table {
+                font-size: 12px;
+            }
+            
+            .schedule-table th, .schedule-table td {
+                padding: 5px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class='bx bx-book-open'></i>
+                <h2>Course Manager</h2>
+            </div>
+            <div class="header-actions">
+                <a href="create_classroom.html" class="btn btn-orange">
+                    <i class='bx bx-plus-circle'></i> Add New Classroom
+                </a>
+            </div>
+        </div>
+
+        <div class="page-title">
+            <h1>Manage Classrooms</h1>
+            <p>View, edit, delete classrooms, assign lessons, and manage students (max 10 students per classroom).</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Classrooms List</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by classroom number or course...">
+                    <button class="btn btn-primary" id="searchButton"><i class='bx bx-search'></i> Search</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="classrooms-table" id="classroomsTable">
+                    <thead>
+                        <tr>
+                            <th>Classroom Name</th>
+                            <th>Course</th>
+                            <th>Supervisor</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Students</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classroomsTableBody">
+                        <!-- Classroom rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="noClassesMessage" class="no-classes" style="display: none;">
+                <i class='bx bx-info-circle' style="font-size: 24px; margin-bottom: 10px;"></i><br>
+                No classrooms found. Click "Add New Classroom" to create your first classroom.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class='bx bx-trash'></i> Confirm Delete</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the classroom <strong id="classNameToDelete">Classroom Name</strong>? This action cannot be undone.</p>
+                <p class="text-warning" style="margin-top:10px; color:#856404;">All student assignments and lessons for this classroom will also be removed.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 课程表数据
+            const schedules = {
+                1: [
+                    { day: 'Monday', time: '10:00 - 11:00', lesson: 'Introduction to Programming' },
+                    { day: 'Wednesday', time: '14:00 - 15:30', lesson: 'Variables and Data Types' },
+                    { day: 'Friday', time: '09:00 - 10:30', lesson: 'Control Structures' }
+                ],
+                2: [
+                    { day: 'Tuesday', time: '11:00 - 12:30', lesson: 'Software Design Principles' },
+                    { day: 'Thursday', time: '13:00 - 15:00', lesson: 'Agile Methodologies' }
+                ],
+                3: [
+                    { day: 'Monday', time: '13:00 - 14:30', lesson: 'Database Design' },
+                    { day: 'Wednesday', time: '10:00 - 11:30', lesson: 'SQL Queries' },
+                    { day: 'Friday', time: '14:00 - 15:30', lesson: 'Normalization' }
+                ],
+                4: [
+                    { day: 'Tuesday', time: '09:00 - 10:30', lesson: 'Set Theory' },
+                    { day: 'Thursday', time: '11:00 - 12:30', lesson: 'Graph Algorithms' }
+                ],
+                5: [
+                    { day: 'Monday', time: '15:00 - 16:30', lesson: 'Network Fundamentals' },
+                    { day: 'Tuesday', time: '14:00 - 15:30', lesson: 'TCP/IP Protocol' },
+                    { day: 'Thursday', time: '10:00 - 11:30', lesson: 'Network Security' }
+                ]
+            };
+
+            // 教室数据
+            const classrooms = [
+                { id: 1, name: '5801', course: 'FIT2009 - Fundamental Programming', supervisor: 'Dr. Alice Smith', duration: '4 Weeks', status: 'Active', students: 8, lessonsAssigned: 5 },
+                { id: 2, name: '9401', course: 'FIT3047 - Software Engineering', supervisor: 'Prof. Bob Johnson', duration: '3 Weeks', status: 'Active', students: 5, lessonsAssigned: 3 },
+                { id: 3, name: '2406', course: 'FIT5120 - Database Systems', supervisor: 'Dr. Charlie Brown', duration: '2 Weeks', status: 'Completed', students: 10, lessonsAssigned: 8 },
+                { id: 4, name: '6002', course: 'FIT1045 - Discrete Mathematics', supervisor: 'Dr. Dana White', duration: '4 Weeks', status: 'Scheduled', students: 0, lessonsAssigned: 0 },
+                { id: 5, name: '5001', course: 'FIT3155 - Computer Networks', supervisor: 'Prof. Eve Davis', duration: '5 Weeks', status: 'Active', students: 7, lessonsAssigned: 4 }
+            ];
+
+            const tableBody = document.getElementById('classroomsTableBody');
+            const noClassesMessage = document.getElementById('noClassesMessage');
+            const deleteModal = document.getElementById('deleteModal');
+            const classNameToDelete = document.getElementById('classNameToDelete');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            
+            let classIdToDelete = null;
+            let currentClassrooms = [...classrooms];
+
+            // 渲染教室到表格
+            function renderClassrooms(classroomsArray) {
+                tableBody.innerHTML = '';
+
+                if (classroomsArray.length === 0) {
+                    noClassesMessage.style.display = 'block';
+                    return;
+                }
+                
+                noClassesMessage.style.display = 'none';
+
+                classroomsArray.forEach(classroom => {
+                    const row = document.createElement('tr');
+                    
+                    // 状态标签样式
+                    let badgeClass = 'badge-primary';
+                    if (classroom.status === 'Active') badgeClass = 'badge-success';
+                    if (classroom.status === 'Scheduled') badgeClass = 'badge-warning';
+                    
+                    // 学生数量显示
+                    let studentDisplay = classroom.students;
+                    if (classroom.students >= 10) {
+                        studentDisplay += '<span style="margin-left:5px" title="Maximum capacity reached"><i class="bx bx-info-circle" style="font-size:12px;"></i></span>';
+                    }
+
+                    row.innerHTML = `
+                        <td>${classroom.name}</td>
+                        <td>${classroom.course}</td>
+                        <td>${classroom.supervisor}</td>
+                        <td>${classroom.duration}</td>
+                        <td><span class="badge ${badgeClass}">${classroom.status}</span></td>
+                        <td>${studentDisplay} / 10</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="assign_lessons.html?classId=${classroom.id}" class="btn btn-sm btn-purple">
+                                    <i class='bx bx-book'></i> Lessons
+                                </a>
+                                <a href="manage_students.html?classId=${classroom.id}" class="btn btn-sm btn-success">
+                                    <i class='bx bx-user-plus'></i> Students
+                                </a>
+                                <a href="edit_classroom.html?classId=${classroom.id}" class="btn btn-sm btn-info">
+                                    <i class='bx bx-edit'></i> Edit
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger delete-btn" 
+                                        data-id="${classroom.id}" data-name="${classroom.name}">
+                                    <i class='bx bx-trash'></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                    
+                    // 添加课程表行（可展开/折叠）
+                    const scheduleRow = document.createElement('tr');
+                    scheduleRow.className = 'schedule-row';
+                    scheduleRow.setAttribute('data-class-id', classroom.id);
+                    
+                    // 构建课程表内容
+                    const classSchedule = schedules[classroom.id] || [];
+                    let scheduleHtml = '';
+                    
+                    if (classSchedule.length > 0) {
+                        classSchedule.forEach(lesson => {
+                            scheduleHtml += `
+                                <tr>
+                                    <td>${lesson.day}</td>
+                                    <td>${lesson.time}</td>
+                                    <td>${lesson.lesson}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        scheduleHtml = `
+                            <tr>
+                                <td colspan="3" style="text-align:center; color:#888;">No lessons scheduled yet</td>
+                            </tr>
+                        `;
+                    }
+                    
+                    scheduleRow.innerHTML = `
+                        <td colspan="7" style="padding:0; border-top:none;">
+                            <div class="schedule-toggle" data-class-id="${classroom.id}">
+                                <i class='bx bx-chevron-down'></i> View Schedule (${classSchedule.length} lessons)
+                            </div>
+                            <div class="schedule-container" id="schedule-${classroom.id}">
+                                <table class="schedule-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Day</th>
+                                            <th>Time</th>
+                                            <th>Lesson</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${scheduleHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(scheduleRow);
+                });
+
+                // 为删除按钮添加事件
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        classIdToDelete = this.getAttribute('data-id');
+                        classNameToDelete.textContent = this.getAttribute('data-name');
+                        deleteModal.classList.add('show');
+                    });
+                });
+                
+                // 为课程表切换按钮添加事件
+                document.querySelectorAll('.schedule-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', function() {
+                        const classId = this.getAttribute('data-class-id');
+                        const scheduleContainer = document.getElementById(`schedule-${classId}`);
+                        const icon = this.querySelector('i');
+                        
+                        // 切换展开/折叠状态
+                        scheduleContainer.classList.toggle('expanded');
+                        
+                        // 更新图标
+                        if (scheduleContainer.classList.contains('expanded')) {
+                            icon.classList.remove('bx-chevron-down');
+                            icon.classList.add('bx-chevron-up');
+                            this.innerHTML = '<i class="bx bx-chevron-up"></i> Hide Schedule';
+                        } else {
+                            const lessonCount = schedules[classId]?.length || 0;
+                            icon.classList.remove('bx-chevron-up');
+                            icon.classList.add('bx-chevron-down');
+                            this.innerHTML = `<i class='bx bx-chevron-down'></i> View Schedule (${lessonCount} lessons)`;
+                        }
+                    });
+                });
+            }
+
+            // 初始渲染
+            renderClassrooms(currentClassrooms);
+
+            // 搜索功能
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                if (!searchTerm) {
+                    currentClassrooms = [...classrooms];
+                    renderClassrooms(currentClassrooms);
+                    return;
+                }
+                
+                currentClassrooms = classrooms.filter(classroom => 
+                    classroom.name.toLowerCase().includes(searchTerm) || 
+                    classroom.course.toLowerCase().includes(searchTerm) ||
+                    classroom.supervisor.toLowerCase().includes(searchTerm)
+                );
+                
+                renderClassrooms(currentClassrooms);
+            }
+
+            // 搜索按钮点击事件
+            searchButton.addEventListener('click', performSearch);
+            
+            // 搜索输入框回车事件
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 关闭模态框
+            closeModalBtn.addEventListener('click', function() {
+                deleteModal.classList.remove('show');
+            });
+
+            // 取消删除
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.classList.remove('show');
+            });
+
+            // 确认删除
+            confirmDeleteBtn.addEventListener('click', function() {
+                if (classIdToDelete) {
+                    currentClassrooms = currentClassrooms.filter(classroom => 
+                        classroom.id !== parseInt(classIdToDelete)
+                    );
+                    
+                    renderClassrooms(currentClassrooms);
+                    deleteModal.classList.remove('show');
+                    alert('Classroom deleted successfully');
+                }
+            });
+
+            // 点击模态框外部关闭
+            window.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    deleteModal.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+    

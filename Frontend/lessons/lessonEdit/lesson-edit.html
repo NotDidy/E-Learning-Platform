@@ -1,0 +1,177 @@
+<html lang="en">
+
+<head>
+  <title>Edit Lesson</title>
+  <link rel="stylesheet" href="lesson-edit.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="lesson-details-header">
+    <div class="lessons-title-section">
+      <div class="lessons-title">
+        <div class="lesson-icon">
+          <i class='bx bx-edit'></i>
+        </div>
+        Edit Lesson
+      </div>
+      <div class="header-actions">
+        <button class="back-btn">
+          <i class='bx bx-left-arrow-alt'></i>
+          Back to Lessons
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-details-container">
+    <form class="edit-form">
+      <!-- Lesson Title -->
+      <div class="form-group">
+        <label>Lesson Title</label>
+        <input type="text" value="Introduction to Python Programming" required>
+      </div>
+
+      <!-- Lesson ID -->
+      <div class="form-group">
+        <label>Lesson ID</label>
+        <input type="text" value="L001" disabled>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label>Description</label>
+        <textarea rows="5" required>This lesson introduces students to the fundamentals of Python Programming...</textarea>
+      </div>
+
+      <!-- Objectives -->
+      <div class="lesson-section">
+        <h2><i class='bx bx-target-lock'></i> Objectives</h2>
+        <div id="objectives-list">
+          <div class="row">
+            <input type="text" value="Understand Python syntax and indentation" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" value="Learn variables, constants, and data types" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addObjective()">+ Add Objective</button>
+      </div>
+
+      <!-- Reading List -->
+      <div class="lesson-section">
+        <h2><i class='bx bx-book-reader'></i> Reading List</h2>
+        <div id="reading-list">
+          <div class="row">
+            <input type="text" placeholder="Title" value="Python Crash Course - Chapter 1" required>
+            <input type="url" placeholder="Link" value="https://example.com/python-crash-course" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" placeholder="Title" value="Official Python Tutorial - Sections 1–3" required>
+            <input type="url" placeholder="Link" value="https://example.com/python-tutorial" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addReading()">+ Add Reading</button>
+      </div>
+
+      <!-- Prerequisites -->
+      <div class="form-group">
+        <label>Prerequisites</label>
+        <input type="text" value="None">
+      </div>
+
+      <!-- Assignments -->
+      <div class="lesson-section">
+        <h2><i class='bx bx-clipboard'></i> Assignments</h2>
+        <div id="assignments-list">
+          <div class="row">
+            <input type="text" value="Basic Operations Program" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" value="Variable Practice Exercises" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" value="Mini Project: Simple Calculator" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addAssignment()">+ Add Assignment</button>
+      </div>
+
+      <!-- Duration -->
+      <div class="form-group">
+        <label>Duration (hours)</label>
+        <input type="number" value="3" min="1" required>
+      </div>
+
+      <!-- Credits -->
+      <div class="form-group">
+        <label>Credits</label>
+        <input type="number" value="3" min="1">
+      </div>
+
+      <!-- Instructor -->
+      <div class="form-group">
+        <label>Instructor</label>
+        <input type="text" value="John Smith" required>
+      </div>
+
+      <!-- Save / Cancel buttons -->
+      <div class="form-actions">
+        <button type="submit" class="save-btn"><i class='bx bx-save'></i> Save Changes</button>
+        <button type="button" class="cancel-btn"><i class='bx bx-x-circle'></i> Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function addObjective() {
+      const container = document.getElementById("objectives-list");
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <input type="text" placeholder="New Objective" required>
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      container.appendChild(row);
+    }
+
+    function addReading() {
+      const container = document.getElementById("reading-list");
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <input type="text" placeholder="Title" required>
+        <input type="url" placeholder="Link" required>
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      container.appendChild(row);
+    }
+
+    function addAssignment() {
+      const container = document.getElementById("assignments-list");
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <input type="text" placeholder="New Assignment" required>
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      container.appendChild(row);
+    }
+
+    // Attach remove function to initial rows of data
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.onclick = function () { this.parentNode.remove(); }
+    });
+  </script>
+</body>
+</html>

@@ -12,8 +12,10 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     course_code = models.CharField(max_length=32, unique=True, null=True, blank=True)
     description = models.TextField(blank=True)
-    credit_points = models.PositiveIntegerField(default=0)
+    credit_points = models.PositiveIntegerField(default=30)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default=STATUS_ACTIVE)
+    duration_weeks = models.PositiveIntegerField(default=12)
+    max_students = models.PositiveIntegerField(default=50)
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="courses"
     )
@@ -37,6 +39,11 @@ class Course(models.Model):
             self.published_at = when
             self.save(update_fields=["is_draft", "published_at"])
 
+    def save(self, *args, **kwargs):
+        # Always enforce 30 credit points per course
+        self.credit_points = 30
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return self.title
     
@@ -57,9 +64,16 @@ class Enrollment(models.Model):
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons")
     title = models.CharField(max_length=255)
+    lesson_code = models.CharField(max_length=32, blank=True, null=True, help_text="Lesson ID/Code")
     description = models.TextField(blank=True)
     learning_objectives = models.TextField(blank=True, help_text="One per line or paragraph")
     reading_list = models.TextField(blank=True, help_text="References or links, one per line")
+    assignments = models.TextField(blank=True)
+    duration_hours = models.PositiveIntegerField(default=0)
+    credit_points = models.PositiveIntegerField(default=0)
+    instructor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="lessons"
+    )
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -75,39 +89,11 @@ class Lesson(models.Model):
     class Meta:
         ordering = ["order", "created_at"]
         db_table = "lesson"
+        constraints = [
+            models.UniqueConstraint(fields=["course", "lesson_code"], name="unique_lesson_code_per_course")
+        ]
 
     def __str__(self) -> str:
         return f"{self.title} ({self.course.title})"
     
 
-
-
-class Section(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="sections")
-    title = models.CharField(max_length=255)
-    content = models.TextField(blank=True)
-    order = models.PositiveIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["order", "created_at"]
-        db_table = "lesson_section"
-
-    def __str__(self) -> str:
-        return f"{self.title} ({self.lesson.title})"
-
-
-class SectionProgress(models.Model):
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="section_progress")
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name="progress")
-    completed = models.BooleanField(default=False)
-    completed_at = models.DateTimeField(null=True, blank=True)
-
-    class Meta:
-        unique_together = ("student", "section")
-        db_table = "section_progress"
-
-    def __str__(self) -> str:
-        status = "done" if self.completed else "pending"
-        return f"{self.student} - {self.section} [{status}]"
