@@ -1,0 +1,9 @@
+<h1>Classrooms for {{ course.title }}</h1>
+<a href="{% url 'classroom_create' course.id %}">Create new classroom</a>
+<ul>
+    {% for c in classrooms %}
+    <li><a href="{% url 'classroom_detail' c.id %}">{{ c.name }}</a> ({{ c.enrollments.count }} students)</li>
+    {% empty %}
+    <li>No classrooms yet.</li>
+    {% endfor %}
+</ul>
