@@ -1,13 +1,21 @@
 from django import forms
 from .models import Classroom, Schedule
-
+from accounts.models import User
+from courses.models import Lesson
 
 class ClassroomForm(forms.ModelForm):
     class Meta:
         model = Classroom
         fields = ["name", "course", "supervisor", "duration_weeks", "description", "class_code"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["supervisor"].queryset = User.objects.filter(role=User.Roles.INSTRUCTOR)
 
+        classroom = kwargs.pop("classroom", None)  
+        super().__init__(*args, **kwargs)
+        if classroom:
+            self.fields["lesson"].queryset = Lesson.objects.filter(course=classroom.course)
 
 class ScheduleForm(forms.ModelForm):
     class Meta:

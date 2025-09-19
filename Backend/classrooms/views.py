@@ -20,26 +20,23 @@ def create_classroom(request):
 
     if request.method == "POST":
         form = ClassroomForm(request.POST)
-        formset = ScheduleFormSet(request.POST, queryset=Schedule.objects.none())
+        if form.is_valid():
+            classroom = form.save(commit=False)
+            formset = ScheduleFormSet(request.POST, queryset=Schedule.objects.none(), form_kwargs={"classroom": classroom})
 
-        if form.is_valid() and formset.is_valid():
-            classroom = form.save()
-
-            schedules = formset.save(commit=False)
-            for schedule in schedules:
-                print(schedule.__dict__)
-                schedule.classroom = classroom
-                schedule.save()
-
-            messages.success(request, "Classroom created successfully!")
-            return redirect("classrooms")
-        
+            if formset.is_valid():
+                classroom.save()
+                schedules = formset.save(commit=False)
+                for schedule in schedules:
+                    schedule.classroom = classroom
+                    schedule.save()
+                formset.save_m2m()
+                messages.success(request, "Classroom created successfully!")
+                return redirect("classrooms")
         else:
-            print("Form errors:", form.errors)
-            print("Formset errors:", formset.errors)
+            formset = ScheduleFormSet(queryset=Schedule.objects.none())
     else:
-
         form = ClassroomForm()
         formset = ScheduleFormSet(queryset=Schedule.objects.none())
-        
+
     return render(request, "classrooms/create_classrooms.html", {"form": form, "formset": formset})
