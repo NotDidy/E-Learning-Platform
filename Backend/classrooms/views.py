@@ -27,14 +27,19 @@ def create_classroom(request):
 
             schedules = formset.save(commit=False)
             for schedule in schedules:
+                print(schedule.__dict__)
                 schedule.classroom = classroom
                 schedule.save()
 
             messages.success(request, "Classroom created successfully!")
             return redirect("classrooms")
-
+        
+        else:
+            print("Form errors:", form.errors)
+            print("Formset errors:", formset.errors)
     else:
+
         form = ClassroomForm()
         formset = ScheduleFormSet(queryset=Schedule.objects.none())
-
+        
     return render(request, "classrooms/create_classrooms.html", {"form": form, "formset": formset})
