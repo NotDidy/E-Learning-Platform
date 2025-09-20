@@ -347,6 +347,11 @@ class CoursePreviewInstructorView(InstructorRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         course: Course = self.object
-        ctx["lessons"] = course.lessons.all()  # show ALL lessons
-        ctx["preview_mode"] = True
+
+        ctx["lessons"] = course.lessons.all()
+        ctx["students"] = [enrollment.student for enrollment in course.enrollments.select_related('student').all()]
+        ctx["classrooms"] = course.classrooms.all()
+        ctx["is_student"] = getattr(self.request.user, "role", None) == "STUDENT"
+        ctx["is_enrolled"] = course.enrollments.filter(student=self.request.user).exists() if ctx["is_student"] else False
+
         return ctx
