@@ -1,67 +1,45 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
+from django.forms import modelformset_factory
 from django.contrib import messages
-from .models import Classroom, ClassroomEnrollment
-from courses.models import Course
-from accounts.models import User
+from .models import Classroom, Schedule
+from .forms import ClassroomForm, ScheduleForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+def is_instructor(user):
+    return user.is_authenticated and user.role == user.Roles.INSTRUCTOR
+
+
+def classrooms(request):
+    classrooms = Classroom.objects.all()
+    return render(request, "classrooms/classrooms.html", {"classrooms": classrooms})
 
 @login_required
-def classroom_list(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    classrooms = course.classrooms.filter(instructor=request.user)
-    return render(
-        request,
-        'classrooms/classroom_list.html',
-        {'course': course, 'classrooms': classrooms}
-    )
+@user_passes_test(is_instructor)
+def create_classroom(request):
+    ScheduleFormSet = modelformset_factory(Schedule, form=ScheduleForm, extra=1, can_delete=True)
 
-@login_required
-def classroom_create(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description', '')
-        max_students = request.POST.get('max_students', 30)
-        classroom = Classroom.objects.create(
-            course=course,
-            instructor=request.user,
-            name=name,
-            description=description,
-            max_students=max_students
-        )
-        messages.success(request, f"Classroom '{classroom.name}' created.")
-        return redirect('classroom_list', course_id=course.id)
+    if request.method == "POST":
+        form = ClassroomForm(request.POST)
+        formset = ScheduleFormSet(request.POST, queryset=Schedule.objects.none())
 
-    return render(request, 'classrooms/classroom_create.html', {'course': course})
+        if form.is_valid() and formset.is_valid():
+            classroom = form.save()
 
-@login_required
-def classroom_detail(request, classroom_id):
-    classroom = get_object_or_404(Classroom, id=classroom_id, instructor=request.user)
-    students = classroom.enrollments.select_related('student')
-    return render(
-        request,
-        'classrooms/classroom_detail.html',
-        {'classroom': classroom, 'students': students}
-    )
+            schedules = formset.save(commit=False)
+            for schedule in schedules:
+                print(schedule.__dict__)
+                schedule.classroom = classroom
+                schedule.save()
 
-@login_required
-def classroom_add_student(request, classroom_id):
-    classroom = get_object_or_404(Classroom, id=classroom_id, instructor=request.user)
-    if request.method == 'POST':
-        student_id = request.POST.get('student_id')
-        student = get_object_or_404(User, id=student_id, role=User.Roles.STUDENT)
-        ClassroomEnrollment.objects.get_or_create(classroom=classroom, student=student)
-        messages.success(request, f"{student.email} added to {classroom.name}")
-        return redirect('classroom_detail', classroom_id=classroom.id)
+            messages.success(request, "Classroom created successfully!")
+            return redirect("classrooms")
+        
+        else:
+            print("Form errors:", form.errors)
+            print("Formset errors:", formset.errors)
+    else:
 
-    # show list of students who are not yet enrolled
-    enrolled_ids = classroom.enrollments.values_list('student_id', flat=True)
-    available_students = User.objects.filter(role=User.Roles.STUDENT).exclude(id__in=enrolled_ids)
-    return render(
-        request,
-        'classrooms/classroom_add_student.html',
-        {'classroom': classroom, 'available_students': available_students}
-    )
+        form = ClassroomForm()
+        formset = ScheduleFormSet(queryset=Schedule.objects.none())
+        
+    return render(request, "classrooms/create_classrooms.html", {"form": form, "formset": formset})

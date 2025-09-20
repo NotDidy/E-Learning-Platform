@@ -9,7 +9,6 @@ from django.db.models import Count
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import F, Value
-from django.utils.decorators import method_decorator
 
 from .models import Course, Enrollment, Lesson
 from .forms import LessonForm
@@ -336,20 +335,18 @@ def lesson_delete(request, lesson_id: int):
     messages.success(request, f"Deleted lesson '{title}'.")
     return redirect("course_detail", pk=course_id)
 
-@method_decorator(login_required, name="dispatch")
-class CoursePreviewView(DetailView):
+class CoursePreviewInstructorView(InstructorRequiredMixin, DetailView):
     model = Course
-    template_name = "courses/course_preview.html"
+    template_name = "courses/course-preview-instructor.html"
+    context_object_name = "course"
 
-    def dispatch(self, request, *args, **kwargs):
-        course = self.get_object()
-        if course.is_draft or course.status != Course.STATUS_ACTIVE:
-            return HttpResponseForbidden("This course is not available for preview")
-        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        # Instructors can only see their own courses
+        return Course.objects.filter(instructor=self.request.user).prefetch_related("lessons")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         course: Course = self.object
-        ctx["lessons"] = course.lessons.all()[:3]  # preview only first 3 lessons
+        ctx["lessons"] = course.lessons.all()  # show ALL lessons
         ctx["preview_mode"] = True
         return ctx
