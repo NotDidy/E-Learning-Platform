@@ -1,8 +1,0 @@
-<h1>Create Classroom under {{ course.title }}</h1>
-<form method="post">
-    {% csrf_token %}
-    <label>Name:</label><input type="text" name="name"><br>
-    <label>Description:</label><textarea name="description"></textarea><br>
-    <label>Max students:</label><input type="number" name="max_students" value="30"><br>
-    <button type="submit">Create Classroom</button>
-</form>
