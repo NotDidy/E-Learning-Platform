@@ -46,12 +46,15 @@
         </div>
         <div class="header-actions">
             {% if request.user == course.instructor %}
-            <button class="action-btn edit-btn">
+            <a class="action-btn edit-btn" href="{% url 'course_edit' course.id %}">
                 <i class='bx bx-edit'></i> Edit
-            </button>
-            <button class="action-btn delete-btn">
-                <i class='bx bx-trash'></i> Delete
-            </button>
+            </a>
+            <form id="course-delete-form" method="post" action="{% url 'course_delete' course.id %}">
+                {% csrf_token %}
+                <button type="submit" class="action-btn delete-btn">
+                    <i class='bx bx-trash'></i> Delete
+                </button>
+            </form>
             {% endif %}
             <a class="back-btn" href="{% url 'instructor_courses' %}">
                 <i class='bx bx-left-arrow-alt'></i>
@@ -75,19 +78,24 @@
 
     <!-- Lessons Section -->
     <div class="course-section">
-        <h2>
-            <i class='bx bx-book-open'></i> 
-            Lessons
-            <span class="section-counter">{{ lessons|length }}</span>
-        </h2>
+        <div class="section-header">
+            <h2><i class='bx bx-book-open'></i> Lessons <span class="section-counter">{{ lessons|length }}</span></h2>
+            {% if request.user == course.instructor %}
+            <a class="section-action-btn" href="{% url 'lesson_create' course.id %}">
+                <i class='bx bx-plus'></i> Add Lesson
+            </a>
+            {% endif %}
+        </div>
         <ul class="lessons-list">
             {% for lesson in lessons %}
             <li class="lesson-item">
-                <div class="lesson-info">
-                    <div class="lesson-id">{{ lesson.lesson_code }}</div>
-                    <div class="lesson-name">{{ lesson.title }}</div>
-                </div>
-                <i class='bx bx-chevron-right'></i>
+                <a class="lesson-link" href="{% url 'lesson_detail' lesson.pk %}">
+                    <div class="lesson-info">
+                        <div class="lesson-id">{{ lesson.lesson_code }}</div>
+                        <div class="lesson-name">{{ lesson.title }}</div>
+                    </div>
+                    <i class='bx bx-chevron-right'></i>
+                </a>
             </li>
             {% empty %}
                 <p>No lessons yet.</p>
@@ -119,11 +127,14 @@
 
     <!-- Classrooms Section -->
     <div class="course-section">
-        <h2>
-            <i class='bx bx-buildings'></i> 
-            Assigned Classrooms
-            <span class="section-counter">{{ classrooms|length }}</span>
-        </h2>
+        <div class="section-header">
+            <h2><i class='bx bx-buildings'></i> Assigned Classrooms <span class="section-counter">{{ classrooms|length }}</span></h2>
+            {% if request.user == course.instructor %}
+            <a class="section-action-btn" href="{% url 'create_classroom' %}?course={{ course.id }}">
+                <i class='bx bx-plus'></i> Add Classroom
+            </a>
+            {% endif %}
+        </div>
         <ul class="classrooms-list">
             {% for classroom in classrooms %}
             <li class="classroom-item">
@@ -151,4 +162,24 @@
         {% endif %}
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForm = document.getElementById('course-delete-form');
+        if (!deleteForm) {
+            return;
+        }
+        deleteForm.addEventListener('submit', function (event) {
+            const confirmed = confirm(
+                `Are you sure you want to delete "{{ course.title|escapejs }}"?`
+            );
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 {% endblock %}

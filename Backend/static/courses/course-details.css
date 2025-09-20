@@ -348,3 +348,85 @@
                 gap: 8px;
             }
         }
+
+/* Instructor detail overrides */
+.lesson-item {
+    padding: 0;
+    background: transparent;
+    margin-bottom: 5px;
+}
+
+.lesson-item .lesson-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f6fc;
+    padding: 6px 10px;
+    border-left: 3px solid var(--primary-color);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-color);
+    transition: 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    width: 100%;
+    gap: 6px;
+}
+
+.lesson-item .lesson-link:hover {
+    background: #eef2fd;
+    transform: translateX(5px);
+}
+
+.lesson-item:hover {
+    background: transparent;
+    transform: none;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    margin: 0;
+    flex: 1;
+}
+
+.section-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    background: #e3f2fd;
+    color: #1565c0;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+}
+
+.section-action-btn:hover {
+    background: #bbdefb;
+    transform: translateY(-2px);
+}
+
+.section-action-btn i {
+    font-size: 16px;
+}
+
+.header-actions form {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .lesson-item .lesson-link {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
