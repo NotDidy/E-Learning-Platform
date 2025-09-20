@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ object.title }}{% endblock %}
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'courses/course-details.css' %}">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block menu_links %}
 <li class="nav-link">
@@ -31,56 +36,113 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
-
-<div class="white-cover" style="padding: 20px;">
-    <h2 style="margin-bottom: 8px;">{{ object.title }}</h2>
-    {% if object.course_code %}
-        <div style="color:#666; margin-bottom: 8px;">Code: {{ object.course_code }}</div>
-    {% endif %}
-    {% if object.description %}
-        <p style="margin-top: 0;">{{ object.description }}</p>
-    {% endif %}
-
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-top: 16px;">
-        <h3 style="margin:0;">Lessons</h3>
-        {% if request.user == object.instructor %}
-            <a class="create-course-btn" href="{% url 'lesson_create' object.id %}">
-                <i class='bx bx-plus'></i>
-                Add Lesson
+<div class="course-details-header">
+    <div class="courses-title-section">
+        <div class="courses-title">
+            <div class="course-icon">
+                <i class='bx bx-book-bookmark'></i>
+            </div>
+            Course Details
+        </div>
+        <div class="header-actions">
+            {% if request.user == course.instructor %}
+            <button class="action-btn edit-btn">
+                <i class='bx bx-edit'></i> Edit
+            </button>
+            <button class="action-btn delete-btn">
+                <i class='bx bx-trash'></i> Delete
+            </button>
+            {% endif %}
+            <a class="back-btn" href="{% url 'instructor_courses' %}">
+                <i class='bx bx-left-arrow-alt'></i>
+                Back to Courses
             </a>
+        </div>
+    </div>
+</div>
+
+<div class="course-details-container">
+    <div class="course-header">
+        <h1>{{ course.title }}</h1>
+        {% if course.course_code %}
+            <span class="course-id">Course ID: {{ course.course_code }}</span>
         {% endif %}
     </div>
-    <div class="courses-grid" style="margin-top: 12px;">
-        {% for lesson in lessons %}
-            <div class="course-card">
-                <div class="course-card-header">
-                    <div class="course-info">
-                        <h3>{{ lesson.lesson_code }}</h3>
-                    </div>
-                </div>
-                {% if lesson.description %}
-                    <p class="courses-description">{{ lesson.description|truncatewords:30 }}</p>
-                {% endif %}
 
-                {% if lesson.prerequisite %}
-                    <p style="font-size:14px; color:#666;">
-                        <strong>Prerequisite:</strong> {{ lesson.prerequisite.title }}
-                    </p>
-                {% endif %}
+    {% if course.description %}
+        <p class="course-full-description">{{ course.description }}</p>
+    {% endif %}
 
-                <div style="display:flex; justify-content:flex-end;">
-                    <a class="action-btn edit-btn" href="{% url 'lesson_detail' lesson.id %}"><i class='bx bx-right-arrow-alt'></i></a>
+    <!-- Lessons Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-book-open'></i> 
+            Lessons
+            <span class="section-counter">{{ lessons|length }}</span>
+        </h2>
+        <ul class="lessons-list">
+            {% for lesson in lessons %}
+            <li class="lesson-item">
+                <div class="lesson-info">
+                    <div class="lesson-id">{{ lesson.lesson_code }}</div>
+                    <div class="lesson-name">{{ lesson.title }}</div>
                 </div>
-            </div>
-        {% empty %}
-            <p>No lessons yet.</p>
-        {% endfor %}
+                <i class='bx bx-chevron-right'></i>
+            </li>
+            {% empty %}
+                <p>No lessons yet.</p>
+            {% endfor %}
+        </ul>
     </div>
 
+    <!-- Students Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-user-circle'></i>
+            Enrolled Students
+            <span class="section-counter">{{ students|length }}</span>
+        </h2>
+        <ul class="students-list">
+            {% for student in students %}
+            <li class="student-item">
+                <div>
+                    <div class="student-id">{{ student.student_id }}</div>
+                    <div class="student-name">{{ student.get_full_name }}</div>
+                </div>
+                <i class='bx bx-chevron-right'></i>
+            </li>
+            {% empty %}
+                <p>No students enrolled yet.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Classrooms Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-buildings'></i> 
+            Assigned Classrooms
+            <span class="section-counter">{{ classrooms|length }}</span>
+        </h2>
+        <ul class="classrooms-list">
+            {% for classroom in classrooms %}
+            <li class="classroom-item">
+                <div class="classroom-info">
+                    <div class="classroom-id">{{ classroom.classroom_code }}</div>
+                    <div class="classroom-name">{{ classroom.name }}</div>
+                </div>
+                <div class="ongoing-lessons">{{ classroom.lessons.count }} lessons</div>
+            </li>
+            {% empty %}
+                <p>No classrooms assigned yet.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Enrollment Section (for students) -->
     {% if user.is_authenticated and is_student %}
         {% if not is_enrolled %}
-            <form method="post" action="{% url 'course_enroll' object.id %}">
+            <form method="post" action="{% url 'course_enroll' course.id %}">
                 {% csrf_token %}
                 <button type="submit" class="create-course-btn">Enroll</button>
             </form>
