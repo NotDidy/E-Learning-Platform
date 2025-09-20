@@ -14,6 +14,17 @@ def classrooms(request):
     return render(request, "classrooms/classrooms.html", {"classrooms": classrooms})
 
 @login_required
+def classroom_preview(request, classroom_id):
+
+    classroom = Classroom.objects.get(id=classroom_id)
+    schedules = classroom.schedules.all()
+    return render(
+        request,
+        "classrooms/classroom_preview.html",
+        {"classroom": classroom, "schedules": schedules},
+    )
+
+@login_required
 @user_passes_test(is_instructor)
 def create_classroom(request):
     ScheduleFormSet = modelformset_factory(Schedule, form=ScheduleForm, extra=1, can_delete=True)
