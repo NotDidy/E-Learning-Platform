@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Course Preview - {{ course.title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'courses/style-course.css' %}">
+
+<div class="course-details-header">
+    <div class="courses-title-section">
+        <div class="courses-title">
+            <div class="course-icon">
+                <i class='bx bx-book-bookmark'></i>
+            </div>
+            Course Details
+        </div>
+        <div class="header-actions">
+            <a class="action-btn edit-btn" href="{% url 'course_edit' course.id %}">
+                <i class='bx bx-edit'></i> Edit
+            </a>
+            <form method="post" action="{% url 'course_delete' course.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="action-btn delete-btn" type="submit">
+                    <i class='bx bx-trash'></i> Delete
+                </button>
+            </form>
+            <a class="back-btn" href="{% url 'instructor_courses' %}">
+                <i class='bx bx-left-arrow-alt'></i>
+                Back to Courses
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="course-details-container">
+    <div class="course-header">
+        <h1>{{ course.title }}</h1>
+        {% if course.course_code %}
+            <span class="course-id">Course ID: {{ course.course_code }}</span>
+        {% endif %}
+    </div>
+
+    {% if course.description %}
+    <p class="course-full-description">{{ course.description }}</p>
+    {% endif %}
+
+    <!-- Lessons Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-book-open'></i> 
+            Lessons
+            <span class="section-counter">{{ lessons|length }}</span>
+        </h2>
+        <ul class="lessons-list">
+            {% for lesson in lessons %}
+            <li class="lesson-item">
+                <div class="lesson-info">
+                    <div class="lesson-id">L{{ forloop.counter|stringformat:"03d" }}</div>
+                    <div class="lesson-name">{{ lesson.title }}</div>
+                </div>
+                <i class='bx bx-chevron-right'></i>
+            </li>
+            {% empty %}
+            <li><em>No lessons available.</em></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Students Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-user-circle'></i> 
+            Enrolled Students
+            <span class="section-counter">{{ course.student_count|default:0 }}</span>
+        </h2>
+        <ul class="students-list">
+            {% for student in course.students.all %}
+            <li class="student-item">
+                <div>
+                    <div class="student-id">S{{ forloop.counter|stringformat:"03d" }}</div>
+                    <div class="student-name">{{ student.get_full_name|default:student.email }}</div>
+                </div>
+                <i class='bx bx-chevron-right'></i>
+            </li>
+            {% empty %}
+            <li><em>No students enrolled yet.</em></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Classrooms Section -->
+    <div class="course-section">
+        <h2>
+            <i class='bx bx-buildings'></i> 
+            Assigned Classrooms
+            <span class="section-counter">{{ course.active_classrooms|default:0 }}</span>
+        </h2>
+        <ul class="classrooms-list">
+            {% for classroom in course.classrooms.all %}
+            <li class="classroom-item">
+                <div class="classroom-info">
+                    <div class="classroom-id">CL{{ forloop.counter|stringformat:"03d" }}</div>
+                    <div class="classroom-name">{{ classroom.name }}</div>
+                </div>
+                <div class="ongoing-lessons">{{ classroom.lessons.count }} lessons</div>
+            </li>
+            {% empty %}
+            <li><em>No classrooms assigned yet.</em></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="course-meta">
+        <div class="meta-item"><i class='bx bx-time'></i> Duration: {{ course.duration_weeks }} weeks</div>
+        <div class="meta-item"><i class='bx bx-medal'></i> Credits: {{ course.credits|default:"N/A" }}</div>
+        <div class="meta-item"><i class='bx bx-user'></i> Instructor: {{ course.instructor.get_full_name|default:course.instructor.email }}</div>
+        <div class="meta-item"><i class='bx bx-calendar'></i> Created: {{ course.created_at|date:"d/m/Y" }}</div>
+        <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: {{ course.updated_at|date:"d/m/Y" }}</div>
+        <div class="course-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">
+            {{ course.get_status_display }}
+        </div>
+    </div>
+</div>
+{% endblock %}
