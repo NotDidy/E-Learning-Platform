@@ -337,7 +337,7 @@ def lesson_delete(request, lesson_id: int):
 
 class CoursePreviewInstructorView(InstructorRequiredMixin, DetailView):
     model = Course
-    template_name = "courses/course-preview-instructor.html"
+    template_name = "courses/course-details-instructor.html"
     context_object_name = "course"
 
     def get_queryset(self):
