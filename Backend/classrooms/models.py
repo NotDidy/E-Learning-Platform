@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import timedelta
-from courses.models import Course
+from courses.models import Course, Lesson
+from django.conf import settings
 
 
 class Classroom(models.Model):
@@ -13,7 +14,7 @@ class Classroom(models.Model):
 
     name = models.CharField(max_length=200)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="classrooms")
-    supervisor = models.CharField(max_length=200)
+    supervisor = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,limit_choices_to={"role": "INSTRUCTOR"}, related_name="supervised_classrooms")
     duration_weeks = models.PositiveIntegerField(choices=DURATION_CHOICES)
     description = models.TextField(blank=True, null=True)
     class_code = models.CharField(max_length=50, blank=True, null=True, unique=True)
@@ -37,7 +38,7 @@ class Schedule(models.Model):
 
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name="schedules")
     day = models.CharField(max_length=20, choices=DAYS)
-    lesson = models.CharField(max_length=200)  
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="schedules")  
     start_time = models.TimeField()
     end_time = models.TimeField()
 
