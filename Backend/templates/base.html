@@ -80,6 +80,17 @@
                 </ul>
             </div>
             <div class="bottom-content">
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx  bx-moon icon moon'  ></i> 
+                        <i class='bx  bx-sun icon sun'  ></i> 
+                    </div>
+                    <span class="mode-text text"></span> 
+
+                    <div class="toggle-switch" onclick="toggleDarkMode()">
+                        <span class="dm-switch"></span>
+                    </div>
+                </li>
                 <li>
                     <a href="{% url 'logout' %}">
                         <i class='bx bx-log-out icon'></i>
@@ -94,12 +105,7 @@
         {% block content %}{% endblock %}
     </section>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('close');
-        }
-    </script>
+    <script src="{% static 'accounts/darkmode.js' %}" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
