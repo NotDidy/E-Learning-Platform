@@ -61,27 +61,44 @@
     </div>
 </div>
 
-<h3>Schedule</h3>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Day</th>
-        <th>Lesson</th>
-        <th>Start</th>
-        <th>End</th>
-    </tr>
-    </thead>
-    <tbody>
+<h3 style="margin:20px;">Schedule</h3>
+
+<div class="courses-grid">
     {% for s in schedules %}
-    <tr>
-        <td>{{ s.day }}</td>
-        <td>{{ s.lesson }}</td>
-        <td>{{ s.start_time }}</td>
-        <td>{{ s.end_time }}</td>
-    </tr>
+    <div class="course-card">
+        <div class="course-details">
+            <div class="detail-row">
+                <span class="detail-label">
+                    <i class="bx bx-calendar"></i>
+                    Day:
+                </span>
+                <span class="detail-value">{{ s.day|title }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">
+                    <i class="bx bx-book"></i>
+                    Lesson:
+                </span>
+                <span class="detail-value">{{ s.lesson }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">
+                    <i class="bx bx-time-five"></i>
+                    Start:
+                </span>
+                <span class="detail-value">{{ s.start_time }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">
+                    <i class="bx bx-time-five"></i>
+                    End:
+                </span>
+                <span class="detail-value">{{ s.end_time }}</span>
+            </div>
+        </div>
+    </div>
     {% empty %}
-    <tr><td colspan="4">No schedule defined.</td></tr>
+    <p style="margin:20px;">No schedule defined yet.</p>
     {% endfor %}
-    </tbody>
-</table>
+</div>
 {% endblock %}
