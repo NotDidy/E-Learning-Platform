@@ -57,48 +57,23 @@
                 </span>
                 <span class="detail-value">{{ classroom.duration_weeks }} weeks</span>
             </div>
+            <h3 style="margin-top:20px;">Schedule</h3>
+            {% if schedules %}
+                {% for s in schedules %}
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-calendar"></i>
+                        {{ s.day|title }}:
+                    </span>
+                    <span class="detail-value">
+                        {{ s.lesson }} ({{ s.start_time }} - {{ s.end_time }})
+                    </span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No schedule defined yet.</p>
+            {% endif %}
         </div>
     </div>
-</div>
-
-<h3 style="margin:20px;">Schedule</h3>
-
-<div class="courses-grid">
-    {% for s in schedules %}
-    <div class="course-card">
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-calendar"></i>
-                    Day:
-                </span>
-                <span class="detail-value">{{ s.day|title }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-book"></i>
-                    Lesson:
-                </span>
-                <span class="detail-value">{{ s.lesson }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-time-five"></i>
-                    Start:
-                </span>
-                <span class="detail-value">{{ s.start_time }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-time-five"></i>
-                    End:
-                </span>
-                <span class="detail-value">{{ s.end_time }}</span>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <p style="margin:20px;">No schedule defined yet.</p>
-    {% endfor %}
 </div>
 {% endblock %}
