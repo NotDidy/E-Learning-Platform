@@ -19,15 +19,20 @@
                     {% if request.user.is_authenticated %}
                         {% if request.user.role == 'ADMIN' %}
                             {% url 'admin_dashboard' as home_url %}
+                            {% url 'admin_dashboard' as courses_url %}
                         {% elif request.user.role == 'STUDENT' %}
                             {% url 'student_dashboard' as home_url %}
+                            {% url 'student_courses' as courses_url %}
                         {% elif request.user.role == 'INSTRUCTOR' %}
                             {% url 'instructor_dashboard' as home_url %}
+                            {% url 'instructor_courses' as courses_url %}
                         {% else %}
                             {% url 'role_select' as home_url %}
+                            {% url 'role_select' as courses_url %}
                         {% endif %}
                     {% else %}
                         {% url 'role_select' as home_url %}
+                        {% url 'role_select' as courses_url %}
                     {% endif %}
                     <a href="{{ home_url }}" class="logo-link" style="text-decoration:none;">
                         <h2 class="logo"><i class='bx bx-devices'></i></h2>
@@ -48,13 +53,13 @@
                 <ul class="menu-links">
                     {% block menu_links %}
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{{ courses_url|default:'#' }}">
                             <i class='bx bx-book-content icon'></i>
                             <span class="text nav-text">Courses</span>
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href="#">
+                        <a href= "{% url 'classrooms' %}">
                             <i class='bx bx-calendar-week icon'></i>
                             <span class="text nav-text">Classrooms</span>
                         </a>
