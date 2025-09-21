@@ -18,11 +18,7 @@ def classroom_preview(request, classroom_id):
 
     classroom = Classroom.objects.get(id=classroom_id)
     schedules = classroom.schedules.all()
-    return render(
-        request,
-        "classrooms/classroom_preview.html",
-        {"classroom": classroom, "schedules": schedules},
-    )
+    return render(request, "classrooms/classroom_preview.html", {"classroom": classroom, "schedules": schedules})
 
 @login_required
 @user_passes_test(is_instructor)
