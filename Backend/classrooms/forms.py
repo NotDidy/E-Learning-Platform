@@ -12,15 +12,19 @@ class ClassroomForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["supervisor"].queryset = User.objects.filter(role=User.Roles.INSTRUCTOR)
 
-        classroom = kwargs.pop("classroom", None)  
-        super().__init__(*args, **kwargs)
-        if classroom:
-            self.fields["lesson"].queryset = Lesson.objects.filter(course=classroom.course)
-
 class ScheduleForm(forms.ModelForm):
     class Meta:
         model = Schedule
         fields = ["day", "lesson", "start_time", "end_time"]
+
+    def __init__(self, *args, **kwargs):
+        classroom = kwargs.pop("classroom", None)
+        super().__init__(*args, **kwargs)
+
+        if classroom and classroom.course_id:
+            self.fields["lesson"].queryset = Lesson.objects.filter(course=classroom.course)
+        else:
+            self.fields["lesson"].queryset = Lesson.objects.all()
 
     def clean(self):
         cleaned_data = super().clean()
