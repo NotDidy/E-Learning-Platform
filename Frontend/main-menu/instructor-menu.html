@@ -56,6 +56,18 @@
                 </ul>
             </div> 
             <div class="bottom-content">
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx  bx-moon icon moon'  ></i> 
+                        <i class='bx  bx-sun icon sun'  ></i> 
+                    </div>
+                    <span class="mode-text text"></span> 
+
+                    <div class="toggle-switch" onclick="toggleDarkMode()">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
                 <li class="">
                     <a href="#">
                         <i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
@@ -70,17 +82,10 @@
         <div id ="dashboard-main">
             <div class="white-cover">
                 <h1 class="dashboard-title">Dashboard</h1>
-                <p class="welcome message">Welcome Instructor!</p>
+                <p class="welcome-message">Welcome Instructor!</p>
                 <div class="admin-badge">Instructor Access</div>
             </div>
         </div>
     </section>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('close');
-        }
-    </script>
-
 </body>
 </html>

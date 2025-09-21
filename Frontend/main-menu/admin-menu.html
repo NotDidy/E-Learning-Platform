@@ -56,9 +56,21 @@
                 </ul>
             </div> 
             <div class="bottom-content">
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx  bx-moon icon moon'  ></i> 
+                        <i class='bx  bx-sun icon sun'  ></i> 
+                    </div>
+                    <span class="mode-text text"></span> 
+
+                    <div class="toggle-switch" onclick="toggleDarkMode()">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
                 <li class="">
                     <a href="#">
-                        <<i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
+                        <i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
                         <span class="text nav-text">Logout</span>
                     </a>
                 </li>
@@ -70,7 +82,7 @@
         <div id ="dashboard-main">
             <div class="white-cover">
                 <h1 class="dashboard-title">Dashboard</h1>
-                <p class="welcome message">Welcome Admin!</p>
+                <p class="welcome-message">Welcome Admin!</p>
                 <div class="admin-badge">Administrator Access</div>
             </div>
 
@@ -144,11 +156,6 @@
         </div>
     </section>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('close');
-        }
-
         function showInstructorForm() {
             document.getElementById('dashboard-main').classList.add('hidden');
             document.getElementById('instructor-form').classList.add('active');
@@ -160,7 +167,6 @@
         }
 
         function createInstructor() {
-            // Get form data
             const firstName = document.querySelector('input[placeholder="Enter first name"]').value;
             const lastName = document.querySelector('input[placeholder="Enter last name"]').value;
             const email = document.querySelector('input[placeholder="instructor@example.com"]').value;
@@ -170,8 +176,7 @@
                 alert('Please fill in all required fields (First Name, Last Name, Email, Password)');
                 return;
             }
-            
-            // Simulate account creation
+
             alert(`Instructor account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\n\nLogin credentials will be sent via email.`);
             clearForm();
             showDashboard();
