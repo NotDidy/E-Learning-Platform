@@ -16,7 +16,7 @@
             <div class="course-icon">
                 <i class='bx bx-book-content icon'></i>
             </div>
-            My Classrooms
+            {{ classroom.name }}
         </div>
         {% if user.is_authenticated and user.role == "INSTRUCTOR" %}
         <a href="{% url 'create_classroom' %}" class="view-courses">
@@ -27,8 +27,7 @@
     </div>
 </div>
 
-<div class="courses-grid" id="coursesGrid">
-    {% for classroom in classrooms %}
+<div class="courses-grid">
     <div class="course-card">
         <div class="course-card-header">
             <div class="course-info">
@@ -59,14 +58,30 @@
                 <span class="detail-value">{{ classroom.duration_weeks }} weeks</span>
             </div>
         </div>
-        <div class="course-actions">
-            <a href="{% url 'classroom_preview' classroom.id %}" class="btn btn-sm btn-outline-primary">
-                <i class="bx bx-show"></i> View Details
-            </a>
-        </div>
     </div>
-    {% empty %}
-    <p>No classrooms available.</p>
-    {% endfor %}
 </div>
+
+<h3>Schedule</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Day</th>
+        <th>Lesson</th>
+        <th>Start</th>
+        <th>End</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in schedules %}
+    <tr>
+        <td>{{ s.day }}</td>
+        <td>{{ s.lesson }}</td>
+        <td>{{ s.start_time }}</td>
+        <td>{{ s.end_time }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No schedule defined.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
