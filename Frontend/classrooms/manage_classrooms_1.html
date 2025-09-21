@@ -405,6 +405,8 @@
         
         .modal-body {
             margin-bottom: 20px;
+            max-height: 350px; /* 限制高度并允许滚动 */
+            overflow-y: auto;
         }
         
         .modal-footer {
@@ -413,6 +415,55 @@
             gap: 10px;
             padding: 10px 0 0;
             border-top: 1px solid #eee;
+        }
+
+        /* 新增：学生列表样式 */
+        #studentsList {
+            list-style: none;
+        }
+        
+        #studentsList li {
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        #studentsList li:last-child {
+            border-bottom: none;
+        }
+        
+        #studentsList li i {
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-weight: 500;
+            color: var(--black-color);
+        }
+        
+        .student-id {
+            font-size: 12px;
+            color: var(--text-color);
+        }
+        
+        .no-students {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-color);
+            font-style: italic;
+        }
+        
+        .no-students i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -521,6 +572,28 @@
         </div>
     </div>
 
+    <!-- 新增：学生列表模态框 -->
+    <div id="studentsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class='bx bx-user'></i> <span id="classStudentTitle">Classroom Students</span></h3>
+                <button class="close-modal" id="closeStudentsModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 学生列表容器 -->
+                <ul id="studentsList"></ul>
+                <!-- 无学生提示（默认隐藏） -->
+                <div id="noStudentsMessage" class="no-students" style="display: none;">
+                    <i class='bx bx-user-minus'></i>
+                    No students enrolled in this classroom yet
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" id="cancelStudentsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 课程表数据
@@ -559,6 +632,50 @@
                 { id: 5, name: '5001', course: 'FIT3155 - Computer Networks', supervisor: 'Prof. Eve Davis', duration: '5 Weeks', status: 'Active', students: 7, lessonsAssigned: 4 }
             ];
 
+            // 新增：各教室的学生数据（按教室ID对应）
+            const studentsByClass = {
+                1: [ // 教室5801的学生
+                    { name: 'John Doe', id: 'S1001' },
+                    { name: 'Jane Smith', id: 'S1002' },
+                    { name: 'Michael Brown', id: 'S1003' },
+                    { name: 'Emily Davis', id: 'S1004' },
+                    { name: 'David Wilson', id: 'S1005' },
+                    { name: 'Sarah Taylor', id: 'S1006' },
+                    { name: 'Robert Martinez', id: 'S1007' },
+                    { name: 'Lisa Anderson', id: 'S1008' }
+                ],
+                2: [ // 教室9401的学生
+                    { name: 'James Moore', id: 'S2001' },
+                    { name: 'Jennifer Lee', id: 'S2002' },
+                    { name: 'Richard Harris', id: 'S2003' },
+                    { name: 'Patricia Clark', id: 'S2004' },
+                    { name: 'Thomas Lewis', id: 'S2005' }
+                ],
+                3: [ // 教室2406的学生（满员）
+                    { name: 'Daniel Walker', id: 'S3001' },
+                    { name: 'Nancy Hall', id: 'S3002' },
+                    { name: 'Mark Allen', id: 'S3003' },
+                    { name: 'Linda Young', id: 'S3004' },
+                    { name: 'Paul Hernandez', id: 'S3005' },
+                    { name: 'Karen Scott', id: 'S3006' },
+                    { name: 'Steven King', id: 'S3007' },
+                    { name: 'Betty Wright', id: 'S3008' },
+                    { name: 'Edward Lopez', id: 'S3009' },
+                    { name: 'Sandra Hill', id: 'S3010' }
+                ],
+                4: [], // 教室6002无学生
+                5: [ // 教室5001的学生
+                    { name: 'William Scott', id: 'S5001' },
+                    { name: 'Mary Green', id: 'S5002' },
+                    { name: 'Joseph Adams', id: 'S5003' },
+                    { name: 'Margaret Baker', id: 'S5004' },
+                    { name: 'Donald Gonzalez', id: 'S5005' },
+                    { name: 'Ruth Nelson', id: 'S5006' },
+                    { name: 'George Carter', id: 'S5007' }
+                ]
+            };
+
+            // 获取DOM元素（包含新增的学生模态框元素）
             const tableBody = document.getElementById('classroomsTableBody');
             const noClassesMessage = document.getElementById('noClassesMessage');
             const deleteModal = document.getElementById('deleteModal');
@@ -569,6 +686,14 @@
             const searchInput = document.getElementById('searchInput');
             const searchButton = document.getElementById('searchButton');
             
+            // 新增：学生模态框相关元素
+            const studentsModal = document.getElementById('studentsModal');
+            const classStudentTitle = document.getElementById('classStudentTitle');
+            const studentsList = document.getElementById('studentsList');
+            const noStudentsMessage = document.getElementById('noStudentsMessage');
+            const closeStudentsModalBtn = document.getElementById('closeStudentsModalBtn');
+            const cancelStudentsBtn = document.getElementById('cancelStudentsBtn');
+
             let classIdToDelete = null;
             let currentClassrooms = [...classrooms];
 
@@ -609,9 +734,11 @@
                                 <a href="assign_lessons.html?classId=${classroom.id}" class="btn btn-sm btn-purple">
                                     <i class='bx bx-book'></i> Lessons
                                 </a>
-                                <a href="manage_students.html?classId=${classroom.id}" class="btn btn-sm btn-success">
+                                <!-- 修改：将a标签改为button，添加查看学生按钮类和数据属性 -->
+                                <button type="button" class="btn btn-sm btn-success view-students-btn"
+                                        data-id="${classroom.id}" data-name="${classroom.name}">
                                     <i class='bx bx-user-plus'></i> Students
-                                </a>
+                                </button>
                                 <a href="edit_classroom.html?classId=${classroom.id}" class="btn btn-sm btn-info">
                                     <i class='bx bx-edit'></i> Edit
                                 </a>
@@ -709,6 +836,52 @@
                         }
                     });
                 });
+
+                // 新增：为查看学生按钮添加事件
+                document.querySelectorAll('.view-students-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const classId = parseInt(this.getAttribute('data-id'));
+                        const className = this.getAttribute('data-name');
+                        showStudentsModal(classId, className); // 显示学生模态框
+                    });
+                });
+            }
+
+            // 新增：显示学生模态框并渲染学生列表
+            function showStudentsModal(classId, className) {
+                // 设置模态框标题（显示教室名称）
+                classStudentTitle.textContent = `Students - Classroom ${className}`;
+                
+                // 获取当前教室的学生数据
+                const students = studentsByClass[classId] || [];
+                
+                // 清空之前的列表
+                studentsList.innerHTML = '';
+                
+                if (students.length === 0) {
+                    // 无学生时显示提示
+                    noStudentsMessage.style.display = 'block';
+                    studentsList.style.display = 'none';
+                } else {
+                    // 有学生时渲染列表
+                    noStudentsMessage.style.display = 'none';
+                    studentsList.style.display = 'block';
+                    
+                    students.forEach(student => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <i class='bx bx-user-circle'></i>
+                            <div class="student-info">
+                                <div class="student-name">${student.name}</div>
+                                <div class="student-id">Student ID: ${student.id}</div>
+                            </div>
+                        `;
+                        studentsList.appendChild(li);
+                    });
+                }
+                
+                // 显示模态框
+                studentsModal.classList.add('show');
             }
 
             // 初始渲染
@@ -743,17 +916,16 @@
                 }
             });
 
-            // 关闭模态框
+            // 删除模态框关闭逻辑
             closeModalBtn.addEventListener('click', function() {
                 deleteModal.classList.remove('show');
             });
 
-            // 取消删除
             cancelDeleteBtn.addEventListener('click', function() {
                 deleteModal.classList.remove('show');
             });
 
-            // 确认删除
+            // 确认删除逻辑
             confirmDeleteBtn.addEventListener('click', function() {
                 if (classIdToDelete) {
                     currentClassrooms = currentClassrooms.filter(classroom => 
@@ -766,14 +938,25 @@
                 }
             });
 
-            // 点击模态框外部关闭
+            // 新增：学生模态框关闭逻辑
+            closeStudentsModalBtn.addEventListener('click', function() {
+                studentsModal.classList.remove('show');
+            });
+
+            cancelStudentsBtn.addEventListener('click', function() {
+                studentsModal.classList.remove('show');
+            });
+
+            // 点击模态框外部关闭（同时处理两个模态框）
             window.addEventListener('click', function(e) {
                 if (e.target === deleteModal) {
                     deleteModal.classList.remove('show');
+                }
+                if (e.target === studentsModal) {
+                    studentsModal.classList.remove('show');
                 }
             });
         });
     </script>
 </body>
 </html>
-    
