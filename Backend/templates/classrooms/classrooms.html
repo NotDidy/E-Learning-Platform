@@ -19,6 +19,7 @@
                     <th>Name</th>
                     <th>Course</th>
                     <th>Instructor</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,11 @@
                     <td>{{ classroom.name }}</td>
                     <td>{{ classroom.course }}</td>
                     <td>{{ classroom.supervisor }}</td>
+                    <td>
+                        <a href="{% url 'classroom_preview' classroom.id %}" class="btn btn-sm btn-outline-primary">
+                            <i class="bx bx-show"></i> View
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
