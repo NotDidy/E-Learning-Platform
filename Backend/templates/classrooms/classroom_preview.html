@@ -8,7 +8,7 @@
             <div class="course-icon">
                 <i class='bx bx-book-content icon'></i>
             </div>
-            My Classrooms
+            My Classroom
         </div>
         {% if user.is_authenticated and user.role == "INSTRUCTOR" %}
         <a href="{% url 'create_classroom' %}" class="view-courses btn btn-primary">
@@ -19,46 +19,59 @@
     </div>
 </div>
 
-<div class="courses-grid" id="coursesGrid">
-    {% for classroom in classrooms %}
-    <div class="course-card">
-        <div class="course-card-header">
-            <div class="course-info">
-                <h3>{{ classroom.name }}</h3>
-                <span class="course-code">{{ classroom.class_code }}</span>
-            </div>
-        </div>
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-user-circle"></i>
-                    Classroom Supervisor:
-                </span>
-                <span class="detail-value">{{ classroom.supervisor }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-list-ul"></i>
-                    Course:
-                </span>
-                <span class="detail-value">{{ classroom.course }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-time"></i>
-                    Duration:
-                </span>
-                <span class="detail-value">{{ classroom.duration_weeks }} weeks</span>
-            </div>
-        </div>
-        <div class="course-actions">
-            <a href="{% url 'classroom_detail' classroom.id %}" class="btn btn-sm btn-outline-primary">
-                <i class="bx bx-show"></i> View Details
-            </a>
+<div class="course-card">
+    <div class="course-card-header">
+        <div class="course-info">
+            <h3>{{ classroom.name }}</h3>
+            <span class="course-code">{{ classroom.class_code }}</span>
         </div>
     </div>
-    {% empty %}
-    <p>No classrooms available.</p>
-    {% endfor %}
+    <div class="course-details">
+        <div class="detail-row">
+            <span class="detail-label">
+                <i class="bx bx-user-circle"></i>
+                Classroom Supervisor:
+            </span>
+            <span class="detail-value">{{ classroom.supervisor }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">
+                <i class="bx bx-list-ul"></i>
+                Course:
+            </span>
+            <span class="detail-value">{{ classroom.course }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">
+                <i class="bx bx-time"></i>
+                Duration:
+            </span>
+            <span class="detail-value">{{ classroom.duration_weeks }} weeks</span>
+        </div>
+    </div>
+
+    <h4 class="mt-3">Schedule</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Day</th>
+            <th>Lesson</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for schedule in schedules %}
+        <tr>
+            <td>{{ schedule.day }}</td>
+            <td>{{ schedule.lesson }}</td>
+            <td>{{ schedule.start_time }}</td>
+            <td>{{ schedule.end_time }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No schedule added.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
