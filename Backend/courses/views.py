@@ -358,7 +358,7 @@ class CoursePreviewInstructorView(InstructorRequiredMixin, DetailView):
     
 class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
     model = Course
-    template_name = "courses/student_course_preview.html"
+    template_name = "courses/course-details-student.html"
     context_object_name = "course"
 
     def dispatch(self, request, *args, **kwargs):
