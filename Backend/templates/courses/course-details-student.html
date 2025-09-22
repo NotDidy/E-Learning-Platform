@@ -54,28 +54,6 @@
         </ul>
     </div>
 
-    <!-- Students -->
-    <div class="course-section">
-        <h2>
-            <i class='bx bx-user-circle'></i>
-            Enrolled Students
-            <span class="section-counter">{{ students|length }}</span>
-        </h2>
-        <ul class="students-list">
-            {% for student in students %}
-            <li class="student-item">
-                <div>
-                    <div class="student-id">{{ student.email }}</div>
-                    <div class="student-name">{{ student.get_full_name }}</div>
-                </div>
-                <i class='bx bx-chevron-right'></i>
-            </li>
-            {% empty %}
-            <p>No students enrolled yet.</p>
-            {% endfor %}
-        </ul>
-    </div>
-
     <!-- Classrooms -->
     <div class="course-section">
         <h2>

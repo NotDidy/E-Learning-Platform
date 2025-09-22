@@ -26,7 +26,7 @@
     <div class="course-card">
         <div class="course-card-header">
             <div class="course-info">
-                <h3><a href="{% url 'course_detail' course.id %}" style="text-decoration:none; color:inherit;">{{ course.title }}</a></h3>
+                <h3><a href="{% url 'student_course_preview' course.id %}" style="text-decoration:none; color:inherit;">{{ course.title }}</a></h3>
                 {% if course.course_code %}<span class="course-code">{{ course.course_code }}</span>{% endif %}
             </div>
         </div>

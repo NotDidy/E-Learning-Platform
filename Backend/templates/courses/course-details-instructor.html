@@ -71,7 +71,7 @@
             {% for student in students %}
             <li class="student-item">
                 <div>
-                    <div class="student-id">{{ student.email }}</div>
+                    <div class="student-id">{{ student.student_id }}</div>
                     <div class="student-name">{{ student.get_full_name }}</div>
                 </div>
                 <i class='bx bx-chevron-right'></i>
@@ -100,16 +100,5 @@
         </ul>
     </div>
 
-    <!-- Enrollment Section (for students) -->
-    {% if user.is_authenticated and is_student %}
-        {% if not is_enrolled %}
-            <form method="post" action="{% url 'course_enroll' course.id %}">
-                {% csrf_token %}
-                <button type="submit" class="create-course-btn">Enroll</button>
-            </form>
-        {% else %}
-            <p style="margin-top:12px; color:#2a7;">You are enrolled in this course.</p>
-        {% endif %}
-    {% endif %}
 </div>
 {% endblock %}

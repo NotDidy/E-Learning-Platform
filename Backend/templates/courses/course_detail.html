@@ -78,11 +78,7 @@
 
     <!-- Students Section -->
     <div class="course-section">
-        <h2>
-            <i class='bx bx-user-circle'></i>
-            Enrolled Students
-            <span class="section-counter">{{ students|length }}</span>
-        </h2>
+        <h2><i class='bx bx-user-circle'></i> Enrolled Students <span class="section-counter">{{ students|length }}</span></h2>
         <ul class="students-list">
             {% for student in students %}
             <li class="student-item">
