@@ -355,3 +355,37 @@ class CoursePreviewInstructorView(InstructorRequiredMixin, DetailView):
         ctx["is_enrolled"] = course.enrollments.filter(student=self.request.user).exists() if ctx["is_student"] else False
 
         return ctx
+    
+class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
+    model = Course
+    template_name = "courses/student_course_preview.html"
+    context_object_name = "course"
+
+    def dispatch(self, request, *args, **kwargs):
+        course = self.get_object()
+        user = request.user
+
+        # Ensure only students can access
+        try:
+            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
+        except Exception:
+            is_student = False
+
+        if not is_student:
+            return HttpResponseForbidden("Student role required")
+
+        # Students can view even if not enrolled
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        course: Course = self.object
+        user = self.request.user
+
+        ctx["lessons"] = course.lessons.all()
+        ctx["students"] = [enrollment.student for enrollment in course.enrollments.select_related("student").all()]
+        ctx["classrooms"] = course.classrooms.all()
+        ctx["is_student"] = True
+        ctx["is_enrolled"] = Enrollment.objects.filter(student=user, course=course).exists()
+
+        return ctx
