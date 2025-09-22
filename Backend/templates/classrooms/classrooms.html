@@ -52,6 +52,12 @@
             <a href="{% url 'classroom_preview' classroom.id %}" class="view-courses">
                 <i class="bx bx-show"></i> View Details
             </a>
+
+            {% if user.is_authenticated and user.role == "INSTRUCTOR" %}
+                <a href="{% url 'manage_classrooms_1' classroom.id %}" class="view-courses">
+                    <i class="bx bx-cog"></i> Manage
+                </a>
+            {% endif %}
         </div>
     </div>
     {% empty %}
