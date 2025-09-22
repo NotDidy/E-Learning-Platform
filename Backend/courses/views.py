@@ -54,7 +54,7 @@ class CourseListView(LoginRequiredMixin, ListView):
         if is_instructor:
             return Course.objects.filter(instructor=user)
         else:
-            return Course.objects.filter(status=Course.STATUS_ACTIVE, is_draft=False)
+            return Course.objects.filter(status=Course.STATUS_ACTIVE)
 
 
 class CourseDetailView(LoginRequiredMixin, DetailView):
@@ -71,7 +71,7 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
             is_instructor = False
 
         # Students cannot view drafts
-        if not is_instructor and (course.is_draft or course.status != Course.STATUS_ACTIVE):
+        if not is_instructor and (course.status != Course.STATUS_ACTIVE):
             return HttpResponseForbidden("This course is not available")
 
         return super().dispatch(request, *args, **kwargs)
@@ -155,7 +155,7 @@ def available_courses(request):
 
     enrolled_ids = Enrollment.objects.filter(student=user).values_list("course_id", flat=True)
     courses = (
-        Course.objects.filter(status=Course.STATUS_ACTIVE, is_draft=False)
+        Course.objects.filter(status=Course.STATUS_ACTIVE)
         .exclude(id__in=enrolled_ids)
         .annotate(student_count=Count("enrollments"))
         .order_by("-created_at")
