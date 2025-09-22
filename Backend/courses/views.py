@@ -187,7 +187,7 @@ def course_instructor_list(request):
         .annotate(
             student_count=Count("enrollments", distinct=True),
             lesson_count=Count("lessons", distinct=True),
-            active_classrooms=Value(1),  
+            classroom_count=Count("classrooms", distinct=True),  
         )
         .prefetch_related("lessons", "enrollments__student")
         .order_by("-created_at")
