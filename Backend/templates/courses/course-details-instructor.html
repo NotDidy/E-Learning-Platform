@@ -17,8 +17,15 @@
         </div>
         <div class="header-actions">
             {% if request.user == course.instructor %}
-            <button class="action-btn edit-btn"><i class='bx bx-edit'></i> Edit</button>
-            <button class="action-btn delete-btn"><i class='bx bx-trash'></i> Delete</button>
+            <a href="{% url 'course_edit' course.id %}" class="action-btn edit-btn">
+                <i class='bx bx-edit'></i> Edit
+            </a>
+            <form method="post" action="{% url 'course_delete' course.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="action-btn delete-btn">
+                    <i class='bx bx-trash'></i> Delete
+                </button>
+            </form>
             {% endif %}
             <a class="back-btn" href="{% url 'instructor_courses' %}">
                 <i class='bx bx-left-arrow-alt'></i> Back to Courses
