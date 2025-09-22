@@ -1,78 +1,91 @@
 {% extends "base.html" %}
 {% load static %}
 
-
-{% block title %}My Classrooms{% endblock %}
+{% block title %}My Classroom | Course Manager{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'classrooms/classroom_preview.css' %}">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 {% endblock %}
 
 {% block content %}
-<div class="courses-header">
-    <div class="courses-title-section">
-        <div class="courses-title">
-            <div class="course-icon">
-                <i class='bx bx-book-content icon'></i>
-            </div>
-            {{ classroom.name }}
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <i class='bx bx-book-open'></i>
+            <h2>Course Manager</h2>
         </div>
-        {% if user.is_authenticated and user.role == "INSTRUCTOR" %}
-        <a href="{% url 'create_classroom' %}" class="view-courses">
-            <i class='bx bx-book-bookmark'></i>
-            Create New Classroom
-        </a>
+        {% if user.is_authenticated %}
+        <div class="user-profile">
+            <div>
+                <div style="font-weight: 500; color: var(--black-color);">{{ user.get_full_name }}</div>
+                <div style="font-size: 12px; color: var(--text-color);">{{ user.email }}</div>
+            </div>
+            <div class="user-avatar">{{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}</div>
+        </div>
         {% endif %}
     </div>
-</div>
 
-<div class="courses-grid">
-    <div class="course-card">
-        <div class="course-card-header">
-            <div class="course-info">
-                <h3>{{ classroom.name }}</h3>
-                <span class="course-code">{{ classroom.class_code }}</span>
+    <div class="page-title">
+        <h1>{{ classroom.name }}</h1>
+        <p>View your assigned classroom, classmates, scheduled lessons, and track your progress.</p>
+    </div>
+
+    <!-- Classroom Information Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Classroom Details</h2>
+        </div>
+        <div class="classroom-info">
+            <div class="info-item">
+                <h3>Class Code</h3>
+                <p>{{ classroom.class_code }}</p>
+            </div>
+            <div class="info-item info">
+                <h3>Course</h3>
+                <p>{{ classroom.course }}</p>
+            </div>
+            <div class="info-item">
+                <h3>Supervisor</h3>
+                <p>{{ classroom.supervisor }}</p>
+            </div>
+            <div class="info-item warning">
+                <h3>Duration</h3>
+                <p>{{ classroom.duration_weeks }} Weeks</p>
             </div>
         </div>
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-user-circle"></i>
-                    Classroom Supervisor:
-                </span>
-                <span class="detail-value">{{ classroom.supervisor }}</span>
+    </div>
+
+    <!-- Lesson Schedule Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Lesson Schedule</h2>
+        </div>
+        <div class="schedule-container expanded">
+            <div class="table-container">
+                <table class="lessons-table">
+                    <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Lesson</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for s in schedules %}
+                    <tr>
+                        <td>{{ s.day }}</td>
+                        <td>{{ s.lesson }}</td>
+                        <td>{{ s.start_time }}</td>
+                        <td>{{ s.end_time }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="no-data">No schedule defined.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-list-ul"></i>
-                    Course:
-                </span>
-                <span class="detail-value">{{ classroom.course }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
-                    <i class="bx bx-time"></i>
-                    Duration:
-                </span>
-                <span class="detail-value">{{ classroom.duration_weeks }} weeks</span>
-            </div>
-            <h3 style="margin-top:20px;">Schedule</h3>
-            {% if schedules %}
-                {% for s in schedules %}
-                <div class="detail-row">
-                    <span class="detail-label">
-                        <i class="bx bx-calendar"></i>
-                        {{ s.day|title }}:
-                    </span>
-                    <span class="detail-value">
-                        {{ s.lesson }} ({{ s.start_time }} - {{ s.end_time }})
-                    </span>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p>No schedule defined yet.</p>
-            {% endif %}
         </div>
     </div>
 </div>
