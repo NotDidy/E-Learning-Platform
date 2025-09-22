@@ -39,6 +39,11 @@
                 <i class='bx bx-group'></i>
                 <span>{{ course.student_count|default:0 }} Students</span>
             </div>
+            
+            <a href="{% url 'student_course_preview' course.id %}" class="enroll-btn" style="background:#6c757d; margin-right:5px;">
+                Preview
+            </a>
+
             <form method="post" action="{% url 'course_enroll' course.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{% url 'available_courses' %}">
