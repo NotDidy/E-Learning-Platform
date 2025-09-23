@@ -77,7 +77,6 @@
         {% if object.instructor %}<div class="meta-item"><i class='bx bx-user'></i> Instructor: {{ object.instructor.get_full_name|default:object.instructor.email }}</div>{% endif %}
         <div class="meta-item"><i class='bx bx-calendar'></i> Created: {{ object.created_at|date:"d/m/Y" }}</div>
         <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: {{ object.updated_at|date:"d/m/Y" }}</div>
-        <div class="lesson-status {% if course_published %}status-published{% else %}status-draft{% endif %}">{{ course_status_label }}</div>
     </div>
 
     

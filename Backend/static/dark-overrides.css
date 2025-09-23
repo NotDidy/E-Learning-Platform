@@ -1,0 +1,287 @@
+﻿/* Dark mode overrides for course-related layouts */
+body.dark .course-details-header,
+body.dark .course-details-container,
+body.dark .courses-header,
+body.dark .course-card,
+body.dark .modal-content {
+    background: #2b2d3c;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .course-card-header,
+body.dark .course-card-footer,
+body.dark .course-section,
+body.dark .course-meta {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .course-card-header {
+    background: rgba(43, 45, 60, 0.85);
+}
+
+body.dark .courses-title,
+body.dark .course-info h3,
+body.dark .course-details-container .course-header h1,
+body.dark .course-card .detail-label,
+body.dark .course-card .detail-value,
+body.dark .course-details,
+body.dark .course-full-description {
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .course-code,
+body.dark .course-id {
+    background: rgba(105, 92, 254, 0.24);
+    color: #dee2ff;
+}
+
+body.dark .course-section .lesson-item,
+body.dark .course-section .student-item,
+body.dark .course-section .classroom-item {
+    background: rgba(105, 92, 254, 0.18);
+    color: #e6e9ff;
+    border-left-color: rgba(149, 132, 255, 0.75);
+}
+
+body.dark .course-section .lesson-item:hover,
+body.dark .course-section .student-item:hover,
+body.dark .course-section .classroom-item:hover {
+    background: rgba(105, 92, 254, 0.28);
+}
+
+body.dark .lesson-tag,
+body.dark .course-card .lesson-badge {
+    background: rgba(144, 202, 249, 0.25);
+    color: #d3e9ff;
+}
+
+body.dark .student-id,
+body.dark .status-active,
+body.dark .ongoing-lessons {
+    background: rgba(129, 199, 132, 0.28);
+    color: #c8f7ce;
+}
+
+body.dark .status-draft,
+body.dark #courseLimitMsg {
+    background: rgba(255, 196, 122, 0.38);
+    color: #ffd180;
+    border-left-color: #ffb74d;
+}
+
+body.dark .course-card .action-btn,
+body.dark .action-btn {
+    color: rgba(211, 216, 255, 0.78);
+}
+
+body.dark .action-btn.edit-btn,
+body.dark .course-card .action-btn[data-role="edit"] {
+    background: rgba(144, 202, 249, 0.2);
+    color: #d5ecff;
+}
+
+body.dark .action-btn.edit-btn:hover,
+body.dark .course-card .action-btn[data-role="edit"]:hover {
+    background: rgba(144, 202, 249, 0.32);
+}
+
+body.dark .action-btn.delete-btn,
+body.dark .course-card .action-btn[data-role="delete"] {
+    background: rgba(255, 138, 128, 0.22);
+    color: #ffd1d3;
+}
+
+body.dark .action-btn.delete-btn:hover,
+body.dark .course-card .action-btn[data-role="delete"]:hover {
+    background: rgba(255, 138, 128, 0.32);
+}
+
+body.dark .lesson-item .lesson-link {
+    background: rgba(105, 92, 254, 0.18);
+    color: #e6e9ff;
+    border-left-color: rgba(149, 132, 255, 0.75);
+}
+
+body.dark .lesson-item .lesson-link:hover {
+    background: rgba(105, 92, 254, 0.28);
+}
+
+/* Dark mode overrides for lessons */
+body.dark .lesson-details-header,
+body.dark .lesson-details-container {
+    background: #2b2d3c;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .lessons-title,
+body.dark .lesson-header h1,
+body.dark .lesson-full-description {
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .lesson-id {
+    background: rgba(105, 92, 254, 0.24);
+    color: #dee2ff;
+}
+
+body.dark .lesson-section,
+body.dark .normal-list li,
+body.dark .styled-list li,
+body.dark .reading-list li a {
+    background: rgba(105, 92, 254, 0.18);
+    color: #e6e9ff;
+    border-left-color: rgba(149, 132, 255, 0.75);
+}
+
+body.dark .styled-list li:hover,
+body.dark .reading-list li a:hover,
+body.dark .classroom-session:hover {
+    background: rgba(105, 92, 254, 0.28);
+}
+
+body.dark .lesson-section h2,
+body.dark .lesson-section h2 i,
+body.dark .prerequisite-tag {
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .prerequisite-tag {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ffc980;
+}
+
+body.dark .lesson-meta,
+body.dark .meta-item,
+body.dark .meta-item i {
+    color: rgba(211, 216, 255, 0.78);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .lesson-status.status-published {
+    background: rgba(51, 146, 56, 0.2);
+    color: #c8f7ce;
+}
+
+/* Buttons */
+body.dark .back-btn,
+body.dark .action-btn,
+body.dark .save-btn,
+body.dark .cancel-btn,
+body.dark .add-btn,
+body.dark .remove-btn {
+    color: #d3e9ff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .back-btn,
+body.dark .add-btn,
+body.dark .save-btn {
+    background: rgba(105, 92, 254, 0.3);
+}
+
+body.dark .back-btn:hover,
+body.dark .add-btn:hover,
+body.dark .save-btn:hover {
+    background: rgba(105, 92, 254, 0.45);
+}
+
+body.dark .cancel-btn {
+    background: rgba(198, 40, 40, 0.3);
+}
+
+body.dark .cancel-btn:hover {
+    background: rgba(198, 40, 40, 0.45);
+}
+
+body.dark .remove-btn {
+    color: rgba(255, 152, 1, 0.7);
+}
+
+body.dark .remove-btn:hover {
+    color: rgba(255, 152, 1, 1);
+}
+
+/* Classroom sessions as links */
+body.dark .classroom-schedule .classroom-session {
+    background: rgba(105, 92, 254, 0.18);
+    color: #e6e9ff;
+    border-left-color: rgba(149, 132, 255, 0.75);
+}
+
+body.dark .classroom-schedule .classroom-session p,
+body.dark .classroom-schedule .classroom-session i {
+    color: #d3e9ff;
+}
+
+/* Dark mode overrides for edit lesson form */
+body.dark .lesson-details-container,
+body.dark .edit-form {
+    background: #2b2d3c;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .edit-form label {
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark input[type="text"],
+body.dark input[type="number"],
+body.dark input[type="url"],
+body.dark textarea,
+body.dark select {
+    background: #3a3c50;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark input:focus,
+body.dark textarea:focus,
+body.dark select:focus {
+    border-color: #695CFE;
+    box-shadow: 0 0 0 2px rgba(105, 92, 254, 0.3);
+    outline: none;
+}
+
+body.dark .row input {
+    background: #3a3c50;
+    color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .add-btn {
+    background: #695CFE;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .add-btn:hover {
+    background: #5748d6;
+}
+
+body.dark .remove-btn {
+    color: #ffb74d;
+}
+
+body.dark .remove-btn:hover {
+    color: #ffc658;
+}
+
+body.dark .save-btn {
+    background: #28a745;
+    color: white;
+}
+
+body.dark .save-btn:hover {
+    background: #218838;
+}
+
+body.dark .cancel-btn {
+    background: #c62828;
+    color: white;
+}
+
+body.dark .cancel-btn:hover {
+    background: #ff6f6f;
+}
