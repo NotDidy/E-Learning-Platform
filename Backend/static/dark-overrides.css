@@ -558,3 +558,26 @@ body.dark .course-meta .meta-label,
 body.dark .course-meta .meta-value {
     color: rgba(234, 236, 255, 0.85);
 }
+
+body.dark .course-actions {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .view-details-btn {
+    background: rgba(105, 92, 254, 0.2);
+    border-color: rgba(149, 132, 255, 0.5);
+    color: #dce1ff;
+}
+
+body.dark .view-details-btn:hover {
+    background: rgba(105, 92, 254, 0.35);
+}
+
+body.dark .manage-classroom-btn {
+    background: rgba(255, 183, 77, 0.28);
+    color: #ffe5c1;
+}
+
+body.dark .course-actions .action-button {
+    color: #e6e9ff;
+}
