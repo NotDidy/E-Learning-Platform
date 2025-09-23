@@ -98,7 +98,30 @@ body {
   font-size: 28px;
   margin-bottom: 10px;
 }
+/* Back button */
+.page-actions {
+  margin: 0 20px 20px;
+}
 
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: var(--orange-gradient);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: var(--shadow);
+  transition: var(--tran-03);
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,138,101,0.3);
+}
 /* Cards */
 .card {
   background: var(--sidebar-color);
