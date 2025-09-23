@@ -229,6 +229,55 @@ body {
     color: var(--primary-color);
 }
 
+
+.course-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.action-button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--tran-03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.view-details-btn {
+    background: var(--primary-color-light);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.view-details-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(105, 92, 254, 0.3);
+}
+
+.manage-classroom-btn {
+    background: var(--orange-gradient);
+    color: white;
+    border: none;
+}
+
+.manage-classroom-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 138, 101, 0.3);
+}
+
+
 @media (max-width: 768px) {
     .courses-grid {
         grid-template-columns: 1fr;
