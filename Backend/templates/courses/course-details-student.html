@@ -78,14 +78,32 @@
 
     <!-- Meta Info -->
     <div class="course-meta">
-        <div class="meta-item"><i class='bx bx-time'></i> Duration: {{ course.duration }}</div>
-        <div class="meta-item"><i class='bx bx-medal'></i> Credits: {{ course.credits }}</div>
-        <div class="meta-item"><i class='bx bx-user'></i> Instructor: {{ course.instructor.get_full_name }}</div>
-        <div class="meta-item"><i class='bx bx-calendar'></i> Created: {{ course.created_at|date:"d/m/Y" }}</div>
-        <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: {{ course.updated_at|date:"d/m/Y" }}</div>
-        <div class="course-status {% if course.is_active %}status-active{% else %}status-inactive{% endif %}">
-            {% if course.is_active %}Active{% else %}Inactive{% endif %}
+        <div class="meta-item">
+            <i class='bx bx-user-circle'></i>
+            <span class="meta-label">Course Director</span>
+            <span class="meta-value">{{ course.instructor.get_full_name|default:course.instructor.email }}</span>
         </div>
+        <div class="meta-item">
+            <i class='bx bx-time'></i>
+            <span class="meta-label">Duration</span>
+            <span class="meta-value">{{ course.duration_weeks }} Weeks</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-medal'></i>
+            <span class="meta-label">Credits</span>
+            <span class="meta-value">{{ course.credit_points }}</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-calendar'></i>
+            <span class="meta-label">Created</span>
+            <span class="meta-value">{{ course.created_at|date:'d/m/Y' }}</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-calendar-edit'></i>
+            <span class="meta-label">Updated</span>
+            <span class="meta-value">{{ course.updated_at|date:'d/m/Y' }}</span>
+        </div>
+        <span class="course-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">{{ course.get_status_display }}</span>
     </div>
 </div>
 {% endblock %}

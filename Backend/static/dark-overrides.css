@@ -461,3 +461,100 @@ body.dark .table-container::-webkit-scrollbar-thumb {
 body.dark .table-container::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.1);
 }
+
+
+/* Dark mode overrides for student report */
+body.dark .student-report-header,
+body.dark .student-report-container {
+    background: #2b2d3c;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .student-title,
+body.dark .student-report-container h1,
+body.dark .student-report-container h2,
+body.dark .student-report-container h3 {
+    color: rgba(234, 236, 255, 0.88);
+}
+
+body.dark .student-report-container,
+body.dark .student-report-page,
+body.dark .student-report-container .student-email,
+body.dark .student-report-container .summary-card h3,
+body.dark .student-report-container .empty-progress-text {
+    color: rgba(214, 218, 255, 0.82);
+}
+
+body.dark .student-avatar {
+    background: rgba(105, 92, 254, 0.6);
+    color: #f4f6ff;
+}
+
+body.dark .student-id {
+    background: rgba(105, 92, 254, 0.24);
+    color: #dee2ff;
+}
+
+body.dark .summary-card {
+    background: rgba(105, 92, 254, 0.18);
+    border-left-color: rgba(149, 132, 255, 0.75);
+}
+
+body.dark .summary-card .summary-number {
+    color: #d7dcff;
+}
+
+body.dark .empty-progress {
+    background: rgba(255, 183, 77, 0.15);
+    border-color: rgba(255, 183, 77, 0.45);
+}
+
+body.dark .empty-progress-icon {
+    background: rgba(255, 183, 77, 0.25);
+    color: #ffd9a6;
+}
+
+body.dark .student-section {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .classroom-item {
+    background: rgba(105, 92, 254, 0.18);
+    border-left-color: rgba(149, 132, 255, 0.75);
+    color: #e6e9ff;
+}
+
+body.dark .classroom-code,
+body.dark .classroom-meta span {
+    color: rgba(214, 218, 255, 0.76);
+}
+
+body.dark .empty-row {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(214, 218, 255, 0.72);
+}
+
+body.dark .student-meta .meta-item {
+    background: rgba(43, 45, 60, 0.7);
+    color: rgba(214, 218, 255, 0.8);
+}
+
+body.dark .student-meta .meta-item i {
+    color: rgba(149, 132, 255, 0.9);
+}
+
+body.dark .student-status.status-active {
+    background: rgba(129, 199, 132, 0.28);
+    color: #c8f7ce;
+}
+
+body.dark .student-status.status-draft {
+    background: rgba(255, 196, 122, 0.38);
+    color: #ffd180;
+}
+
+body.dark .course-meta .meta-label,
+body.dark .course-meta .meta-value {
+    color: rgba(234, 236, 255, 0.85);
+}

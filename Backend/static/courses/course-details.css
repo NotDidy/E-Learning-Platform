@@ -437,3 +437,11 @@ body {
     }
 }
 
+.course-meta .meta-label {
+    font-weight: 600;
+    color: var(--black-color);
+}
+
+.course-meta .meta-value {
+    color: var(--text-color);
+}

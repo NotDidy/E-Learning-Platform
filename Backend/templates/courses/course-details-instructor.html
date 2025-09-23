@@ -46,6 +46,35 @@
         <p class="course-full-description">{{ course.description }}</p>
     {% endif %}
 
+    <div class="course-meta">
+        <div class="meta-item">
+            <i class='bx bx-user-circle'></i>
+            <span class="meta-label">Course Director</span>
+            <span class="meta-value">{{ course.instructor.get_full_name|default:course.instructor.email }}</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-time'></i>
+            <span class="meta-label">Duration</span>
+            <span class="meta-value">{{ course.duration_weeks }} Weeks</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-medal'></i>
+            <span class="meta-label">Credits</span>
+            <span class="meta-value">{{ course.credit_points }}</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-calendar'></i>
+            <span class="meta-label">Created</span>
+            <span class="meta-value">{{ course.created_at|date:'d/m/Y' }}</span>
+        </div>
+        <div class="meta-item">
+            <i class='bx bx-calendar-edit'></i>
+            <span class="meta-label">Updated</span>
+            <span class="meta-value">{{ course.updated_at|date:'d/m/Y' }}</span>
+        </div>
+        <span class="course-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">{{ course.get_status_display }}</span>
+    </div>
+
     <!-- Lessons Section -->
     <div class="course-section">
         <h2><i class='bx bx-book-open'></i> Lessons <span class="section-counter">{{ lessons|length }}</span></h2>
