@@ -54,7 +54,7 @@
             </a>
 
             {% if user.is_authenticated and user.role == "INSTRUCTOR" %}
-                <a href="{% url 'manage_classrooms_1' classroom.id %}" class="view-courses">
+                <a href="{% url 'manage_classroom' classroom.id %}" class="view-courses">
                     <i class="bx bx-cog"></i> Manage
                 </a>
             {% endif %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Create New Classroom | Course Manager{% endblock %}
+{% block title %}{% firstof page_title "Create New Classroom" %} | Course Manager{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'classrooms/create_classroom.css' %}">
@@ -11,21 +11,22 @@
 {% block content %}
 <div class="create-classroom-page">
     <div class="container">
+        {% url 'classrooms' as classrooms_url %}
         <div class="header">
             <div class="logo">
                 <i class='bx bx-book-open'></i>
                 <h2>Course Manager</h2>
             </div>
             <div>
-                <a href="{% url 'classrooms' %}" class="btn btn-orange">
-                    <i class='bx bx-arrow-left'></i> Back to Classrooms
+                <a href="{{ back_url|default:classrooms_url }}" class="btn btn-orange">
+                    <i class='bx bx-arrow-left'></i> {{ back_label|default:"Back to Classrooms" }}
                 </a>
             </div>
         </div>
 
         <div class="page-title">
-            <h1>Create New Classroom</h1>
-            <p>Fill in the details below to create a new classroom for your students</p>
+            <h1>{{ page_title|default:"Create New Classroom" }}</h1>
+            <p>{{ page_subtitle|default:"Fill in the details below to create a new classroom for your students" }}</p>
         </div>
 
         <div class="card">
@@ -178,17 +179,25 @@
                             <div class="error-message show">{{ form.class_code.errors|join:", " }}</div>
                         {% endif %}
                     </div>
-                </div>
-
                 <div class="form-actions">
-                    <a href="{% url 'classrooms' %}" class="btn btn-cancel">
-                        <i class='bx bx-x'></i> Cancel
+                    {% if is_edit and delete_url %}
+                    <form id="deleteClassroomForm" class="delete-classroom-form" method="post" action="{{ delete_url }}">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn delete-btn">
+                            <i class='bx bx-trash'></i> Delete Classroom
+                        </button>
+                    </form>
+                    {% endif %}
+                    <a href="{{ cancel_url|default:classrooms_url }}" class="btn btn-cancel">
+                        <i class='bx bx-x'></i> {{ cancel_label|default:"Cancel" }}
                     </a>
+                    {% if show_draft %}
                     <button type="button" class="btn btn-orange" id="saveDraftBtn">
-                        <i class='bx bx-save'></i> Save as draft
+                        <i class='bx bx-save'></i> {{ draft_label|default:"Save as draft" }}
                     </button>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary">
-                        <i class='bx bx-check'></i> Create Classroom
+                        <i class='{{ submit_icon|default:"bx bx-check" }}'></i> {{ submit_label|default:"Create Classroom" }}
                     </button>
                 </div>
             </form>
@@ -266,6 +275,18 @@
                 alert('Draft functionality is not available yet.');
             });
         }
+
+        {% if classroom %}
+        const deleteForm = document.getElementById('deleteClassroomForm');
+        if (deleteForm) {
+            deleteForm.addEventListener('submit', function (event) {
+                const confirmed = confirm('Are you sure you want to delete "{{ classroom.name|escapejs }}"?');
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+            });
+        }
+        {% endif %}
 
         updateRemoveButtons();
 

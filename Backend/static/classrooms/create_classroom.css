@@ -338,6 +338,44 @@
     color: var(--text-color);
 }
 
+
+.create-classroom-page .delete-classroom-form {
+    margin: 0;
+    margin-right: auto;
+    display: inline-flex;
+    align-items: center;
+}
+
+.create-classroom-page .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+    background: #fff;
+    text-decoration: none;
+}
+
+.create-classroom-page .action-btn i {
+    font-size: 16px;
+}
+
+.create-classroom-page .delete-btn {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.create-classroom-page .delete-btn:hover {
+    background: #ffcdd2;
+    transform: translateY(-2px);
+}
+
 @media (max-width: 1024px) {
     .create-classroom-page .header {
         flex-direction: column;
