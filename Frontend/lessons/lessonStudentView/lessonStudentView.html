@@ -21,7 +21,7 @@
                     Back to Lessons
                 </button>
                 <div class="progress-container">
-                    <div class="progress-bar" style="width: 40%;"></div>
+                    <div class="progress-bar" style="width: 0%;"></div>
                 </div>
             </div>
         </div>
@@ -34,8 +34,20 @@
         </div>
 
         <p class="lesson-full-description">
-            Track your progress by checking off reading materials and assignments as you complete them.
+            Track your progress by checking off reading materials and assignments as you complete them. This lesson introduces students to the fundamentals of Python Programming, including data types, variables,
+            basic operators, and the structure of simple programs. Students will gain confidence in writing simple scripts
+            and understanding how Python executes code step by step.
         </p>
+
+        <div class="lesson-section">
+            <h2><i class='bx bx-target-lock'></i> Objectives</h2>
+            <ul class="normal-list">
+                <li>Understand Python syntax and indentation</li>
+                <li>Learn variables, constants, and data types</li>
+                <li>Perform input/output operations</li>
+                <li>Write simple Python scripts</li>
+            </ul>
+        </div>
 
         <div class="lesson-section">
             <h2><i class='bx bx-book-reader'></i> Reading List</h2>
@@ -47,6 +59,11 @@
         </div>
 
         <div class="lesson-section">
+            <h2><i class='bx bx-list-check'></i> Prerequisites</h2>
+            <span class="prerequisite-tag">None</span>
+        </div>
+
+        <div class="lesson-section">
             <h2><i class='bx bx-clipboard'></i> Assignments</h2>
             <ul class="styled-list checklist">
                 <li><label><input type="checkbox"> Basic Operations Program</label></li>
@@ -55,12 +72,48 @@
             </ul>
         </div>
 
+        <div class="lesson-section">
+            <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
+            <div class="classroom-schedule">
+                <div class="classroom-session">
+                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Room A-204</strong></p>
+                    <p><i class='bx bx-time-five'></i> Time: <strong>Monday, 10:00 AM – 1:00 PM</strong></p>
+                </div>
+                <div class="classroom-session">
+                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Room B-101</strong></p>
+                    <p><i class='bx bx-time-five'></i> Time: <strong>Wednesday, 2:00 PM – 5:00 PM</strong></p>
+                </div>
+                <div class="classroom-session">
+                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Lab C-310</strong></p>
+                    <p><i class='bx bx-time-five'></i> Time: <strong>Friday, 9:00 AM – 12:00 PM</strong></p>
+                </div>
+            </div>
+        </div>
+
         <div class="lesson-meta">
             <div class="meta-item"><i class='bx bx-time'></i> Duration: 3 hours</div>
             <div class="meta-item"><i class='bx bx-medal'></i> Credits: 3</div>
             <div class="meta-item"><i class='bx bx-user'></i> Instructor: John Smith</div>
+            <div class="meta-item"><i class='bx bx-calendar'></i> Created: 14/07/2025</div>
+            <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: 15/07/2025</div>
+            <div class="lesson-status status-published">Published</div>
         </div>
     </div>
+
+    <script>
+        // Progress bar auto update
+        const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+        const progressBar = document.querySelector('.progress-bar');
+
+        function updateProgress() {
+            const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percent = (checked / total) * 100;
+            progressBar.style.width = percent + "%";
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+    </script>
 </body>
 
 </html>
