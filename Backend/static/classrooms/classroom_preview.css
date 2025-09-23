@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 * {
   font-family: 'Poppins', sans-serif;
@@ -8,22 +8,30 @@
 }
 
 :root {
-  --body-color: #f5f7fa;
+  --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  --sidebar-color: #FFF;
   --primary-color: #695CFE;
   --primary-color-light: #F6F5FF;
+  --toggle-color: #DDD;
   --text-color: #707070;
   --black-color: #0a0909;
   --shadow: 0 4px 20px rgba(0,0,0,0.1);
   --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
   --warning-color: #ff9800;
+
+  --tran-02: all 0.2s ease;
+  --tran-03: all 0.3s ease;
+  --tran-04: all 0.4s ease;
+  --tran-05: all 0.5s ease;
 }
 
 /* Page background */
 body {
-  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  background: var(--body-color);
   min-height: 100vh;
   color: var(--text-color);
   background-attachment: fixed;
+  padding: 20px 0;
 }
 
 .container {
@@ -32,17 +40,22 @@ body {
   padding: 20px;
 }
 
-/* Header bar with logo & user info */
+/* Header bar */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  background-color: #fff;
-  border-radius: 5px;
+  background: var(--sidebar-color);
+  margin: 20px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--orange-gradient);
 }
 
 .logo {
@@ -88,11 +101,20 @@ body {
 
 /* Cards */
 .card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 30px;
+  background: var(--sidebar-color);
+  border-radius: 20px;
   box-shadow: var(--shadow);
-  margin-bottom: 30px;
+  padding: 25px;
+  margin: 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--orange-gradient);
 }
 
 .card-header {
@@ -109,7 +131,7 @@ body {
   color: var(--black-color);
 }
 
-/* Classroom info grid */
+/* Classroom info aligned nicely */
 .classroom-info {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -122,6 +144,9 @@ body {
   padding: 15px;
   border-radius: 8px;
   border-left: 4px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .info-item h3 {
@@ -131,7 +156,7 @@ body {
 }
 
 .info-item p {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--black-color);
 }
@@ -144,12 +169,16 @@ body {
 /* Lessons table */
 .table-container {
   overflow-x: auto;
+  margin-top: 10px;
 }
 
 .lessons-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 15px;
+  background-color: var(--sidebar-color);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .lessons-table th,
@@ -163,8 +192,6 @@ body {
   background-color: #f9f9f9;
   font-weight: 600;
   color: var(--black-color);
-  position: sticky;
-  top: 0;
 }
 
 .lessons-table tbody tr:hover {
@@ -179,4 +206,12 @@ body {
   border: 1px dashed #ccc;
   border-radius: 8px;
   margin-top: 20px;
+}
+
+/* Section title for schedule */
+.section-title {
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black-color);
 }
