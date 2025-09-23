@@ -83,8 +83,8 @@
             {% for student in students %}
             <li class="student-item">
                 <div>
-                    <div class="student-id">{{ student.student_id }}</div>
-                    <div class="student-name">{{ student.get_full_name }}</div>
+                    <div class="student-id">{{ student.student_id|default:student.email }}</div>
+                    <div class="student-name">{{ student.get_full_name|default:student.email }}</div>
                 </div>
                 <i class='bx bx-chevron-right'></i>
             </li>
@@ -108,10 +108,9 @@
             {% for classroom in classrooms %}
             <li class="classroom-item">
                 <div class="classroom-info">
-                    <div class="classroom-id">{{ classroom.classroom_code }}</div>
                     <div class="classroom-name">{{ classroom.name }}</div>
                 </div>
-                <div class="ongoing-lessons">{{ classroom.lessons.count }} lessons</div>
+                <div class="ongoing-lessons">{{ classroom.schedule_count|default:0 }} sessions</div>
             </li>
             {% empty %}
                 <p>No classrooms assigned yet.</p>

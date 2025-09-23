@@ -71,6 +71,20 @@
     </div>
     {% endif %}
 
+    {% if classroom_schedules %}
+    <div class="lesson-section">
+        <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
+        <div class="classroom-schedule">
+            {% for schedule in classroom_schedules %}
+            <a href="{% url 'classroom_preview' schedule.classroom_id %}" class="classroom-session">
+                <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
+                <p><i class='bx bx-time-five'></i> Time: <strong>{{ schedule.get_day_display }} {{ schedule.start_time|time:'g:i A' }} - {{ schedule.end_time|time:'g:i A' }}</strong></p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
     <div class="lesson-meta">
         {% if object.duration_hours %}<div class="meta-item"><i class='bx bx-time'></i> Duration: {{ object.duration_hours }} hours</div>{% endif %}
         {% if object.credit_points %}<div class="meta-item"><i class='bx bx-medal'></i> Credits: {{ object.credit_points }}</div>{% endif %}

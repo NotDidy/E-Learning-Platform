@@ -90,6 +90,19 @@ class CourseDetailView(LoginRequiredMixin, DetailView):
         ctx["is_enrolled"] = False
         if is_student:
             ctx["is_enrolled"] = Enrollment.objects.filter(student=user, course=course).exists()
+
+        enrollments = (
+            course.enrollments.select_related("student")
+            .order_by("student__first_name", "student__last_name", "student__email")
+        )
+        ctx["students"] = [enrollment.student for enrollment in enrollments]
+
+        classrooms = (
+            course.classrooms.annotate(schedule_count=Count("schedules", distinct=True))
+            .select_related("supervisor")
+            .order_by("name")
+        )
+        ctx["classrooms"] = classrooms
         return ctx
 
 @login_required
@@ -296,6 +309,11 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
         course_published = (getattr(course, "status", None) == Course.STATUS_ACTIVE) and (not getattr(course, "is_draft", False))
         ctx["course_published"] = course_published
         ctx["course_status_label"] = "Published" if course_published else "Draft"
+        schedules = (
+            lesson.schedules.select_related("classroom")
+            .order_by("classroom__name", "day", "start_time")
+        )
+        ctx["classroom_schedules"] = schedules
         # section progress removed
         return ctx
 
