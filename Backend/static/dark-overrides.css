@@ -286,15 +286,6 @@ body.dark .cancel-btn:hover {
     background: #ff6f6f;
 }
 
-body.dark .container,
-body.dark .card,
-body.dark .header,
-body.dark .create-classroom-page .header,
-body.dark .courses-header,
-body.dark .table-container {
-    background: var(--primary-color-light);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-}
 
 body.dark h1,
 body.dark h2,
@@ -316,80 +307,157 @@ body.dark .classrooms-table td {
     color: var(--text-color) !important;
 }
 
+/* Header */
+body.dark .header,
+body.dark .create-classroom-page .header {
+    background: rgba(43, 45, 60, 0.95);
+    color: #e6e9ff;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+/* Logo and icons in header */
+body.dark .logo i {
+    color: #695CFE;
+}
+
+/* Page title */
+body.dark .page-title h1,
+body.dark .page-title p {
+    color: #e6e9ff;
+}
+
+/* Cards */
+body.dark .card,
+body.dark .create-classroom-page .card {
+    background: rgba(43, 45, 60, 0.85);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    color: #e6e9ff;
+}
+
+/* Card headers */
+body.dark .card-header h2 {
+    color: #e6e9ff;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Classroom info boxes */
+body.dark .info-item {
+    background: rgba(43, 45, 60, 0.85);
+    border-left-color: rgba(105, 92, 254, 0.75);
+    color: #e6e9ff;
+}
+
+body.dark .info-item h3,
+body.dark .info-item p {
+    color: #e6e9ff;
+}
+
+/* Warning boxes */
+body.dark .info-item.warning {
+    background: rgba(255, 152, 0, 0.15);
+    border-left-color: rgba(255, 152, 0, 0.8);
+    color: #fff7e6;
+}
+
+/* Duration / special info boxes */
+body.dark .info-item.duration {
+    background: rgba(105, 92, 254, 0.18);
+    border-left-color: rgba(105, 92, 254, 0.75);
+}
+
+/* Tables */
+body.dark .classrooms-table,
+body.dark .lessons-table,
+body.dark .timetable {
+    background: rgba(43, 45, 60, 0.85);
+    color: #e6e9ff;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .classrooms-table th,
 body.dark .lessons-table th,
-body.dark .classrooms-table th {
-    background-color: rgba(43,45,60,0.9);
+body.dark .timetable th {
+    background: rgba(105, 92, 254, 0.2);
+    color: #e6e9ff;
 }
 
-body.dark .lessons-table tbody tr:nth-child(even),
-body.dark .classrooms-table tbody tr:nth-child(even) {
-    background-color: rgba(105,92,254,0.04);
+body.dark .classrooms-table td,
+body.dark .lessons-table td,
+body.dark .timetable td {
+    color: #e6e9ff;
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
+body.dark .classrooms-table tbody tr:hover,
 body.dark .lessons-table tbody tr:hover,
-body.dark .classrooms-table tbody tr:hover {
-    background-color: rgba(105,92,254,0.08);
+body.dark .timetable tbody tr:hover {
+    background: rgba(105, 92, 254, 0.25);
 }
 
+/* Buttons */
+body.dark .btn,
+body.dark .action-buttons .btn,
+body.dark .view-courses,
+body.dark .course-action .view-courses,
+body.dark .back-btn,
+body.dark .save-btn,
+body.dark .cancel-btn,
+body.dark .add-btn,
+body.dark .remove-btn {
+    color: #e6e9ff;
+}
+
+body.dark .btn-primary,
+body.dark .btn-orange,
+body.dark .btn-success,
+body.dark .btn-info,
+body.dark .btn-danger,
+body.dark .btn-purple {
+    background: rgba(105, 92, 254, 0.3);
+    color: #e6e9ff;
+}
+
+body.dark .btn-cancel,
+body.dark .btn-secondary {
+    background: rgba(43, 45, 60, 0.6);
+    color: #e6e9ff;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .btn:hover,
+body.dark .action-buttons .btn:hover,
+body.dark .view-courses:hover {
+    filter: brightness(1.2);
+}
+
+/* Inputs and form fields */
 body.dark input,
 body.dark select,
 body.dark textarea {
-    background: var(--input-background);
-    color: var(--text-color);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(43, 45, 60, 0.75);
+    color: #e6e9ff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 body.dark input:focus,
 body.dark select:focus,
 body.dark textarea:focus {
-    background: var(--input-focus-background);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(105,92,254,0.15);
+    border-color: #695CFE;
+    box-shadow: 0 0 0 2px rgba(105, 92, 254, 0.25);
 }
 
-/* Buttons dark overrides */
-body.dark .btn,
-body.dark .back-btn,
-body.dark .save-btn,
-body.dark .cancel-btn,
-body.dark .add-btn,
-body.dark .remove-btn,
-body.dark .action-btn,
-body.dark .course-action .view-courses {
-    color: #fff;
-    background-color: rgba(105,92,254,0.2);
+
+
+/* Scrollbar for tables in dark mode */
+body.dark .table-container::-webkit-scrollbar {
+    height: 8px;
 }
 
-body.dark .btn:hover,
-body.dark .back-btn:hover,
-body.dark .save-btn:hover,
-body.dark .cancel-btn:hover,
-body.dark .add-btn:hover,
-body.dark .remove-btn:hover,
-body.dark .action-btn:hover,
-body.dark .course-action .view-courses:hover {
-    background-color: rgba(105,92,254,0.32);
-}
-
-/* Scrollbars for dark mode */
-body.dark ::-webkit-scrollbar {
-    width: 8px;
-}
-
-body.dark ::-webkit-scrollbar-thumb {
-    background-color: rgba(255,255,255,0.2);
+body.dark .table-container::-webkit-scrollbar-thumb {
+    background: rgba(105, 92, 254, 0.4);
     border-radius: 4px;
 }
 
-body.dark .info-item.duration {
-    background-color: rgba(105, 92, 254, 0.18); 
-    color: #e6e9ff;
-    border-left-color: rgba(149, 132, 255, 0.75);
-}
-
-/* For input fields */
-body.dark .duration-input {
-    background-color: #2b2d3c;
-    color: #e6e9ff;
-    border: 1px solid rgba(255,255,255,0.2);
+body.dark .table-container::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
 }

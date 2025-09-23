@@ -191,11 +191,6 @@
                     <a href="{{ cancel_url|default:classrooms_url }}" class="btn btn-cancel">
                         <i class='bx bx-x'></i> {{ cancel_label|default:"Cancel" }}
                     </a>
-                    {% if show_draft %}
-                    <button type="button" class="btn btn-orange" id="saveDraftBtn">
-                        <i class='bx bx-save'></i> {{ draft_label|default:"Save as draft" }}
-                    </button>
-                    {% endif %}
                     <button type="submit" class="btn btn-primary">
                         <i class='{{ submit_icon|default:"bx bx-check" }}'></i> {{ submit_label|default:"Create Classroom" }}
                     </button>
@@ -276,7 +271,6 @@
             });
         }
 
-        {% if classroom %}
         const deleteForm = document.getElementById('deleteClassroomForm');
         if (deleteForm) {
             deleteForm.addEventListener('submit', function (event) {
@@ -286,7 +280,6 @@
                 }
             });
         }
-        {% endif %}
 
         updateRemoveButtons();
 

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load static %}
 
 {% block title %}{{ course.title }}{% endblock %}
@@ -81,12 +81,14 @@
         <h2><i class='bx bx-user-circle'></i> Enrolled Students <span class="section-counter">{{ students|length }}</span></h2>
         <ul class="students-list">
             {% for student in students %}
-            <li class="student-item">
-                <div>
-                    <div class="student-id">{{ student.student_id|default:student.email }}</div>
-                    <div class="student-name">{{ student.get_full_name|default:student.email }}</div>
-                </div>
-                <i class='bx bx-chevron-right'></i>
+            <li>
+                <a href="{% url 'reports:student_course_report' course.id student.id %}" class="student-item">
+                    <div>
+                        <div class="student-id">{{ student.student_id|default:student.email }}</div>
+                        <div class="student-name">{{ student.get_full_name|default:student.email }}</div>
+                    </div>
+                    <i class='bx bx-chevron-right'></i>
+                </a>
             </li>
             {% empty %}
                 <p>No students enrolled yet.</p>
@@ -151,3 +153,4 @@
     });
 </script>
 {% endblock %}
+

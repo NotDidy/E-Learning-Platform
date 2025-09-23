@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
     font-family: 'Poppins', sans-serif;
@@ -153,6 +153,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+.students-list a.student-item {
+    text-decoration: none;
+    color: inherit;
 }
 
 .lesson-item, .student-item, .classroom-item {
@@ -431,3 +436,4 @@ body {
         gap: 8px;
     }
 }
+
