@@ -224,11 +224,24 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if lessons_by_course %}
+    {{ lessons_by_course|json_script:"lessons-by-course-data" }}
+{% endif %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('createClassroomForm');
         const durationField = document.getElementById('duration');
         const durationError = document.getElementById('durationError');
+        const courseField = document.getElementById('course');
+        const lessonsDataElement = document.getElementById('lessons-by-course-data');
+        let lessonsByCourse = {};
+        if (lessonsDataElement) {
+            try {
+                lessonsByCourse = JSON.parse(lessonsDataElement.textContent);
+            } catch (error) {
+                console.error('Unable to parse lessons data', error);
+            }
+        }
         const addRowBtn = document.getElementById('addRowBtn');
         const scheduleTable = document.getElementById('scheduleTable');
         if (!scheduleTable) {
@@ -264,6 +277,12 @@
             durationField.addEventListener('change', validateDuration);
         }
 
+        if (courseField) {
+            courseField.addEventListener('change', function () {
+                updateLessonSelects(true);
+            });
+        }
+
         const draftBtn = document.getElementById('saveDraftBtn');
         if (draftBtn) {
             draftBtn.addEventListener('click', function () {
@@ -282,6 +301,7 @@
         }
 
         updateRemoveButtons();
+        updateLessonSelects();
 
         if (form) {
             form.addEventListener('submit', function (event) {
@@ -289,6 +309,60 @@
                 const timesValid = validateAllTimes();
                 if (!durationValid || !timesValid) {
                     event.preventDefault();
+                }
+            });
+        }
+
+        function getLessonSelects() {
+            if (!tableBody) {
+                return [];
+            }
+            return Array.from(tableBody.querySelectorAll('select.lesson-select'));
+        }
+
+        function updateLessonSelects(clearSelection = false) {
+            if (!tableBody) {
+                return;
+            }
+            const courseId = courseField ? courseField.value : '';
+            const lessons = courseId && lessonsByCourse[courseId] ? lessonsByCourse[courseId] : [];
+            const hasCourse = Boolean(courseId);
+
+            getLessonSelects().forEach(select => {
+                const previousValue = clearSelection ? '' : select.value;
+                select.innerHTML = '';
+
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                if (!hasCourse) {
+                    placeholderOption.textContent = 'Select a course first';
+                    select.disabled = true;
+                } else if (!lessons.length) {
+                    placeholderOption.textContent = 'No lessons available';
+                    select.disabled = true;
+                } else {
+                    placeholderOption.textContent = 'Select lesson';
+                    select.disabled = false;
+                }
+                placeholderOption.selected = true;
+                select.appendChild(placeholderOption);
+
+                if (hasCourse) {
+                    lessons.forEach(lesson => {
+                        const option = document.createElement('option');
+                        option.value = String(lesson.id);
+                        option.textContent = lesson.label;
+                        select.appendChild(option);
+                    });
+
+                    if (!clearSelection && previousValue && lessons.some(lesson => String(lesson.id) === previousValue)) {
+                        select.value = previousValue;
+                        placeholderOption.selected = false;
+                    } else {
+                        select.value = '';
+                    }
+                } else {
+                    select.value = '';
                 }
             });
         }
@@ -313,6 +387,7 @@
             }
 
             updateRemoveButtons();
+            updateLessonSelects();
         }
 
         function handleRemoveRow(event) {

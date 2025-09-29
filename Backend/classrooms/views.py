@@ -6,6 +6,19 @@ from django.urls import reverse
 
 from .forms import ClassroomForm, ScheduleForm
 from .models import Classroom, Schedule
+from courses.models import Course
+
+
+
+def _lessons_by_course():
+    courses = Course.objects.prefetch_related("lessons").order_by("title")
+    return {
+        str(course.id): [
+            {"id": lesson.id, "label": lesson.title}
+            for lesson in course.lessons.all()
+        ]
+        for course in courses
+    }
 
 
 def is_instructor(user):
@@ -61,6 +74,8 @@ def create_classroom(request):
             form_kwargs={"classroom": None},
         )
 
+    lessons_by_course = _lessons_by_course()
+
     context = {
         "form": form,
         "formset": formset,
@@ -76,6 +91,7 @@ def create_classroom(request):
         "is_edit": False,
         "delete_url": None,
         "classroom": None,
+        "lessons_by_course": lessons_by_course,
     }
     return render(request, "classrooms/classroom_form.html", context)
 
@@ -114,6 +130,8 @@ def manage_classroom(request, classroom_id):
             form_kwargs={"classroom": classroom},
         )
 
+    lessons_by_course = _lessons_by_course()
+
     context = {
         "form": form,
         "formset": formset,
@@ -129,6 +147,7 @@ def manage_classroom(request, classroom_id):
         "is_edit": True,
         "delete_url": reverse("delete_classroom", args=[classroom.id]),
         "classroom": classroom,
+        "lessons_by_course": lessons_by_course,
     }
     return render(request, "classrooms/classroom_form.html", context)
 

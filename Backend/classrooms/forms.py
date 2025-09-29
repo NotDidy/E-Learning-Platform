@@ -55,6 +55,7 @@ class ScheduleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         lesson_field = self.fields["lesson"]
+        lesson_field.label_from_instance = lambda obj: obj.title
         if classroom and classroom.course_id:
             lesson_field.queryset = Lesson.objects.filter(course=classroom.course)
         else:
