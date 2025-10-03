@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profiles | Course Manager</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --body-color: #f5f7fa;
+            --sidebar-color: #FFF;
+            --primary-color: #695CFE;
+            --primary-color-light: #F6F5FF;
+            --toggle-color: #DDD;
+            --text-color: #707070;
+            --black-color: #0a0909;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+            --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+            --success-color: #4CAF50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --info-color: #2196F3;
+            --purple-color: #9C27B0;
+            --cancel-color: #f0f0f0;
+            --cancel-text: #888;
+
+            --tran-02: all 0.2s ease;
+            --tran-03: all 0.3s ease;
+            --tran-04: all 0.4s ease;
+            --tran-05: all 0.5s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            background-attachment: fixed;
+            padding-bottom: 40px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: var(--tran-02);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--tran-03);
+        }
+
+        .header:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--black-color);
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(105, 92, 254, 0.3);
+            transition: var(--tran-03);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .instructor-badge {
+            background-color: var(--purple-color);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 5px;
+        }
+
+        .page-title {
+            margin: 20px 0 30px;
+        }
+
+        .page-title h1 {
+            color: var(--black-color);
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .page-title p {
+            color: var(--text-color);
+            font-size: 15px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--tran-03);
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-header h2 {
+            font-size: 20px;
+            color: var(--black-color);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: var(--tran-03);
+        }
+        
+        .back-link:hover {
+            text-decoration: none;
+            background-color: var(--primary-color-light);
+            transform: translateX(-3px);
+        }
+        
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: var(--tran-03);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(105, 92, 254, 0.1);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .select-control {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: white;
+            transition: var(--tran-03);
+        }
+        
+        .select-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(105, 92, 254, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .btn i {
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a4bdb;
+            box-shadow: 0 4px 12px rgba(105, 92, 254, 0.3);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color-light);
+            box-shadow: 0 4px 12px rgba(105, 92, 254, 0.1);
+        }
+        
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .student-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--tran-03);
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color-light);
+        }
+        
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: var(--tran-03);
+        }
+        
+        .student-card:hover .student-avatar {
+            transform: scale(1.1);
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            color: var(--black-color);
+            margin-bottom: 2px;
+            font-size: 16px;
+        }
+        
+        .student-id {
+            font-size: 13px;
+            color: var(--text-color);
+        }
+        
+        .student-courses {
+            font-size: 12px;
+            color: var(--primary-color);
+            margin-top: 5px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--tran-03);
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 模态框样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--tran-03);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hover);
+            transform: translateY(20px);
+            transition: var(--tran-03);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            color: var(--black-color);
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--tran-02);
+        }
+        
+        .close-modal:hover {
+            color: var(--danger-color);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .student-profile-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .profile-main-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--black-color);
+            margin-bottom: 5px;
+        }
+        
+        .profile-id {
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .profile-title {
+            display: inline-block;
+            padding: 5px 12px;
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .profile-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black-color);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color-light);
+        }
+        
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 3px;
+            display: block;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--black-color);
+        }
+        
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .course-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            transition: var(--tran-03);
+        }
+        
+        .course-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .course-name {
+            font-weight: 600;
+            color: var(--black-color);
+            margin-bottom: 5px;
+        }
+        
+        .course-instructor, .course-date {
+            font-size: 13px;
+            color: var(--text-color);
+        }
+        
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 20px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: none;
+            }
+            
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .student-profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .modal-footer {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class='bx bx-book-open'></i>
+                <h2>Course Manager</h2>
+            </div>
+            <div class="user-profile">
+                <div>
+                    <div style="font-weight: 500; color: var(--black-color);">
+                        Dr. Sarah Johnson <span class="instructor-badge">Instructor</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-color);">Computer Science Department</div>
+                </div>
+                <div class="user-avatar">SJ</div>
+            </div>
+        </div>
+
+        <div class="page-title">
+            <h1>Student Profiles</h1>
+            <p>View and manage all students enrolled in your courses</p>
+        </div>
+
+        <a href="instructor_dashboard.html" class="back-link">
+            <i class='bx bx-arrow-left'></i> Back to Dashboard
+        </a>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>All Students</h2>
+                <div>Total Students: <span id="total-students">15</span></div>
+            </div>
+            
+            <div class="filter-bar">
+                <div class="search-box">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="student-search" placeholder="Search by student ID or name...">
+                </div>
+                
+                <div class="filter-controls">
+                    <select class="select-control" id="course-filter">
+                        <option value="all">All Courses</option>
+                        <option value="cs101">CS101 - Introduction to Programming</option>
+                        <option value="cs202">CS202 - Data Structures</option>
+                        <option value="cs303">CS303 - Algorithms</option>
+                    </select>
+                    
+                    <select class="select-control" id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="undergraduate">Undergraduate</option>
+                        <option value="graduate">Graduate</option>
+                    </select>
+                    
+                    <button class="btn btn-outline" id="reset-filters">
+                        <i class='bx bx-refresh'></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="students-grid" id="students-container">
+                <!-- 学生卡片 1 -->
+                <div class="student-card" data-id="S2023001">
+                    <div class="student-avatar">EJ</div>
+                    <div class="student-info">
+                        <div class="student-name">Emma Johnson</div>
+                        <div class="student-id">S2023001</div>
+                        <div class="student-courses">3 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+                
+                <!-- 学生卡片 2 -->
+                <div class="student-card" data-id="S2023002">
+                    <div class="student-avatar">LW</div>
+                    <div class="student-info">
+                        <div class="student-name">Liam Wilson</div>
+                        <div class="student-id">S2023002</div>
+                        <div class="student-courses">2 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+                
+                <!-- 学生卡片 3 -->
+                <div class="student-card" data-id="S2023003">
+                    <div class="student-avatar">OM</div>
+                    <div class="student-info">
+                        <div class="student-name">Olivia Martinez</div>
+                        <div class="student-id">S2023003</div>
+                        <div class="student-courses">4 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+                
+                <!-- 学生卡片 4 -->
+                <div class="student-card" data-id="S2023004">
+                    <div class="student-avatar">NB</div>
+                    <div class="student-info">
+                        <div class="student-name">Noah Brown</div>
+                        <div class="student-id">S2023004</div>
+                        <div class="student-courses">2 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+                
+                <!-- 学生卡片 5 -->
+                <div class="student-card" data-id="S2023005">
+                    <div class="student-avatar">AS</div>
+                    <div class="student-info">
+                        <div class="student-name">Ava Smith</div>
+                        <div class="student-id">S2023005</div>
+                        <div class="student-courses">3 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+                
+                <!-- 学生卡片 6 -->
+                <div class="student-card" data-id="S2023006">
+                    <div class="student-avatar">JM</div>
+                    <div class="student-info">
+                        <div class="student-name">James Miller</div>
+                        <div class="student-id">S2023006</div>
+                        <div class="student-courses">2 courses enrolled</div>
+                    </div>
+                    <div>
+                        <i class='bx bx-chevron-right text-gray-400'></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pagination">
+                <button class="pagination-btn" id="prev-page" disabled>
+                    <i class='bx bx-chevron-left'></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">4</button>
+                <button class="pagination-btn">5</button>
+                <button class="pagination-btn" id="next-page">
+                    <i class='bx bx-chevron-right'></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 学生详情模态框 -->
+    <div class="modal-overlay" id="studentProfileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Student Profile</h3>
+                <button class="close-modal" id="closeProfileModal">
+                    <i class='bx bx-x'></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="student-profile-header">
+                    <div class="profile-avatar" id="profile-avatar">EJ</div>
+                    <div class="profile-main-info">
+                        <div class="profile-name" id="profile-name">Emma Johnson</div>
+                        <div class="profile-id" id="profile-id">Student ID: S2023001</div>
+                        <div class="profile-title" id="profile-title">Undergraduate Student</div>
+                    </div>
+                </div>
+                
+                <div class="profile-details-grid">
+                    <div>
+                        <h3 class="profile-section-title">Personal Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Email Address</span>
+                            <span class="detail-value" id="profile-email">emma.j@university.edu</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date of Birth</span>
+                            <span class="detail-value" id="profile-dob">May 15, 2004</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Contact Number</span>
+                            <span class="detail-value" id="profile-phone">+1 (555) 123-4567</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Address</span>
+                            <span class="detail-value" id="profile-address">123 University Ave, Student Housing</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Account Created</span>
+                            <span class="detail-value" id="profile-created">September 1, 2023</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="profile-section-title">Enrolled Courses</h3>
+                        <div class="course-list" id="profile-courses">
+                            <div class="course-item">
+                                <div class="course-name">CS101 - Introduction to Programming</div>
+                                <div class="course-instructor">Instructor: Dr. Sarah Johnson</div>
+                                <div class="course-date">Enrolled: September 5, 2023</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-name">MA102 - Calculus II</div>
+                                <div class="course-instructor">Instructor: Prof. Michael Chen</div>
+                                <div class="course-date">Enrolled: September 5, 2023</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-name">PH101 - Physics Fundamentals</div>
+                                <div class="course-instructor">Instructor: Dr. Lisa Wong</div>
+                                <div class="course-date">Enrolled: September 5, 2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="download-profile">
+                    <i class='bx bx-download'></i> Download Profile
+                </button>
+                <button class="btn btn-primary" id="close-profile-btn">
+                    <i class='bx bx-check'></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 学生数据
+            const students = [
+                {
+                    id: 'S2023001',
+                    name: 'Emma Johnson',
+                    initials: 'EJ',
+                    email: 'emma.j@university.edu',
+                    title: 'Undergraduate Student',
+                    dob: 'May 15, 2004',
+                    phone: '+1 (555) 123-4567',
+                    address: '123 University Ave, Student Housing',
+                    created: 'September 1, 2023',
+                    courses: [
+                        { name: 'CS101 - Introduction to Programming', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' },
+                        { name: 'MA102 - Calculus II', instructor: 'Prof. Michael Chen', enrolled: 'September 5, 2023' },
+                        { name: 'PH101 - Physics Fundamentals', instructor: 'Dr. Lisa Wong', enrolled: 'September 5, 2023' }
+                    ]
+                },
+                {
+                    id: 'S2023002',
+                    name: 'Liam Wilson',
+                    initials: 'LW',
+                    email: 'liam.w@university.edu',
+                    title: 'Undergraduate Student',
+                    dob: 'March 22, 2003',
+                    phone: '+1 (555) 987-6543',
+                    address: '456 Campus Drive, Dormitory B',
+                    created: 'September 1, 2023',
+                    courses: [
+                        { name: 'CS101 - Introduction to Programming', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' },
+                        { name: 'CS202 - Data Structures', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' }
+                    ]
+                },
+                {
+                    id: 'S2023003',
+                    name: 'Olivia Martinez',
+                    initials: 'OM',
+                    email: 'olivia.m@university.edu',
+                    title: 'Graduate Student',
+                    dob: 'August 8, 2001',
+                    phone: '+1 (555) 456-7890',
+                    address: '789 Scholar Road, Apt 2B',
+                    created: 'August 15, 2023',
+                    courses: [
+                        { name: 'CS303 - Algorithms', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' },
+                        { name: 'CS501 - Advanced Computing', instructor: 'Prof. David Wilson', enrolled: 'September 5, 2023' },
+                        { name: 'ST502 - Research Methods', instructor: 'Dr. Jennifer Lee', enrolled: 'September 5, 2023' },
+                        { name: 'MA301 - Advanced Mathematics', instructor: 'Prof. Michael Chen', enrolled: 'September 5, 2023' }
+                    ]
+                },
+                {
+                    id: 'S2023004',
+                    name: 'Noah Brown',
+                    initials: 'NB',
+                    email: 'noah.b@university.edu',
+                    title: 'Undergraduate Student',
+                    dob: 'January 12, 2004',
+                    phone: '+1 (555) 234-5678',
+                    address: '321 Learning Lane, Dormitory A',
+                    created: 'September 2, 2023',
+                    courses: [
+                        { name: 'CS101 - Introduction to Programming', instructor: 'Dr. Sarah Johnson', enrolled: 'September 6, 2023' },
+                        { name: 'MA101 - Calculus I', instructor: 'Prof. Michael Chen', enrolled: 'September 6, 2023' }
+                    ]
+                },
+                {
+                    id: 'S2023005',
+                    name: 'Ava Smith',
+                    initials: 'AS',
+                    email: 'ava.s@university.edu',
+                    title: 'Undergraduate Student',
+                    dob: 'July 30, 2003',
+                    phone: '+1 (555) 876-5432',
+                    address: '654 Knowledge Blvd, Student Housing',
+                    created: 'August 20, 2023',
+                    courses: [
+                        { name: 'CS202 - Data Structures', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' },
+                        { name: 'ST101 - Statistics I', instructor: 'Prof. Thomas Clark', enrolled: 'September 5, 2023' },
+                        { name: 'EN102 - English Literature', instructor: 'Dr. Robert Adams', enrolled: 'September 5, 2023' }
+                    ]
+                },
+                {
+                    id: 'S2023006',
+                    name: 'James Miller',
+                    initials: 'JM',
+                    email: 'james.m@university.edu',
+                    title: 'Undergraduate Student',
+                    dob: 'October 5, 2003',
+                    phone: '+1 (555) 345-6789',
+                    address: '987 Wisdom Court, Dormitory C',
+                    created: 'August 25, 2023',
+                    courses: [
+                        { name: 'CS303 - Algorithms', instructor: 'Dr. Sarah Johnson', enrolled: 'September 5, 2023' },
+                        { name: 'PH201 - Advanced Physics', instructor: 'Dr. Lisa Wong', enrolled: 'September 5, 2023' }
+                    ]
+                }
+            ];
+            
+            // 模态框元素
+            const profileModal = document.getElementById('studentProfileModal');
+            const closeProfileModal = document.getElementById('closeProfileModal');
+            const closeProfileBtn = document.getElementById('close-profile-btn');
+            const downloadProfile = document.getElementById('download-profile');
+            
+            // 模态框内容元素
+            const profileAvatar = document.getElementById('profile-avatar');
+            const profileName = document.getElementById('profile-name');
+            const profileId = document.getElementById('profile-id');
+            const profileTitle = document.getElementById('profile-title');
+            const profileEmail = document.getElementById('profile-email');
+            const profileDob = document.getElementById('profile-dob');
+            const profilePhone = document.getElementById('profile-phone');
+            const profileAddress = document.getElementById('profile-address');
+            const profileCreated = document.getElementById('profile-created');
+            const profileCourses = document.getElementById('profile-courses');
+            
+            // 打开学生详情模态框
+            function openStudentProfile(studentId) {
+                const student = students.find(s => s.id === studentId);
+                if (!student) return;
+                
+                // 更新模态框内容
+                profileAvatar.textContent = student.initials;
+                profileName.textContent = student.name;
+                profileId.textContent = `Student ID: ${student.id}`;
+                profileTitle.textContent = student.title;
+                profileEmail.textContent = student.email;
+                profileDob.textContent = student.dob;
+                profilePhone.textContent = student.phone;
+                profileAddress.textContent = student.address;
+                profileCreated.textContent = student.created;
+                
+                // 更新课程列表
+                profileCourses.innerHTML = '';
+                student.courses.forEach(course => {
+                    const courseItem = document.createElement('div');
+                    courseItem.className = 'course-item';
+                    courseItem.innerHTML = `
+                        <div class="course-name">${course.name}</div>
+                        <div class="course-instructor">Instructor: ${course.instructor}</div>
+                        <div class="course-date">Enrolled: ${course.enrolled}</div>
+                    `;
+                    profileCourses.appendChild(courseItem);
+                });
+                
+                // 显示模态框
+                profileModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // 关闭模态框
+            function closeProfileModalFunc() {
+                profileModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // 为所有学生卡片添加点击事件
+            document.querySelectorAll('.student-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    openStudentProfile(studentId);
+                });
+            });
+            
+            // 关闭模态框事件
+            closeProfileModal.addEventListener('click', closeProfileModalFunc);
+            closeProfileBtn.addEventListener('click', closeProfileModalFunc);
+            
+            // 点击模态框外部关闭
+            profileModal.addEventListener('click', function(e) {
+                if (e.target === profileModal) {
+                    closeProfileModalFunc();
+                }
+            });
+            
+            // 下载档案按钮
+            downloadProfile.addEventListener('click', function() {
+                // 模拟下载功能
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="bx bx-loader bx-spin"></i> Downloading...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="bx bx-check"></i> Downloaded!';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }, 1500);
+                }, 1000);
+            });
+            
+            // 搜索功能
+            document.getElementById('student-search').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const studentCards = document.querySelectorAll('.student-card');
+                
+                studentCards.forEach(card => {
+                    const studentId = card.getAttribute('data-id').toLowerCase();
+                    const studentName = card.querySelector('.student-name').textContent.toLowerCase();
+                    
+                    if (studentId.includes(searchTerm) || studentName.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // 筛选功能
+            const courseFilter = document.getElementById('course-filter');
+            const statusFilter = document.getElementById('status-filter');
+            
+            function applyFilters() {
+                const courseValue = courseFilter.value;
+                const statusValue = statusFilter.value;
+                
+                document.querySelectorAll('.student-card').forEach(card => {
+                    const studentId = card.getAttribute('data-id');
+                    const student = students.find(s => s.id === studentId);
+                    
+                    if (!student) {
+                        card.style.display = 'none';
+                        return;
+                    }
+                    
+                    // 课程筛选
+                    let courseMatch = true;
+                    if (courseValue !== 'all') {
+                        const courseName = courseValue === 'cs101' ? 'CS101' : 
+                                          courseValue === 'cs202' ? 'CS202' : 'CS303';
+                        courseMatch = student.courses.some(c => c.name.startsWith(courseName));
+                    }
+                    
+                    // 状态筛选
+                    let statusMatch = true;
+                    if (statusValue !== 'all') {
+                        const statusText = statusValue === 'undergraduate' ? 'Undergraduate' : 'Graduate';
+                        statusMatch = student.title.includes(statusText);
+                    }
+                    
+                    // 应用筛选
+                    if (courseMatch && statusMatch) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            courseFilter.addEventListener('change', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+            
+            // 重置筛选
+            document.getElementById('reset-filters').addEventListener('click', function() {
+                courseFilter.value = 'all';
+                statusFilter.value = 'all';
+                document.getElementById('student-search').value = '';
+                
+                // 显示所有学生卡片
+                document.querySelectorAll('.student-card').forEach(card => {
+                    card.style.display = '';
+                });
+            });
+            
+            // 分页功能
+            const paginationBtns = document.querySelectorAll('.pagination-btn:not(#prev-page):not(#next-page)');
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            let currentPage = 1;
+            
+            function updatePagination() {
+                // 更新按钮状态
+                paginationBtns.forEach((btn, index) => {
+                    const pageNum = index + 1;
+                    if (pageNum === currentPage) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // 更新前后按钮状态
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === paginationBtns.length;
+            }
+            
+            paginationBtns.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    currentPage = index + 1;
+                    updatePagination();
+                    // 在实际应用中，这里会加载对应页的学生数据
+                });
+            });
+            
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                    // 在实际应用中，这里会加载对应页的学生数据
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < paginationBtns.length) {
+                    currentPage++;
+                    updatePagination();
+                    // 在实际应用中，这里会加载对应页的学生数据
+                }
+            });
+        });
+    </script>
+</body>
+</html>
