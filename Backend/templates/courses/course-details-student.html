@@ -46,7 +46,9 @@
                     <div class="lesson-id">{{ lesson.lesson_code }}</div>
                     <div class="lesson-name">{{ lesson.title }}</div>
                 </div>
+                    <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
                 <i class='bx bx-chevron-right'></i>
+            </a>
             </li>
             {% empty %}
             <p>No lessons available yet.</p>
