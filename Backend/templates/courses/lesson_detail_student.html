@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ lesson.title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'lessons/lessonStudentView.css' %}">
+
+<div class="lesson-details-container">
+
+    <!-- Header Section -->
+    <div class="lesson-header">
+        <div class="lessons-title-section">
+            <a href="{% url 'student_lessons_list' lesson.course.id %}" class="back-btn">
+                <i class='bx bx-left-arrow-alt'></i> Back to Lessons
+            </a>
+            <div class="lessons-title">
+                <div class="lesson-icon">
+                    <i class='bx bx-book-open'></i>
+                </div>
+                {{ lesson.title }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    {% if lesson.description %}
+    <p class="lesson-full-description">{{ lesson.description }}</p>
+    {% endif %}
+
+    <!-- Lesson Meta Info -->
+    <div class="lesson-meta">
+        {% if lesson.duration_hours %}
+        <div class="meta-item"><i class='bx bx-time'></i> Duration: {{ lesson.duration_hours }} hours</div>
+        {% endif %}
+        <div class="meta-item"><i class='bx bx-user'></i> Instructor: {{ lesson.course.instructor.get_full_name|default:lesson.course.instructor.email }}</div>
+        <div class="meta-item"><i class='bx bx-calendar'></i> Created: {{ lesson.created_at|date:"d/m/Y" }}</div>
+        <div class="meta-item"><i class='bx bx-calendar-edit'></i> Updated: {{ lesson.updated_at|date:"d/m/Y" }}</div>
+    </div>
+
+    <!-- Learning Materials -->
+    <div class="lesson-section">
+        <h2><i class='bx bx-book-reader'></i> Learning Materials</h2>
+        <ul class="styled-list checklist">
+            {% for material in lesson.materials.all %}
+            <li>
+                <label>
+                    <input 
+                        type="checkbox" 
+                        class="material-checkbox"
+                        data-material-id="{{ material.id }}"
+                        {% if material.id in completed_material_ids %}checked{% endif %}
+                    >
+                    <a href="{{ material.file.url }}" target="_blank">{{ material.title }}</a>
+                </label>
+            </li>
+            {% empty %}
+            <li>No learning materials available for this lesson.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Classroom Schedule -->
+    <div class="lesson-section">
+        <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
+        <div class="classroom-schedule">
+            {% for schedule in lesson.schedules.all %}
+            <div class="classroom-session">
+                <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
+                <p><i class='bx bx-time-five'></i> {{ schedule.get_day_display }} {{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}</p>
+            </div>
+            {% empty %}
+            <p>No scheduled classroom sessions for this lesson.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- JavaScript for AJAX progress updates -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.material-checkbox');
+    const csrfToken = '{{ csrf_token }}';
+    const toggleUrl = "{% url 'toggle_lesson_progress' lesson.id %}";
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            fetch(toggleUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'material_id': this.dataset.materialId
+                })
+            })
+            .then(response => response.json())
+            .catch(err => console.error('Error updating progress:', err));
+        });
+    });
+});
+</script>
+
+{% endblock %}
