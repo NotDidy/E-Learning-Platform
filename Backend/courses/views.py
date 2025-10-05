@@ -9,8 +9,10 @@ from django.db.models import Count
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import F, Value
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
-from .models import Course, Enrollment, Lesson
+from .models import Course, Enrollment, Lesson, LessonProgress
 from .forms import LessonForm
 
 class InstructorRequiredMixin(UserPassesTestMixin):
@@ -314,7 +316,30 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
             .order_by("classroom__name", "day", "start_time")
         )
         ctx["classroom_schedules"] = schedules
-        # section progress removed
+        
+        ctx["materials"] = lesson.materials.all()
+
+        user = self.request.user
+        progress = None
+        try:
+            progress = LessonProgress.objects.get(student=user, lesson=lesson)
+        except LessonProgress.DoesNotExist:
+            progress = None
+        ctx["lesson_progress"] = progress  
+
+        total_lessons = lesson.course.lessons.count()
+        completed_count = 0
+        try:
+            is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
+        except Exception:
+            is_student = False
+        if is_student:
+            completed_count = LessonProgress.objects.filter(student=user, lesson__course=lesson.course, completed=True).count()
+        ctx["course_total_lessons"] = total_lessons
+        ctx["course_completed_lessons"] = completed_count
+        ctx["course_percent_complete"] = round((completed_count / total_lessons * 100) if total_lessons else 0.0, 2)
+
+
         return ctx
 
 
@@ -407,3 +432,37 @@ class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
         ctx["is_enrolled"] = Enrollment.objects.filter(student=user, course=course).exists()
 
         return ctx
+    
+@login_required
+@require_POST
+def toggle_lesson_progress(request, lesson_id):
+    user = request.user
+    lesson = get_object_or_404(Lesson, pk=lesson_id)
+
+    try:
+        is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
+    except Exception:
+        is_student = False
+    if not is_student:
+        return JsonResponse({"error": "Only students may mark progress"}, status=403)
+
+    if not Enrollment.objects.filter(student=user, course=lesson.course).exists():
+        return JsonResponse({"error": "Student not enrolled in course"}, status=403)
+
+    progress, created = LessonProgress.objects.get_or_create(student=user, lesson=lesson)
+    progress.completed = not progress.completed
+    progress.save()
+
+    total_lessons = lesson.course.lessons.count() or 0
+    completed_count = LessonProgress.objects.filter(
+        student=user, lesson__course=lesson.course, completed=True
+    ).count() if total_lessons > 0 else 0
+    percent = (completed_count / total_lessons * 100) if total_lessons > 0 else 0.0
+
+    return JsonResponse({
+        "lesson_id": lesson.id,
+        "completed": progress.completed,
+        "completed_count": completed_count,
+        "total_lessons": total_lessons,
+        "percent_course_complete": round(percent, 2),
+    })
