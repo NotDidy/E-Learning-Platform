@@ -96,4 +96,47 @@ class Lesson(models.Model):
     def __str__(self) -> str:
         return f"{self.title} ({self.course.title})"
     
+class LearningMaterial(models.Model):
+    TYPE_PDF = "pdf"
+    TYPE_VIDEO = "video"
+    TYPE_LINK = "link"
+    TYPE_CHOICES = [
+        (TYPE_PDF, "PDF Document"),
+        (TYPE_VIDEO, "Video"),
+        (TYPE_LINK, "External Link"),
+    ]
 
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="materials")
+    title = models.CharField(max_length=255)
+    material_type = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TYPE_LINK)
+    file = models.FileField(upload_to="materials/", blank=True, null=True)
+    url = models.URLField(blank=True, null=True, help_text="External link (if applicable)")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "learning_material"
+        ordering = ["title"]
+
+    def __str__(self):
+        return f"{self.title} ({self.get_material_type_display()})"
+
+class LessonProgress(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lesson_progress"
+    )
+    lesson = models.ForeignKey(
+        'Lesson',
+        on_delete=models.CASCADE,
+        related_name="progress_records"
+    )
+    completed = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("student", "lesson")
+        db_table = "lesson_progress"
+
+    def __str__(self) -> str:
+        return f"{self.student} - {self.lesson.title} - {'done' if self.completed else 'not done'}"
