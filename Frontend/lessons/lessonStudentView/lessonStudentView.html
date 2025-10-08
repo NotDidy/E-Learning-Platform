@@ -76,19 +76,32 @@
             <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
             <div class="classroom-schedule">
                 <div class="classroom-session">
-                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Room A-204</strong></p>
-                    <p><i class='bx bx-time-five'></i> Time: <strong>Monday, 10:00 AM – 1:00 PM</strong></p>
+                    <div class="classroom-info">
+                        <p><i class='bx bx-buildings'></i> Classroom: <strong>Room A-204</strong></p>
+                        <p><i class='bx bx-time-five'></i> Time: <strong>Monday, 10:00 AM – 1:00 PM</strong></p>
+                    </div>
+                    <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
                 </div>
+
                 <div class="classroom-session">
-                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Room B-101</strong></p>
-                    <p><i class='bx bx-time-five'></i> Time: <strong>Wednesday, 2:00 PM – 5:00 PM</strong></p>
+                    <div class="classroom-info">
+                        <p><i class='bx bx-buildings'></i> Classroom: <strong>Room B-101</strong></p>
+                        <p><i class='bx bx-time-five'></i> Time: <strong>Wednesday, 2:00 PM – 5:00 PM</strong></p>
+                    </div>
+                    <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
                 </div>
+
                 <div class="classroom-session">
-                    <p><i class='bx bx-buildings'></i> Classroom: <strong>Lab C-310</strong></p>
-                    <p><i class='bx bx-time-five'></i> Time: <strong>Friday, 9:00 AM – 12:00 PM</strong></p>
+                    <div class="classroom-info">
+                        <p><i class='bx bx-buildings'></i> Classroom: <strong>Lab C-310</strong></p>
+                        <p><i class='bx bx-time-five'></i> Time: <strong>Friday, 9:00 AM – 12:00 PM</strong></p>
+                    </div>
+                    <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
                 </div>
             </div>
         </div>
+
+
 
         <div class="lesson-meta">
             <div class="meta-item"><i class='bx bx-time'></i> Duration: 3 hours</div>
@@ -114,6 +127,22 @@
 
         checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
     </script>
+
+    <script>
+    document.querySelectorAll('.enroll-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.classList.contains('enrolled')) return;
+
+            const classroom = btn.parentElement.querySelector('strong').innerText;
+            alert(`✅ You have successfully enrolled into ${classroom}!`);
+
+            btn.innerHTML = "<i class='bx bx-check-circle'></i> Enrolled";
+            btn.classList.add('enrolled');
+            btn.disabled = true;
+        });
+    });
+</script>
+
 </body>
 
 </html>
