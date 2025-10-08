@@ -381,65 +381,64 @@ body {
 }
 
 .classroom-schedule {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
 }
 
 .classroom-session {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f9faff;
-    border-left: 3px solid var(--primary-color);
-    padding: 14px 18px;
-    border-radius: 10px;
-    font-size: 14px;
-    color: var(--text-color);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, background 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9faff;
+  border-left: 3px solid var(--primary-color);
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, background 0.3s ease;
 }
 
 .classroom-session:hover {
-    transform: translateY(-3px);
-    background: #eef3ff;
+  transform: translateY(-3px);
+  background: #eef3ff;
 }
 
 .classroom-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .enroll-btn {
-    background: var(--orange-gradient);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 12px rgba(255, 138, 101, 0.25);
-    transition: 0.3s ease;
-    white-space: nowrap;
+  background: var(--orange-gradient);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s ease;
+  white-space: nowrap;
 }
 
 .enroll-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(255, 138, 101, 0.35);
+  transform: scale(1.05);
 }
 
 .enroll-btn.enrolled {
-    background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
-    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.25);
-    cursor: default;
+  background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+  cursor: pointer;
 }
 
 .enroll-btn.enrolled:hover {
-    transform: none;
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%);
+}
+
+.enroll-btn.unenrolling {
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%) !important;
 }
