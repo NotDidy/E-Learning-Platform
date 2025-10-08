@@ -379,3 +379,66 @@ body {
     transform: scale(1.2);
     cursor: pointer;
 }
+
+.classroom-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.classroom-session {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9faff;
+  border-left: 3px solid var(--primary-color);
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.classroom-session:hover {
+  transform: translateY(-3px);
+  background: #eef3ff;
+}
+
+.classroom-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.enroll-btn {
+  background: var(--orange-gradient);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s ease;
+  white-space: nowrap;
+}
+
+.enroll-btn:hover {
+  transform: scale(1.05);
+}
+
+.enroll-btn.enrolled {
+  background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+  cursor: pointer;
+}
+
+.enroll-btn.enrolled:hover {
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%);
+}
+
+.enroll-btn.unenrolling {
+  background: linear-gradient(135deg, #e57373 0%, #ef5350 100%) !important;
+}

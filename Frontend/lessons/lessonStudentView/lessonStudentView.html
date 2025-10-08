@@ -76,19 +76,33 @@
             <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
             <div class="classroom-schedule">
                 <div class="classroom-session">
+                <div class="classroom-info">
                     <p><i class='bx bx-buildings'></i> Classroom: <strong>Room A-204</strong></p>
                     <p><i class='bx bx-time-five'></i> Time: <strong>Monday, 10:00 AM – 1:00 PM</strong></p>
                 </div>
+                <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
+                </div>
+
                 <div class="classroom-session">
+                <div class="classroom-info">
                     <p><i class='bx bx-buildings'></i> Classroom: <strong>Room B-101</strong></p>
                     <p><i class='bx bx-time-five'></i> Time: <strong>Wednesday, 2:00 PM – 5:00 PM</strong></p>
                 </div>
+                <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
+                </div>
+
                 <div class="classroom-session">
+                <div class="classroom-info">
                     <p><i class='bx bx-buildings'></i> Classroom: <strong>Lab C-310</strong></p>
                     <p><i class='bx bx-time-five'></i> Time: <strong>Friday, 9:00 AM – 12:00 PM</strong></p>
                 </div>
+                <button class="enroll-btn"><i class='bx bx-user-plus'></i> Enroll</button>
+                </div>
             </div>
         </div>
+
+
+
 
         <div class="lesson-meta">
             <div class="meta-item"><i class='bx bx-time'></i> Duration: 3 hours</div>
@@ -114,6 +128,54 @@
 
         checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
     </script>
+
+    <script>
+        const enrollButtons = document.querySelectorAll('.enroll-btn');
+        let enrolledButton = null;
+
+        enrollButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+            // If unenrolling
+            if (btn.classList.contains('enrolled') && btn.classList.contains('unenrolling')) {
+                btn.classList.remove('enrolled', 'unenrolling');
+                btn.innerHTML = "<i class='bx bx-user-plus'></i> Enroll";
+                enrolledButton = null;
+                alert('❌ You have unenrolled.');
+                return;
+            }
+
+            // If another class is already enrolled
+            if (enrolledButton && enrolledButton !== btn) {
+                alert('⚠️ You are already enrolled in another class. Please unenroll first.');
+                return;
+            }
+
+            // Enroll into a class
+            const classroom = btn.parentElement.querySelector('strong').innerText;
+            btn.classList.add('enrolled');
+            btn.innerHTML = "<i class='bx bx-check-circle'></i> Enrolled";
+            enrolledButton = btn;
+            alert(`✅ You have successfully enrolled in ${classroom}!`);
+            });
+
+            // Hover effects for enrolled state
+            btn.addEventListener('mouseenter', () => {
+            if (btn.classList.contains('enrolled')) {
+                btn.classList.add('unenrolling');
+                btn.innerHTML = "<i class='bx bx-x-circle'></i> Unenroll";
+            }
+            });
+
+            btn.addEventListener('mouseleave', () => {
+            if (btn.classList.contains('enrolled')) {
+                btn.classList.remove('unenrolling');
+                btn.innerHTML = "<i class='bx bx-check-circle'></i> Enrolled";
+            }
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>
