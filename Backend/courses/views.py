@@ -5,14 +5,14 @@ from django.http import HttpResponseForbidden
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import F, Value
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
-from .models import Course, Enrollment, Lesson, LessonProgress
+from .models import Course, Enrollment, Lesson, LessonProgress, LearningMaterialProgress, CreditTransaction, LessonItemProgress
 from .forms import LessonForm
 
 class InstructorRequiredMixin(UserPassesTestMixin):
@@ -273,6 +273,19 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
     model = Lesson
     template_name = "courses/lesson_detail.html"
 
+    def get_template_names(self):
+        user = self.request.user
+        try:
+            is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR
+        except Exception:
+            is_instructor = False
+
+        if is_instructor:
+            # Keep your existing instructor template
+            return ["courses/lesson_detail.html"]
+        # Student template (the Scrum page you built)
+        return ["courses/lesson_detail_student.html"]
+
     def dispatch(self, request, *args, **kwargs):
         lesson = get_object_or_404(Lesson, pk=kwargs.get("pk"))
         user = request.user
@@ -296,56 +309,81 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         lesson: Lesson = self.object
-        # sections removed
-        # Split multi-line fields for styled lists
-        def _split(text):
+        user = self.request.user
+
+        # Split helper
+        def _split(text: str):
             return [line.strip() for line in (text or "").splitlines() if line.strip()]
+
+        # Objectives (unchanged)
         ctx["objectives_list"] = _split(lesson.learning_objectives)
-        # Reading lines: best-effort link detection (http/https)
+
+        # Reading List: best-effort link detection (http/https) -> [{"text": ..., "url": ...}, ...]
         readings = []
         for line in _split(lesson.reading_list):
-            txt = line
-            url = None
+            txt, url = line, None
             idx_http = line.find('http://') if 'http://' in line else line.find('https://')
             if idx_http != -1:
                 txt = line[:idx_http].strip() or line[idx_http:].strip()
                 url = line[idx_http:].strip()
             readings.append({"text": txt, "url": url})
         ctx["reading_list"] = readings
-        ctx["assignments_list"] = _split(getattr(lesson, "assignments", ""))
-        # Publish status mirrors course state
+
+        # Assignments as plain lines
+        assignments_list = _split(getattr(lesson, "assignments", ""))
+        ctx["assignments_list"] = assignments_list
+
+        # ----- NEW: completed indices for reading/assignment lines (lists so 'in' works in templates)
+        completed_reading_idx = list(
+            LessonItemProgress.objects.filter(
+                student=user, lesson=lesson, section=LessonItemProgress.SECTION_READING, completed=True
+            ).values_list("item_index", flat=True)
+        )
+        completed_assignment_idx = list(
+            LessonItemProgress.objects.filter(
+                student=user, lesson=lesson, section=LessonItemProgress.SECTION_ASSIGNMENT, completed=True
+            ).values_list("item_index", flat=True)
+        )
+        ctx["completed_reading_idx"] = completed_reading_idx
+        ctx["completed_assignment_idx"] = completed_assignment_idx
+
+        # ----- Progress % across readings + assignments ONLY
+        total_items = len(readings) + len(assignments_list)
+        completed_items = len(completed_reading_idx) + len(completed_assignment_idx)
+        ctx["lesson_materials_percent"] = round((completed_items / total_items * 100), 2) if total_items else 0.0
+
+        # Publish status mirrors course state (unchanged)
         course = lesson.course
         course_published = (getattr(course, "status", None) == Course.STATUS_ACTIVE) and (not getattr(course, "is_draft", False))
         ctx["course_published"] = course_published
         ctx["course_status_label"] = "Published" if course_published else "Draft"
+
+        # Schedules (unchanged)
         schedules = (
             lesson.schedules.select_related("classroom")
             .order_by("classroom__name", "day", "start_time")
         )
         ctx["classroom_schedules"] = schedules
-        
-        ctx["materials"] = lesson.materials.all()
 
-        user = self.request.user
-        progress = None
         try:
             progress = LessonProgress.objects.get(student=user, lesson=lesson)
         except LessonProgress.DoesNotExist:
             progress = None
-        ctx["lesson_progress"] = progress  
+        ctx["lesson_progress"] = progress
 
+        # Course-level completion summary (unchanged)
         total_lessons = lesson.course.lessons.count()
-        completed_count = 0
         try:
             is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
         except Exception:
             is_student = False
-        if is_student:
-            completed_count = LessonProgress.objects.filter(student=user, lesson__course=lesson.course, completed=True).count()
+        completed_count = (
+            LessonProgress.objects.filter(student=user, lesson__course=lesson.course, completed=True).count()
+            if (is_student and total_lessons) else 0
+        )
         ctx["course_total_lessons"] = total_lessons
         ctx["course_completed_lessons"] = completed_count
-        ctx["course_percent_complete"] = round((completed_count / total_lessons * 100) if total_lessons else 0.0, 2)
-
+        ctx["course_percent_complete"] = round((completed_count / total_lessons * 100), 2) if total_lessons else 0.0
 
         return ctx
 
@@ -443,9 +481,15 @@ class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
 @login_required
 @require_POST
 def toggle_lesson_progress(request, lesson_id):
+    """
+    Toggle completion for a single inline item (reading/assignment) by section + index.
+    When all items in both sections are completed, mark the lesson completed and
+    award credits once.
+    """
     user = request.user
     lesson = get_object_or_404(Lesson, pk=lesson_id)
 
+    # Role + enrollment checks
     try:
         is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
     except Exception:
@@ -456,20 +500,78 @@ def toggle_lesson_progress(request, lesson_id):
     if not Enrollment.objects.filter(student=user, course=lesson.course).exists():
         return JsonResponse({"error": "Student not enrolled in course"}, status=403)
 
-    progress, created = LessonProgress.objects.get_or_create(student=user, lesson=lesson)
-    progress.completed = not progress.completed
-    progress.save()
+    # Payload: section + index (+ completed flag)
+    desired = request.POST.get("completed")
+    completed_flag = str(desired).lower() in ("1", "true", "yes", "on")
+    section = request.POST.get("section")
+    index = request.POST.get("index")
 
+    if section not in (LessonItemProgress.SECTION_READING, LessonItemProgress.SECTION_ASSIGNMENT):
+        return JsonResponse({"error": "invalid section"}, status=400)
+    try:
+        idx = int(index)
+    except (TypeError, ValueError):
+        return JsonResponse({"error": "index must be an integer"}, status=400)
+
+    # Upsert per-item progress
+    ip, _ = LessonItemProgress.objects.get_or_create(
+        student=user, lesson=lesson, section=section, item_index=idx
+    )
+    ip.completed = completed_flag
+    ip.save()
+
+    # Recompute overall progress (readings + assignments only)
+    readings_count = sum(1 for line in (lesson.reading_list or "").splitlines() if line.strip())
+    assignments_count = sum(1 for line in (lesson.assignments or "").splitlines() if line.strip())
+
+    completed_readings = LessonItemProgress.objects.filter(
+        student=user, lesson=lesson, section=LessonItemProgress.SECTION_READING, completed=True
+    ).count()
+    completed_assignments = LessonItemProgress.objects.filter(
+        student=user, lesson=lesson, section=LessonItemProgress.SECTION_ASSIGNMENT, completed=True
+    ).count()
+
+    total_items = readings_count + assignments_count
+    completed_items = completed_readings + completed_assignments
+    percent = round((completed_items / total_items * 100), 2) if total_items else 0.0
+    all_done = (total_items > 0) and (completed_items == total_items)
+
+    # Mirror to lesson-level progress + award credits once
+    lp, _ = LessonProgress.objects.get_or_create(student=user, lesson=lesson)
+    previously_completed = lp.completed
+    if lp.completed != all_done:
+        lp.completed = all_done
+        lp.save(update_fields=["completed", "updated_at"])
+
+    credits_awarded_now = 0
+    if all_done and not previously_completed:
+        txn, created = CreditTransaction.objects.get_or_create(
+            student=user, lesson=lesson, defaults={"credits": lesson.credit_points}
+        )
+        if created:
+            credits_awarded_now = lesson.credit_points
+
+    # Course-level completion (unchanged logic, if you show it)
     total_lessons = lesson.course.lessons.count() or 0
-    completed_count = LessonProgress.objects.filter(
+    completed_lessons = LessonProgress.objects.filter(
         student=user, lesson__course=lesson.course, completed=True
-    ).count() if total_lessons > 0 else 0
-    percent = (completed_count / total_lessons * 100) if total_lessons > 0 else 0.0
+    ).count() if total_lessons else 0
+    course_percent = round((completed_lessons / total_lessons * 100), 2) if total_lessons else 0.0
 
     return JsonResponse({
-        "lesson_id": lesson.id,
-        "completed": progress.completed,
-        "completed_count": completed_count,
-        "total_lessons": total_lessons,
-        "percent_course_complete": round(percent, 2),
+        "section": section,
+        "index": idx,
+        "inline_completed": ip.completed,
+        "lesson_completed": all_done,
+        "lesson_materials_percent": percent,
+        "course_completed_lessons": completed_lessons,
+        "course_total_lessons": total_lessons,
+        "percent_course_complete": course_percent,
+        "credits_awarded_now": credits_awarded_now,
+        "counts": {
+            "total": total_items,
+            "completed": completed_items,
+            "readings_total": readings_count, "readings_completed": completed_readings,
+            "assignments_total": assignments_count, "assignments_completed": completed_assignments,
+        }
     })
