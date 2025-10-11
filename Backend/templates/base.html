@@ -66,10 +66,17 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-user icon'></i>
-                            <span class="text nav-text">Students</span>
-                        </a>
+                        {% if request.user.role == 'STUDENT' %}
+                            <a href="{% url 'student_profile' %}">
+                                <i class='bx bx-user icon'></i>
+                                <span class="text nav-text">Students</span>
+                            </a>
+                        {% else %}
+                            <a href="#">
+                                <i class='bx bx-user icon'></i>
+                                <span class="text nav-text">Students</span>
+                            </a>
+                        {% endif %}
                     </li>
                     <li class="nav-link">
                         <a href="#">
