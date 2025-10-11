@@ -30,13 +30,14 @@
 
 .student-report-page .student-report-header::before {
     content: '';
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 5px;
     background: var(--report-orange);
-    display: block;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 .student-report-page .student-title-section {
@@ -66,6 +67,12 @@
     justify-content: center;
     color: #fff;
     font-size: 22px;
+}
+
+.student-report-page .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .student-report-page .back-btn {
