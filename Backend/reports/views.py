@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
+from django.db.models.functions import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 
 from accounts.models import User
-from courses.models import Course, Enrollment
+from courses.models import Course, Enrollment, LessonProgress, CreditTransaction
 
 
 @login_required
@@ -28,14 +29,84 @@ def student_course_report(request, course_id: int, student_id: int):
 
     classrooms = (
         course.classrooms.select_related("supervisor")
+        .prefetch_related("schedules")
         .annotate(schedule_count=Count("schedules", distinct=True))
         .order_by("name")
     )
 
-    stats = {
-        "lessons_total": course.lessons.count(),
-        "classrooms_total": classrooms.count(),
+    completed_lessons_qs = (
+        LessonProgress.objects.filter(
+            student=student,
+            lesson__course=course,
+            completed=True,
+        )
+        .select_related("lesson")
+        .order_by("-updated_at")
+    )
+
+    lessons_total = course.lessons.count()
+    completed_lessons_count = completed_lessons_qs.count()
+    completion_percent = (
+        round((completed_lessons_count / lessons_total) * 100)
+        if lessons_total
+        else 0
+    )
+
+    credits_total = (
+        CreditTransaction.objects.filter(
+            student=student,
+            lesson__course=course,
+        ).aggregate(total=Coalesce(Sum("credits"), 0))
+    )["total"]
+
+    completed_lessons = []
+    for progress in completed_lessons_qs:
+        lesson = progress.lesson
+        lesson_code = lesson.lesson_code or f"L{lesson.id:03d}"
+        completed_lessons.append(
+            {
+                "code": lesson_code,
+                "title": lesson.title,
+                "completed_on": progress.updated_at,
+            }
+        )
+
+    classroom_cards = []
+    for classroom in classrooms:
+        schedules = []
+        for schedule in classroom.schedules.all():
+            day_label = schedule.get_day_display()
+            day_short = day_label[:3] if day_label else schedule.day.title()
+            schedules.append(
+                f"{day_short} {schedule.start_time.strftime('%H:%M')} - {schedule.end_time.strftime('%H:%M')}"
+            )
+
+        if schedules:
+            schedule_label = schedules[0]
+            if len(schedules) > 1:
+                schedule_label = f"{schedule_label} (+{len(schedules) - 1} more)"
+        else:
+            schedule_label = "Schedule not set"
+
+        classroom_cards.append(
+            {
+                "name": classroom.name,
+                "code": classroom.class_code,
+                "schedule": schedule_label,
+                "supervisor": classroom.supervisor,
+            }
+        )
+
+    progress = {
+        "lessons_total": lessons_total,
+        "completed_lessons": completed_lessons_count,
+        "completion_percent": completion_percent,
+        "active_classrooms": classrooms.count(),
         "students_total": course.enrollments.count(),
+        "credits_earned": credits_total,
+        "remaining_lessons": max(lessons_total - completed_lessons_count, 0),
+        "completed_lessons_percent": completion_percent,
+        "overall_percent": completion_percent,
     }
 
     context = {
@@ -43,8 +114,10 @@ def student_course_report(request, course_id: int, student_id: int):
         "student": student,
         "enrollment": enrollment,
         "classrooms": classrooms,
-        "stats": stats,
-        "progress_available": False,
+        "progress_available": lessons_total > 0,
+        "progress": progress,
+        "completed_lessons": completed_lessons,
+        "classroom_cards": classroom_cards,
     }
 
     return render(request, "reports/student_report.html", context)
