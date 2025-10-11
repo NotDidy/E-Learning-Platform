@@ -208,3 +208,64 @@ class LessonItemProgress(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.lesson} - {self.section}[{self.item_index}] -> {'done' if self.completed else 'not'}"
+    
+
+class LessonSchedule(models.Model):
+    lesson = models.ForeignKey("Lesson", on_delete=models.CASCADE, related_name="lesson_schedules")
+    classroom = models.CharField(max_length=100, help_text="Classroom or session name")
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    capacity = models.PositiveIntegerField(default=20)
+
+    class Meta:
+        db_table = "lesson_schedule"
+        ordering = ["start_time"]
+
+    def __str__(self):
+        return f"{self.lesson.title} - {self.classroom} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
+
+    @property
+    def enrolled_count(self):
+        return self.enrollments.count()
+
+    def is_full(self):
+        return self.enrolled_count >= self.capacity
+    
+class LessonScheduleEnrollment(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="schedule_enrollments"
+    )
+    schedule = models.ForeignKey(
+        "LessonSchedule", on_delete=models.CASCADE, related_name="enrollments"
+    )
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "lesson_schedule_enrollment"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["student", "schedule"],
+                name="unique_schedule_enrollment"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.student} enrolled in {self.schedule}"
+
+    @staticmethod
+    def enroll_student(student, schedule):
+        """
+        Handles one-schedule-per-lesson rule.
+        If already enrolled in another schedule for the same lesson,
+        unenrolls them first.
+        """
+        # Remove any existing enrollment for this lesson
+        LessonScheduleEnrollment.objects.filter(
+            student=student, schedule__lesson=schedule.lesson
+        ).exclude(schedule=schedule).delete()
+
+        # Add new enrollment if not already enrolled
+        obj, created = LessonScheduleEnrollment.objects.get_or_create(
+            student=student, schedule=schedule
+        )
+        return obj, created
