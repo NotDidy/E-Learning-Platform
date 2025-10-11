@@ -82,9 +82,11 @@
                 {% for course in courses %}
                     <li class="course-item">
                         <div class="course-info">
-                            <div class="course-name">{{ course.code }} - {{ course.name }}</div>
+                            <div class="course-name">{{ course.course_code }} - {{ course.title }}</div>
                         </div>
-                        <div class="course-status">Enrolled</div>
+                        <div class="course-status">
+                            {{ course.get_status_display }}
+                        </div>
                     </li>
                 {% empty %}
                     <li>No courses enrolled yet.</li>

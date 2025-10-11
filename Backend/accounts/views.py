@@ -16,6 +16,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib import messages as dj_messages
 from django.db.models import Count
 from django.views.decorators.http import require_POST
+from courses.models import Course
 
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
@@ -238,5 +239,8 @@ def student_profile(request):
 
     if user.role != User.Roles.STUDENT:
         return redirect("home") 
+    
+    courses = Course.objects.filter(enrollments__student=user,status=Course.STATUS_ACTIVE).distinct()
 
-    return render(request, "accounts/student_profile.html", {"student": user})
+
+    return render(request, "accounts/student_profile.html", {"student": user, "courses": courses})
