@@ -44,3 +44,18 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.classroom.name} - {self.day} ({self.lesson})"
+    
+class ScheduleEnrollment(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="schedule_enrollments"
+    )
+    schedule = models.ForeignKey(
+        "classrooms.Schedule", on_delete=models.CASCADE, related_name="enrollments"
+    )
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("student", "schedule")
+
+    def __str__(self):
+        return f"{self.student} enrolled in {self.schedule}"
