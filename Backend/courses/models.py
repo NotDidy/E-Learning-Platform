@@ -42,6 +42,12 @@ class Course(models.Model):
     def save(self, *args, **kwargs):
         # Always enforce 30 credit points per course
         self.credit_points = 30
+
+        if self.pk:  
+            course = Course.objects.filter(pk=self.pk).first()
+        if course and course.status == Course.STATUS_ACTIVE and self.status == Course.STATUS_INACTIVE:
+            self.enrollments.all().delete()
+
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

@@ -168,14 +168,21 @@ def available_courses(request):
     if not is_student:
         return HttpResponseForbidden("Student role required")
 
-    enrolled_ids = Enrollment.objects.filter(student=user).values_list("course_id", flat=True)
+    active_enrollments = Enrollment.objects.filter(
+        student=user, course__status=Course.STATUS_ACTIVE
+    )
+
+    enrolled_ids = active_enrollments.values_list("course_id", flat=True)
+
+    enrolled_count = active_enrollments.count()
+
     courses = (
         Course.objects.filter(status=Course.STATUS_ACTIVE)
         .exclude(id__in=enrolled_ids)
         .annotate(student_count=Count("enrollments"))
         .order_by("-created_at")
     )
-    enrolled_count = len(enrolled_ids)
+
     return render(
         request,
         "courses/available-course.html",
