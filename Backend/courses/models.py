@@ -140,3 +140,65 @@ class LessonProgress(models.Model):
 
     def __str__(self) -> str:
         return f"{self.student} - {self.lesson.title} - {'done' if self.completed else 'not done'}"
+    
+class LearningMaterialProgress(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="material_progress",
+    )
+    material = models.ForeignKey(
+        "LearningMaterial",
+        on_delete=models.CASCADE,
+        related_name="progress_records",
+    )
+    completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ("student", "material")
+        db_table = "learning_material_progress"
+
+    def __str__(self):
+        return f"{self.student} - {self.material.title} - {'done' if self.completed else 'not done'}"
+
+
+class CreditTransaction(models.Model):
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="credit_txns")
+    lesson = models.ForeignKey("Lesson", on_delete=models.CASCADE, related_name="credit_txns")
+    credits = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("student", "lesson")
+        db_table = "credit_transaction"
+
+    def __str__(self):
+        return f"{self.student} earned {self.credits} for {self.lesson}"
+    
+class LessonItemProgress(models.Model):
+    SECTION_READING = "reading"
+    SECTION_ASSIGNMENT = "assignment"
+    SECTION_CHOICES = [
+        (SECTION_READING, "Reading"),
+        (SECTION_ASSIGNMENT, "Assignment"),
+    ]
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lesson_item_progress"
+    )
+    lesson = models.ForeignKey(
+        "Lesson", on_delete=models.CASCADE, related_name="item_progress"
+    )
+    section = models.CharField(max_length=20, choices=SECTION_CHOICES)
+    item_index = models.PositiveIntegerField() 
+    completed = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("student", "lesson", "section", "item_index")
+        db_table = "lesson_item_progress"
+
+    def __str__(self):
+        return f"{self.student} - {self.lesson} - {self.section}[{self.item_index}] -> {'done' if self.completed else 'not'}"
