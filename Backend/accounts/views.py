@@ -239,8 +239,4 @@ def student_profile(request):
     if user.role != User.Roles.STUDENT:
         return redirect("home") 
 
-    context = {
-        "student": user,
-        "courses": user.course_set.all() if hasattr(user, "course_set") else [],
-    }
-    return render(request, "accounts/student_profile.html", {"user": user})
+    return render(request, "accounts/student_profile.html", {"student": user})
