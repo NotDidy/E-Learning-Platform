@@ -108,17 +108,27 @@
   <div class="lesson-section">
     <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
     <div class="classroom-schedule">
-      {% for schedule in lesson.schedules.all %}
-        <div class="classroom-session">
-          <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
-          <p><i class='bx bx-time-five'></i>
-            {{ schedule.get_day_display }} {{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}
-          </p>
-        </div>
-      {% empty %}
-        <p>No scheduled classroom sessions for this lesson.</p>
-      {% endfor %}
-    </div>
+    {% for schedule in lesson.schedules.all %}
+      <div class="classroom-session">
+        <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
+        <p><i class='bx bx-time-five'></i>
+          {{ schedule.get_day_display }} {{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}
+        </p>
+
+        {% if schedule.is_full %}
+          <span class="badge bg-danger">Full</span>
+        {% elif enrolled_schedule_id == schedule.id %}
+          <span class="badge bg-success">Enrolled</span>
+        {% else %}
+          <form method="post" action="{% url 'enroll_schedule' schedule.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Enroll</button>
+          </form>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p>No scheduled classroom sessions for this lesson.</p>
+    {% endfor %}
   </div>
 </div>
 
