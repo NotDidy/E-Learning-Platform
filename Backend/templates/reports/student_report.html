@@ -1,11 +1,10 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}Student Report | {{ student.get_full_name|default:student.email }}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'reports/student-report.css' %}">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -29,7 +28,9 @@
 
     <div class="student-report-container">
         <div class="student-header">
-            <div class="student-avatar">{{ student.get_full_name|default:student.email|slice:":2"|upper }}</div>
+            <div class="student-avatar">
+                {{ student.get_full_name|default:student.email|slice:":2"|upper }}
+            </div>
             <div class="student-information">
                 <h1>{{ student.get_full_name|default:student.email }}</h1>
                 {% if student.student_id %}
@@ -39,18 +40,24 @@
             </div>
         </div>
 
-        <div class="summary-grid">
-            <div class="summary-card">
-                <h3><i class='bx bx-book-open'></i> Lessons in Course</h3>
-                <div class="summary-number">{{ stats.lessons_total }}</div>
+        <div class="progress-overview">
+            <div class="progress-card">
+                <h3><i class='bx bx-book-open'></i> Completed Lessons</h3>
+                <div class="number">{{ progress.completed_lessons }}</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ progress.completed_lessons_percent|default_if_none:0 }}%"></div>
+                </div>
             </div>
-            <div class="summary-card">
-                <h3><i class='bx bx-buildings'></i> Classrooms Linked</h3>
-                <div class="summary-number">{{ stats.classrooms_total }}</div>
+            <div class="progress-card">
+                <h3><i class='bx bx-trophy'></i> Overall Progress</h3>
+                <div class="percentage">{{ progress.overall_percent|default_if_none:0 }}%</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ progress.overall_percent|default_if_none:0 }}%"></div>
+                </div>
             </div>
-            <div class="summary-card">
-                <h3><i class='bx bx-group'></i> Total Enrolled</h3>
-                <div class="summary-number">{{ stats.students_total }}</div>
+            <div class="progress-card">
+                <h3><i class='bx bx-buildings'></i> Active Classrooms</h3>
+                <div class="number">{{ progress.active_classrooms }}</div>
             </div>
         </div>
 
@@ -58,33 +65,58 @@
         <div class="empty-progress">
             <div class="empty-progress-icon"><i class='bx bx-line-chart'></i></div>
             <div class="empty-progress-text">
-                Detailed progress tracking for students is coming soon.
+                Progress tracking will appear once lessons are added to this course.
             </div>
         </div>
         {% endif %}
 
         <div class="student-section">
             <h2>
-                <i class='bx bx-buildings'></i>
-                Course Classrooms
-                <span class="section-counter">{{ classrooms|length }}</span>
+                <i class='bx bx-check-circle'></i>
+                Completed Lessons
+                <span class="section-counter">{{ completed_lessons|length }}</span>
             </h2>
-            <ul class="classroom-list">
-                {% for classroom in classrooms %}
+            <ul class="completed-lessons">
+                {% for lesson in completed_lessons %}
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">{{ lesson.code }}</div>
+                        <div class="lesson-name">{{ lesson.title }}</div>
+                        <div class="completion-date">Completed: {{ lesson.completed_on|date:"M j, Y" }}</div>
+                    </div>
+                    <div class="completion-status"><i class='bx bx-check'></i> Completed</div>
+                </li>
+                {% empty %}
+                <li class="empty-row">No lessons have been completed yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="student-section">
+            <h2>
+                <i class='bx bx-buildings'></i>
+                Active Classrooms
+                <span class="section-counter">{{ classroom_cards|length }}</span>
+            </h2>
+            <ul class="active-classrooms">
+                {% for classroom in classroom_cards %}
                 <li class="classroom-item">
                     <div class="classroom-info">
+                        {% if classroom.code %}
+                        <div class="classroom-id">{{ classroom.code }}</div>
+                        {% endif %}
                         <div class="classroom-name">{{ classroom.name }}</div>
-                        {% if classroom.class_code %}
-                        <div class="classroom-code">Code: {{ classroom.class_code }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="classroom-meta">
                         {% if classroom.supervisor %}
-                        <span><i class='bx bx-user-circle'></i> {{ classroom.supervisor.get_full_name|default:classroom.supervisor.email }}</span>
+                        <div class="classroom-supervisor">
+                            Supervisor: {{ classroom.supervisor.get_full_name|default:classroom.supervisor.email }}
+                        </div>
                         {% else %}
-                        <span><i class='bx bx-user-circle'></i> Unassigned</span>
+                        <div class="classroom-supervisor">
+                            Supervisor: Unassigned
+                        </div>
                         {% endif %}
                     </div>
+                    <div class="schedule-time">{{ classroom.schedule }}</div>
                 </li>
                 {% empty %}
                 <li class="empty-row">This course does not have any classrooms yet.</li>
@@ -93,8 +125,10 @@
         </div>
 
         <div class="student-meta">
-            <div class="meta-item"><i class='bx bx-calendar'></i> Enrolled on {{ enrollment.date_enrolled|date:"d M Y" }}</div>
-            <div class="meta-item"><i class='bx bx-book-bookmark'></i> Course: {{ course.title }}</div>
+            <div class="meta-item"><i class='bx bx-calendar'></i> Enrolled: {{ enrollment.date_enrolled|date:"M j, Y" }}</div>
+            <div class="meta-item"><i class='bx bx-medal'></i> Credits Earned: {{ progress.credits_earned }}</div>
+            <div class="meta-item"><i class='bx bx-book-open'></i> Remaining Lessons: {{ progress.remaining_lessons }}</div>
+            <div class="meta-item"><i class='bx bx-group'></i> Total Enrolled: {{ progress.students_total }}</div>
             <div class="student-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">{{ course.get_status_display }}</div>
         </div>
     </div>
