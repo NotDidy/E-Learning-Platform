@@ -45,7 +45,7 @@ class Course(models.Model):
 
         if self.pk:  
             course = Course.objects.filter(pk=self.pk).first()
-        if course and course.status == Course.STATUS_ACTIVE and self.status == Course.STATUS_INACTIVE:
+        if course and course.status == Course.STATUS_INACTIVE:
             self.enrollments.all().delete()
 
         super().save(*args, **kwargs)
