@@ -14,6 +14,7 @@ from django.http import JsonResponse
 
 from .models import Course, Enrollment, Lesson, LessonProgress, LearningMaterialProgress, CreditTransaction, LessonItemProgress
 from .forms import LessonForm
+from classrooms.models import Schedule, ScheduleEnrollment
 
 class InstructorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -358,12 +359,8 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
         ctx["course_published"] = course_published
         ctx["course_status_label"] = "Published" if course_published else "Draft"
 
-        # Schedules (unchanged)
-        schedules = (
-            lesson.schedules.select_related("classroom")
-            .order_by("classroom__name", "day", "start_time")
-        )
-        ctx["classroom_schedules"] = schedules
+        schedules = lesson.lesson_schedules.all().order_by("start_time")
+        ctx["lesson_schedules"] = schedules
 
         try:
             progress = LessonProgress.objects.get(student=user, lesson=lesson)
@@ -377,6 +374,14 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
             is_student = getattr(user, "role", None) == user.__class__.Roles.STUDENT
         except Exception:
             is_student = False
+
+        if is_student:
+            enrolled_schedule = ScheduleEnrollment.objects.filter(
+                student=user, schedule__lesson=lesson
+            ).first()
+            ctx["enrolled_schedule_id"] = enrolled_schedule.schedule_id if enrolled_schedule else None
+        else:
+            ctx["enrolled_schedule_id"] = None
         completed_count = (
             LessonProgress.objects.filter(student=user, lesson__course=lesson.course, completed=True).count()
             if (is_student and total_lessons) else 0
@@ -575,3 +580,13 @@ def toggle_lesson_progress(request, lesson_id):
             "assignments_total": assignments_count, "assignments_completed": completed_assignments,
         }
     })
+
+@login_required
+def enroll_schedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, id=schedule_id)
+    ScheduleEnrollment.objects.get_or_create(student=request.user, schedule=schedule)
+    messages.success(
+        request,
+        f"You enrolled in {schedule.lesson.title} ({schedule.get_day_display()} - {schedule.classroom.name})."
+    )
+    return redirect('lesson_detail', pk=schedule.lesson.id)

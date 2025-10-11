@@ -208,3 +208,25 @@ class LessonItemProgress(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.lesson} - {self.section}[{self.item_index}] -> {'done' if self.completed else 'not'}"
+    
+
+class LessonSchedule(models.Model):
+    lesson = models.ForeignKey("Lesson", on_delete=models.CASCADE, related_name="lesson_schedules")
+    classroom = models.CharField(max_length=100, help_text="Classroom or session name")
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    capacity = models.PositiveIntegerField(default=20)
+
+    class Meta:
+        db_table = "lesson_schedule"
+        ordering = ["start_time"]
+
+    def __str__(self):
+        return f"{self.lesson.title} - {self.classroom} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
+
+    @property
+    def enrolled_count(self):
+        return self.enrollments.count()
+
+    def is_full(self):
+        return self.enrolled_count >= self.capacity
