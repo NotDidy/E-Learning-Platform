@@ -230,3 +230,17 @@ def instructor_courses(request):
         .order_by("-created_at")
     )
     return render(request, "courses/courses-instructor.html", {"courses": courses})
+
+
+@login_required
+def student_profile(request):
+    user = request.user
+
+    if user.role != User.Roles.STUDENT:
+        return redirect("home") 
+
+    context = {
+        "student": user,
+        "courses": user.course_set.all() if hasattr(user, "course_set") else [],
+    }
+    return render(request, "accounts/student_profile.html", {"user": user})
