@@ -350,23 +350,7 @@ body {
     font-size: 16px;
 }
 
-.progress-container {
-    flex: 1;
-    max-width: 250px;
-    height: 14px;
-    background: #f0f0f0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-}
 
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(135deg, #695CFE 0%, #a29bfe 100%);
-    border-radius: 8px;
-    width: 0%;
-    transition: width 0.3s ease;
-}
 
 .checklist li {
     display: flex;
@@ -442,3 +426,50 @@ body {
 .enroll-btn.unenrolling {
   background: linear-gradient(135deg, #e57373 0%, #ef5350 100%) !important;
 }
+
+/* Center Progress Bar in Header */
+.progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  max-width: 320px;
+  text-align: center;
+}
+
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress-container {
+  width: 100%;
+  height: 16px;
+  background: linear-gradient(135deg, #e0e0e0 0%, #f7f7f7 100%);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, #695CFE 0%, #a29bfe 100%);
+  border-radius: 8px;
+  transition: width 0.4s ease-in-out;
+}
+
+.progress-percent {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black-color);
+  margin-top: 2px;
+}
+
