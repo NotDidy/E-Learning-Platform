@@ -7,109 +7,251 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="courses-header">
-    <div class="courses-title-section">
-        <div class="courses-title">
-            <div class="course-icon">
-                <i class='bx  bx-book-content icon'  ></i>
+    <div class="courses-header">
+        <div class="courses-title-section">
+            <div class="courses-title">
+                <div class="course-icon">
+                    <i class='bx bx-book-content icon'></i>
+                </div>
+                My Classrooms
             </div>
-            My Classrooms
+            <div class="header-actions">
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="cardViewBtn" onclick="switchView('card')">
+                        <i class='bx bx-grid-alt'></i>
+                        Card View
+                    </button>
+                    <button class="view-toggle-btn" id="listViewBtn" onclick="switchView('list')">
+                        <i class='bx bx-list-ul'></i>
+                        List View
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="courses-grid" id="coursesGrid">
-    <div class = "course-card">
-        <div class="course-card-header">
-            <div class="course-info">
+    <div class="courses-grid active" id="cardView">
+        <div class="course-card">
+            <div class="course-card-header">
+                <div class="course-info">
+                    <h3>Classroom 1</h3>
+                    <span class="course-code">CL001</span>
+                </div>
+            </div>
+            <div class="course-details">
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-user-circle"></i>
+                        Classroom Supervisor:
+                    </span>
+                    <span class="detail-value">Prof. Johan XD</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-list-ul"></i>
+                        Course:
+                    </span>
+                    <span class="detail-value">FIT1045 - Introduction to Python Programming</span>
+                </div>
+            </div>
+            <div class="course-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-card-header">
+                <div class="course-info">
+                    <h3>Classroom 2</h3>
+                    <span class="course-code">CL002</span>
+                </div>
+            </div>
+            <div class="course-details">
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-user-circle"></i>
+                        Classroom Supervisor:
+                    </span>
+                    <span class="detail-value">Dr. Wasekul lesgo</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-list-ul"></i>
+                        Course:
+                    </span>
+                    <span class="detail-value">FIT1008 - Introduction to ADTs</span>
+                </div>
+            </div>
+            <div class="course-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-card-header">
+                <div class="course-info">
+                    <h3>Classroom 3</h3>
+                    <span class="course-code">CL003</span>
+                </div>
+            </div>
+            <div class="course-details">
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-user-circle"></i>
+                        Course Director:
+                    </span>
+                    <span class="detail-value">Dr. Long Hei</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <i class="bx bx-list-ul"></i>
+                        Course:
+                    </span>
+                    <span class="detail-value">FIT1056 - Introduction to Software Engineering</span>
+                </div>
+            </div>
+            <div class="course-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="courses-list" id="listView">
+        <div class="classroom-list-item">
+            <div class="list-classroom-id">
                 <h3>Classroom 1</h3>
                 <span class="course-code">CL001</span>
             </div>
-        </div>
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
+            <div class="list-classroom-details">
+                <div class="list-detail-item">
                     <i class="bx bx-user-circle"></i>
-                    Classroom Supervisor:
-                </span>
-                <span class="detail-value">Prof. Johan XD</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
+                    <span class="list-detail-label">Supervisor:</span>
+                    <span class="list-detail-value">Prof. Johan XD</span>
+                </div>
+                <div class="list-detail-item">
                     <i class="bx bx-list-ul"></i>
-                    Course:
-                </span>
-                <span class="detail-value">FIT1045 - Introduction to Python Programming</span>
+                    <span class="list-detail-label">Course:</span>
+                    <span class="list-detail-value">FIT1045 - Introduction to Python Programming</span>
+                </div>
+            </div>
+            <div class="list-classroom-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
             </div>
         </div>
-        <div class="course-actions">
-            <button class="action-button view-details-btn">
-                <i class="bx bx-info-circle"></i>
-                View Details
-            </button>
-        </div>
-    </div>
 
-    <div class = "course-card">
-        <div class="course-card-header">
-            <div class="course-info">
+        <div class="classroom-list-item">
+            <div class="list-classroom-id">
                 <h3>Classroom 2</h3>
                 <span class="course-code">CL002</span>
             </div>
-        </div>
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
+            <div class="list-classroom-details">
+                <div class="list-detail-item">
                     <i class="bx bx-user-circle"></i>
-                    Classroom Supervisor:
-                </span>
-                <span class="detail-value">Dr. Wasekul lesgo</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
+                    <span class="list-detail-label">Supervisor:</span>
+                    <span class="list-detail-value">Dr. Wasekul lesgo</span>
+                </div>
+                <div class="list-detail-item">
                     <i class="bx bx-list-ul"></i>
-                    Course:
-                </span>
-                <span class="detail-value">FIT1008 - Introduction to ADTs</span>
+                    <span class="list-detail-label">Course:</span>
+                    <span class="list-detail-value">FIT1008 - Introduction to ADTs</span>
+                </div>
+            </div>
+            <div class="list-classroom-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
             </div>
         </div>
-        <div class="course-actions">
-            <button class="action-button view-details-btn">
-                <i class="bx bx-info-circle"></i>
-                View Details
-            </button>
-        </div>
-    </div>
 
-        <div class = "course-card">
-        <div class="course-card-header">
-            <div class="course-info">
+        <div class="classroom-list-item">
+            <div class="list-classroom-id">
                 <h3>Classroom 3</h3>
                 <span class="course-code">CL003</span>
             </div>
-        </div>
-        <div class="course-details">
-            <div class="detail-row">
-                <span class="detail-label">
+            <div class="list-classroom-details">
+                <div class="list-detail-item">
                     <i class="bx bx-user-circle"></i>
-                    Course Director:
-                </span>
-                <span class="detail-value">Dr. Long Hei</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">
+                    <span class="list-detail-label">Director:</span>
+                    <span class="list-detail-value">Dr. Long Hei</span>
+                </div>
+                <div class="list-detail-item">
                     <i class="bx bx-list-ul"></i>
-                    Course:
-                </span>
-                <span class="detail-value">FIT1056 - Introduction to Software Engineering</span>
+                    <span class="list-detail-label">Course:</span>
+                    <span class="list-detail-value">FIT1056 - Introduction to Software Engineering</span>
+                </div>
             </div>
-        </div>
-        <div class="course-actions">
-            <button class="action-button view-details-btn">
-                <i class="bx bx-info-circle"></i>
-                View Details
-            </button>
+            <div class="list-classroom-actions">
+                <button class="action-button view-details-btn">
+                    <i class="bx bx-info-circle"></i>
+                    View Details
+                </button>
+            </div>
         </div>
     </div>
-</div>
+
+    <script>
+        const VIEW_STORAGE_KEY = 'classroomViewPreference';
+
+        function initializeView() {
+            const viewPrefs = getViewPreference();
+            const savedView = viewPrefs.currentView || 'card';
+            switchView(savedView);
+        }
+
+        function getViewPreference() {
+            if (!window.viewPreference) {
+                window.viewPreference = {
+                    currentView: 'card',
+                    timestamp: new Date().toISOString()
+                };
+            }
+            return window.viewPreference;
+        }
+
+        function saveViewPreference(view) {
+            window.viewPreference = {
+                currentView: view,
+                timestamp: new Date().toISOString()
+            };
+            console.log('View preference saved:', window.viewPreference);
+        }
+
+        function switchView(viewType) {
+            const cardView = document.getElementById('cardView');
+            const listView = document.getElementById('listView');
+            const cardViewBtn = document.getElementById('cardViewBtn');
+            const listViewBtn = document.getElementById('listViewBtn');
+
+            if (viewType === 'card') {
+                // Show card view
+                cardView.classList.add('active');
+                listView.classList.remove('active');
+                cardViewBtn.classList.add('active');
+                listViewBtn.classList.remove('active');
+            } else if (viewType === 'list') {
+                // Show list view
+                cardView.classList.remove('active');
+                listView.classList.add('active');
+                cardViewBtn.classList.remove('active');
+                listViewBtn.classList.add('active');
+            }
+
+            saveViewPreference(viewType);
+        }
+
+        window.addEventListener('DOMContentLoaded', initializeView);
+    </script>
 </body>
