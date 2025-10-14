@@ -7,6 +7,40 @@ from django.shortcuts import get_object_or_404, render
 from accounts.models import User
 from courses.models import Course, Enrollment, LessonProgress, CreditTransaction
 
+@login_required
+def instructor_report_list(request):
+    """
+     Shows a list of all students enrolled in the instructor’s courses with their progress summary.
+    """
+    user = request.user
+    if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
+        return HttpResponseForbidden("Instructor access required")
+
+    courses = Course.objects.filter(instructor=user).prefetch_related("enrollments__student")
+    students = []
+
+    for course in courses:
+        for enrollment in course.enrollments.all():
+            student = enrollment.student
+            lessons_total = course.lessons.count()
+            completed_count = LessonProgress.objects.filter(
+                student=student, lesson__course=course, completed=True
+            ).count()
+            percent = round((completed_count / lessons_total) * 100) if lessons_total else 0
+            students.append({
+                "id": student.id,
+                "name": student.get_full_name() or student.email,
+                "email": student.email,
+                "student_id": getattr(student, "student_id", ""),
+                "initials": (student.get_full_name()[:2] if student.get_full_name() else student.email[:2]).upper(),
+                "completed_lessons": completed_count,
+                "overall_percent": percent,
+                "active_classrooms": course.classrooms.count(),
+                "course_id": course.id,
+            })
+
+    context = {"students": students}
+    return render(request, "reports/instructor_report_list.html", context)
 
 @login_required
 def student_course_report(request, course_id: int, student_id: int):
