@@ -10,22 +10,31 @@
     <div class="lesson-details-header">
         <div class="lessons-title-section">
             <div class="lessons-title">
-                <div class="lesson-icon">
-                    <i class='bx bx-book-open'></i>
-                </div>
-                Lesson Details
+            <div class="lesson-icon">
+                <i class='bx bx-book-open'></i>
             </div>
-            <div class="header-actions">
-                <button class="back-btn">
-                    <i class='bx bx-left-arrow-alt'></i>
-                    Back to Lessons
-                </button>
+            Lesson Details
+            </div>
+
+            <!-- ✅ Progress bar centered -->
+            <div class="progress-wrapper">
+                <span class="progress-label"><i class='bx bx-task'></i> Progress</span>
                 <div class="progress-container">
-                    <div class="progress-bar" style="width: 0%;"></div>
+                    <div class="progress-bar"></div>
                 </div>
+                <span class="progress-percent">0%</span>
+            </div>
+
+
+            <div class="header-actions">
+            <button class="back-btn">
+                <i class='bx bx-left-arrow-alt'></i>
+                Back to Lessons
+            </button>
             </div>
         </div>
     </div>
+
 
     <div class="lesson-details-container">
         <div class="lesson-header">
@@ -114,22 +123,10 @@
         </div>
     </div>
 
-    <script>
-        // Progress bar auto update
-        const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
-        const progressBar = document.querySelector('.progress-bar');
 
-        function updateProgress() {
-            const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
-            const total = checkboxes.length;
-            const percent = (checked / total) * 100;
-            progressBar.style.width = percent + "%";
-        }
-
-        checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
-    </script>
 
     <script>
+        // Enrollment button logic
         const enrollButtons = document.querySelectorAll('.enroll-btn');
         let enrolledButton = null;
 
@@ -140,13 +137,13 @@
                 btn.classList.remove('enrolled', 'unenrolling');
                 btn.innerHTML = "<i class='bx bx-user-plus'></i> Enroll";
                 enrolledButton = null;
-                alert('❌ You have unenrolled.');
+                alert('You have unenrolled.');
                 return;
             }
 
             // If another class is already enrolled
             if (enrolledButton && enrolledButton !== btn) {
-                alert('⚠️ You are already enrolled in another class. Please unenroll first.');
+                alert('You are already enrolled in another class. Please unenroll first.');
                 return;
             }
 
@@ -155,7 +152,7 @@
             btn.classList.add('enrolled');
             btn.innerHTML = "<i class='bx bx-check-circle'></i> Enrolled";
             enrolledButton = btn;
-            alert(`✅ You have successfully enrolled in ${classroom}!`);
+            alert(`You have successfully enrolled in ${classroom}!`);
             });
 
             // Hover effects for enrolled state
@@ -174,6 +171,38 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+        const progressBar = document.querySelector('.progress-bar');
+        const progressPercent = document.querySelector('.progress-percent');
+
+        function updateProgress() {
+            const checkedCount = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+            const totalCount = checkboxes.length;
+            const percent = totalCount > 0 ? Math.floor((checkedCount / totalCount) * 100) : 0;
+
+            // Update visuals
+            progressBar.style.width = percent + "%";
+            progressPercent.textContent = percent + "%";
+
+            // Color change based on progress
+            
+            if (percent < 99) {
+            progressBar.style.background = "linear-gradient(135deg, #ffb74d 0%, #ff8a65 100%)";
+            } else {
+            progressBar.style.background = "linear-gradient(135deg, #66bb6a 0%, #43a047 100%)";
+            }
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+
+        // Run once at start to show initial state
+        updateProgress();
+        });
+        </script>
+
 
 
 </body>

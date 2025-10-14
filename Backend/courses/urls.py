@@ -1,5 +1,5 @@
 from django.urls import path
-
+from . import views
 from .views import (
     CourseCreateView,
     CourseListView,
@@ -35,4 +35,7 @@ urlpatterns = [
     path("instructor/courses/<int:pk>/preview/",CoursePreviewInstructorView.as_view(),name="course_preview_instructor"),
     path("student/courses/<int:pk>/preview/", CoursePreviewStudentView.as_view(), name="student_course_preview"),
     path("lessons/<int:lesson_id>/toggle-progress/", toggle_lesson_progress, name="toggle_lesson_progress"),
+    path("lesson-schedule/<int:schedule_id>/enroll/", views.enroll_schedule, name="enroll_schedule"),
+
+
 ]
