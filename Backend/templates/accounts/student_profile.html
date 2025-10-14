@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 {% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ student.get_full_name }} - Profile</title>
-    <link rel="stylesheet" href="{% static 'accounts/student-profile.css' %}">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-</head>
-<body>
+{% block title %}{{ student.get_full_name }} - Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/student-profile.css' %}">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
     <div class="student-profile-header">
         <div class="student-title-section">
             <div class="student-title">
@@ -18,7 +19,7 @@
             <div class="header-actions">
                 <a href="{% url 'student_dashboard' %}" class="back-btn">
                     <i class='bx bx-arrow-left-square'></i>
-                    Back to HomePage
+                    Back to Dashboard
                 </a>
             </div>
         </div>
@@ -94,5 +95,4 @@
             </ul>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
