@@ -595,3 +595,12 @@ def enroll_schedule(request, schedule_id):
         f"You enrolled in {schedule.lesson.title} ({schedule.get_day_display()} - {schedule.classroom.name})."
     )
     return redirect('lesson_detail', pk=schedule.lesson.id)
+
+@login_required
+def unenroll_schedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, id=schedule_id)
+    student = request.user
+    ScheduleEnrollment.objects.filter(student=student, schedule=schedule).delete()
+    messages.success(request, f"You have unenrolled from {schedule.lesson.title}.")
+    return redirect("lesson_detail", pk=schedule.lesson.id)
+
