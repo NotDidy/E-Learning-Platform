@@ -71,6 +71,11 @@
                                 <i class='bx bx-user icon'></i>
                                 <span class="text nav-text">Students</span>
                             </a>
+                        {% elif request.user.role == 'INSTRUCTOR' %}
+                        <a href="{% url 'reports:instructor_report_list' %}">
+                            <i class='bx bx-user icon'></i>
+                            <span class="text nav-text">Students</span>
+                        </a>
                         {% else %}
                             <a href="#">
                                 <i class='bx bx-user icon'></i>
@@ -79,7 +84,7 @@
                         {% endif %}
                     </li>
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{% url 'reports:instructor_report_list' %}">
                             <i class='bx bx-book-content icon'></i>
                             <span class="text nav-text">Reports</span>
                         </a>
