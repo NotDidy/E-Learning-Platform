@@ -149,12 +149,17 @@ def student_courses(request):
     if not is_student:
         return HttpResponseForbidden("Student role required")
 
-    enrollments = (
-        Enrollment.objects.filter(student=user, course__status=Course.STATUS_ACTIVE)
-        .select_related("course", "course__instructor")
-        .prefetch_related("course__lessons")
+    courses = (
+        Course.objects.filter(enrollments__student=user, status=Course.STATUS_ACTIVE)
+        .select_related("instructor")
+        .prefetch_related("lessons")
+        .annotate(
+            lesson_count=Count("lessons", distinct=True),
+            classroom_count=Count("classrooms", distinct=True),
+            student_count=Count("enrollments", distinct=True),
+        )
+        .order_by("title")
     )
-    courses = [e.course for e in enrollments]
     return render(request, "courses/course-student.html", {"courses": courses})
 
 
