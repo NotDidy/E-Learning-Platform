@@ -14,9 +14,11 @@ from .forms import StudentSignupForm
 from .models import User
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages as dj_messages
-from django.db.models import Count
+from django.db.models import Count, Sum
+
 from django.views.decorators.http import require_POST
-from courses.models import Course
+from courses.models import Course, LessonProgress, CreditTransaction
+
 
 class RoleSelectView(TemplateView):
     template_name = "accounts/role_select.html"
@@ -244,3 +246,67 @@ def student_profile(request):
 
 
     return render(request, "accounts/student_profile.html", {"student": user, "courses": courses})
+
+
+@login_required
+def student_overall_report(request):
+    student = request.user
+
+    enrolled_courses = (
+        Course.objects.filter(enrollments__student=student)
+        .select_related("instructor")
+        .prefetch_related("lessons")
+    )
+
+    courses_data = []
+    total_lessons = 0
+    total_completed = 0
+    total_credits = 0
+
+    for course in enrolled_courses:
+        lessons = course.lessons.all()
+        lesson_count = lessons.count()
+
+        completed_count = LessonProgress.objects.filter(
+            student=student, lesson__in=lessons, completed=True
+        ).count()
+
+        credits_earned = (
+            CreditTransaction.objects.filter(student=student, lesson__in=lessons)
+            .aggregate(total=Sum("credits"))["total"] or 0
+        )
+
+        course_progress = round((completed_count / lesson_count) * 100, 1) if lesson_count else 0
+
+        courses_data.append({
+            "id": course.id,
+            "code": course.course_code or f"C{course.id:03}",
+            "name": course.title,
+            "status": "In Progress" if course_progress < 100 else "Completed",
+            "completed_lessons": completed_count,
+            "total_lessons": lesson_count,
+            "credits_earned": credits_earned,
+            "total_credits": course.credit_points,
+            "active_classrooms": course.lessons.count(),  
+            "progress": course_progress,
+        })
+
+        total_lessons += lesson_count
+        total_completed += completed_count
+        total_credits += credits_earned
+
+    overall_progress = round((total_completed / total_lessons) * 100, 1) if total_lessons else 0
+    lessons_remaining = total_lessons - total_completed
+
+    context = {
+        "student": student,
+        "overall_progress": overall_progress,
+        "total_credits": total_credits,
+        "lessons_completed": total_completed,
+        "total_lessons": total_lessons,
+        "active_courses": len(courses_data),
+        "lessons_remaining": lessons_remaining,
+        "courses": courses_data,
+    }
+
+    return render(request, "reports/student_overall_report.html", context)
