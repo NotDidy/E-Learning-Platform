@@ -48,6 +48,13 @@
                 </span>
                 <span class="detail-value">{{ classroom.course }}</span>
             </div>
+            <div class="detail-row">
+                <span class="detail-label">
+                    <i class="bx bx-group"></i>
+                    Students Enrolled:
+                </span>
+                <span class="detail-value">{{ classroom.student_count|default:0 }}</span>
+            </div>
         </div>
         <div class="course-actions">
             <a class="action-button view-details-btn" href="{% url 'classroom_preview' classroom.id %}">
