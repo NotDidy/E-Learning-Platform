@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.db.models import Count, Q
 
 from .forms import ClassroomForm, ScheduleForm
 from .models import Classroom, Schedule
@@ -25,14 +26,37 @@ def is_instructor(user):
     return user.is_authenticated and user.role == user.Roles.INSTRUCTOR
 
 
+@login_required
 def classrooms(request):
-    classrooms = Classroom.objects.all()
+    base_queryset = (
+        Classroom.objects.select_related("course", "supervisor")
+        .annotate(student_count=Count("schedules__enrollments__student", distinct=True))
+        .order_by("name")
+    )
+
+    role = getattr(request.user, "role", None)
+
+    if role == "INSTRUCTOR":
+        classrooms = base_queryset.filter(
+            Q(course__instructor=request.user) | Q(supervisor=request.user)
+        ).distinct()
+    elif role == "STUDENT":
+        classrooms = base_queryset.filter(
+            schedules__enrollments__student=request.user
+        ).distinct()
+    else:
+        classrooms = base_queryset
+
     return render(request, "classrooms/classrooms.html", {"classrooms": classrooms})
 
 
 @login_required
 def classroom_preview(request, classroom_id):
-    classroom = Classroom.objects.get(id=classroom_id)
+    classroom = (
+        Classroom.objects.select_related("course", "supervisor")
+        .annotate(student_count=Count("schedules__enrollments__student", distinct=True))
+        .get(id=classroom_id)
+    )
     schedules = classroom.schedules.all()
     return render(
         request,
