@@ -9,6 +9,8 @@
 
 {% block content %}
 <div class="student-report-page">
+
+    <!-- HEADER -->
     <div class="student-report-header">
         <div class="student-title-section">
             <div class="student-title">
@@ -26,7 +28,10 @@
         </div>
     </div>
 
+    <!-- CONTAINER -->
     <div class="student-report-container">
+
+        <!-- Student Info -->
         <div class="student-header">
             <div class="student-avatar">
                 {{ student.get_full_name|default:student.email|slice:":2"|upper }}
@@ -40,6 +45,7 @@
             </div>
         </div>
 
+        <!-- Progress Overview -->
         <div class="progress-overview">
             <div class="progress-card">
                 <h3><i class='bx bx-book-open'></i> Completed Lessons</h3>
@@ -48,6 +54,7 @@
                     <div class="progress-fill" style="width: {{ progress.completed_lessons_percent|default_if_none:0 }}%"></div>
                 </div>
             </div>
+
             <div class="progress-card">
                 <h3><i class='bx bx-trophy'></i> Overall Progress</h3>
                 <div class="percentage">{{ progress.overall_percent|default_if_none:0 }}%</div>
@@ -55,6 +62,7 @@
                     <div class="progress-fill" style="width: {{ progress.overall_percent|default_if_none:0 }}%"></div>
                 </div>
             </div>
+
             <div class="progress-card">
                 <h3><i class='bx bx-buildings'></i> Active Classrooms</h3>
                 <div class="number">{{ progress.active_classrooms }}</div>
@@ -70,6 +78,7 @@
         </div>
         {% endif %}
 
+        <!-- Completed Lessons -->
         <div class="student-section">
             <h2>
                 <i class='bx bx-check-circle'></i>
@@ -92,6 +101,7 @@
             </ul>
         </div>
 
+        <!-- Active Classrooms -->
         <div class="student-section">
             <h2>
                 <i class='bx bx-buildings'></i>
@@ -124,6 +134,7 @@
             </ul>
         </div>
 
+        <!-- Meta Info -->
         <div class="student-meta">
             <div class="meta-item"><i class='bx bx-calendar'></i> Enrolled: {{ enrollment.date_enrolled|date:"M j, Y" }}</div>
             <div class="meta-item"><i class='bx bx-medal'></i> Credits Earned: {{ progress.credits_earned }}</div>
@@ -131,6 +142,7 @@
             <div class="meta-item"><i class='bx bx-group'></i> Total Enrolled: {{ progress.students_total }}</div>
             <div class="student-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">{{ course.get_status_display }}</div>
         </div>
+
     </div>
 </div>
 {% endblock %}
