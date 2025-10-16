@@ -1,179 +1,191 @@
-.instructor-report-page {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    min-height: 100vh;
-    padding: 30px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    --sidebar-color: #FFF;
+    --primary-color: #ff9800;
+    --primary-color-light: #FFF3E0;
+    --text-color: #333;
+    --light-text: #777;
+    --bg-color: #fdfdfd;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
 
-.instructor-header {
+/* ===== Body ===== */
+body {
+    background: var(--body-color);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+/* ===== Header ===== */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.header-icon {
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    width: 45px;
-    height: 45px;
-    border-radius: 10px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-}
-
-.btn.btn-orange {
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(255, 138, 101, 0.3);
-    transition: 0.3s ease;
-}
-
-.btn.btn-orange:hover {
-    transform: translateY(-2px);
-}
-
-.report-container {
-    display: flex;
-    justify-content: center;
-}
-
-.report-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    width: 100%;
-    max-width: 1100px;
-}
-
-.student-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    padding: 18px 30px;
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    border-radius: 12px;
     margin-bottom: 20px;
 }
 
-.student-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #695CFE;
+.logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 22px;
+    gap: 10px;
+    font-size: 20px;
     font-weight: 600;
+    color: var(--primary-color);
 }
 
-.student-info h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #222;
-}
-
-.student-email {
-    font-size: 13px;
-    color: #555;
-}
-
-.student-id {
-    font-size: 12px;
-    color: #695CFE;
-}
-
-.student-stats {
+.user-profile {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 10px;
 }
 
-.stat {
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.stat .label {
-    font-size: 13px;
-    color: #666;
+/* ===== Page Title ===== */
+.page-title {
+    text-align: center;
+    margin: 20px 0 30px;
 }
 
-.stat .value {
-    font-size: 18px;
-    font-weight: 700;
-    color: #695CFE;
+.page-title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
-.progress-track {
-    height: 8px;
-    background: #eee;
-    border-radius: 5px;
-    margin-top: 4px;
+/* ===== Card ===== */
+.card {
+    background: var(--card-bg);
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* ===== Table ===== */
+.table-container {
+    overflow-x: auto;
+}
+
+.lessons-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
     overflow: hidden;
 }
 
-.progress-fill {
-    height: 8px;
-    border-radius: 5px;
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    transition: width 0.3s;
+.lessons-table th,
+.lessons-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
 }
 
-.view-btn {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    color: #fff;
-    border: none;
-    text-align: center;
-    padding: 10px 15px;
-    border-radius: 10px;
+.lessons-table th {
+    background-color: #fafafa;
     font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
+    color: var(--text-color);
+}
+
+.student-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+}
+
+/* ===== Progress Bar ===== */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.progress-label {
+    font-size: 12px;
+    color: var(--light-text);
+    display: block;
+    margin-top: 4px;
+}
+
+/* ===== Buttons ===== */
+.view-btn {
+    background: var(--orange-gradient);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
     gap: 6px;
-    transition: 0.3s ease;
+    font-weight: 500;
+    transition: 0.2s ease-in-out;
+    box-shadow: var(--shadow);
 }
 
 .view-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,152,0,0.25);
 }
 
-.empty-state {
+.no-data {
     text-align: center;
-    color: #333;
-    padding: 60px 0;
-}
-
-.empty-state i {
-    font-size: 40px;
-    color: #ff8a65;
-    margin-bottom: 10px;
+    color: var(--light-text);
+    font-style: italic;
+    padding: 20px 0;
 }
