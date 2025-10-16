@@ -5,67 +5,93 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'reports/instructor-report.css' %}">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="instructor-report-page">
-    <div class="instructor-header">
-        <div class="header-left">
-            <div class="header-icon"><i class='bx bx-bar-chart'></i></div>
-            <h1>Student Progress Reports</h1>
-        </div>
-        <a href="{% url 'instructor_courses' %}" class="btn btn-orange">
-            <i class='bx bx-arrow-back'></i> Back to Courses
-        </a>
+
+<!-- HEADER (Same design as classrooms) -->
+<div class="header">
+    <div class="logo">
+        <i class="bx bx-bar-chart-alt"></i>
+        <span>Instructor Reports</span>
     </div>
-
-    <div class="report-container">
-        {% if students %}
-        <div class="report-grid">
-            {% for student in students %}
-            <div class="student-card">
-                <div class="card-header">
-                    <div class="student-avatar">
-                        {{ student.initials }}
-                    </div>
-                    <div class="student-info">
-                        <h2>{{ student.name }}</h2>
-                        <p class="student-email">{{ student.email }}</p>
-                        <p class="student-id">ID: {{ student.student_id }}</p>
-                    </div>
-                </div>
-
-                <div class="student-stats">
-                    <div class="stat">
-                        <span class="label">Completed Lessons</span>
-                        <span class="value">{{ student.completed_lessons }}</span>
-                    </div>
-                    <div class="stat">
-                        <span class="label">Overall Progress</span>
-                        <span class="value">{{ student.overall_percent }}%</span>
-                        <div class="progress-track">
-                            <div class="progress-fill" style="width: {{ student.overall_percent }}%"></div>
-                        </div>
-                    </div>
-                    <div class="stat">
-                        <span class="label">Active Classrooms</span>
-                        <span class="value">{{ student.active_classrooms }}</span>
-                    </div>
-                </div>
-
-                <a href="{% url 'reports:student_course_report' student.course_id student.id %}"
-                   class="view-btn">
-                    <i class='bx bx-show'></i> View Report
-                </a>
-            </div>
-            {% endfor %}
+    <div class="user-profile">
+        <div class="user-avatar">
+            {{ request.user.first_name|first|upper }}{{ request.user.first_name|slice:"1:2"|upper }}
         </div>
-        {% else %}
-        <div class="empty-state">
-            <i class='bx bx-user-x'></i>
-            <p>No students found under your courses yet.</p>
+        <div>
+            <p><strong>{{ request.user.get_full_name }}</strong></p>
+            <p>{{ request.user.email }}</p>
         </div>
-        {% endif %}
     </div>
 </div>
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <h1>Student Progress Reports</h1>
+</div>
+
+<!-- CARD WRAPPER -->
+<div class="card">
+    <div class="card-header">
+        <h2><i class="bx bx-list-ul"></i> Enrolled Students</h2>
+    </div>
+
+    <div class="table-container">
+        <table class="lessons-table">
+            <thead>
+            <tr>
+                <th>Student</th>
+                <th>Student ID</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Completed Lessons</th>
+                <th>Progress</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+            <tr>
+                <td>
+                    <div class="student-cell">
+                        <div class="student-avatar">
+                            {{ student.first_name|default:student.email|first|upper }}{{ student.last_name|default:student.email|slice:"1:2"|upper }}
+                        </div>
+                        <span>{{ student.first_name }} {{ student.last_name }}</span>
+                    </div>
+                </td>
+                <td>{{ student.student_id|default:"—" }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.course_title }}</td>
+                <td>{{ student.completed_lessons }}</td>
+                <td>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ student.overall_percent }}%"></div>
+                    </div>
+                    <span class="progress-label">{{ student.overall_percent }}%</span>
+                </td>
+                <td>
+                    {% if student.course_id %}
+                    <a href="{% url 'reports:student_course_report' student.course_id student.id %}" class="view-btn">
+                        <i class="bx bx-show"></i> View
+                    </a>
+                    {% else %}
+                    <span class="disabled-link">No Course</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="no-data">
+                    <i class="bx bx-info-circle"></i> No students enrolled under your courses yet.
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endblock %}
