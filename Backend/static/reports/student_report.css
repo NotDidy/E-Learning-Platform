@@ -23,7 +23,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* ----- Global Page Setup ----- */
+
 body {
     background-color: var(--bg-color);
     font-family: 'Poppins', sans-serif;
@@ -32,7 +32,6 @@ body {
     padding: 0;
 }
 
-/* Align with base.html's content area */
 .content {
     padding: 20px;
 }

@@ -1,18 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    --sidebar-color: #FFF;
-    --primary-color: #ff9800;
-    --primary-color-light: #FFF3E0;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #fdfdfd;
-    --card-bg: #ffffff;
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+  --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  --sidebar-color: #FFF;
+  --primary-color: #ff9800;
+  --primary-color-light: #FFF3E0;
+  --toggle-color: #DDD;
+  --text-color: #333;
+  --black-color: #0a0909;
+  --light-text: #888;
+  --bg-color: #fdfdfd;
+  --card-bg: #ffffff;
+  --shadow: 0 4px 20px rgba(0,0,0,0.1);
+  --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
 }
-
 * {
     margin: 0;
     padding: 0;
