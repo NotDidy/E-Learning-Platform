@@ -23,31 +23,41 @@ def _lessons_by_course():
 
 
 def is_instructor(user):
-    return user.is_authenticated and user.role == user.Roles.INSTRUCTOR
+    return user.is_authenticated and getattr(user, "role", None) == getattr(user.__class__, "Roles").INSTRUCTOR
 
 
 @login_required
 def classrooms(request):
     base_queryset = (
         Classroom.objects.select_related("course", "supervisor")
-        .annotate(student_count=Count("schedules__enrollments__student", distinct=True))
+        .annotate(student_count=Count("course__enrollments__student", distinct=True))
         .order_by("name")
     )
 
-    role = getattr(request.user, "role", None)
+    try:
+        Roles = getattr(request.user.__class__, "Roles")
+        role = getattr(request.user, "role", None)
+        role_is_instructor = (role == Roles.INSTRUCTOR)
+        role_is_student = (role == Roles.STUDENT)
+    except Exception:
+        role_is_instructor = False
+        role_is_student = False
 
-    if role == "INSTRUCTOR":
-        classrooms = base_queryset.filter(
+    if role_is_instructor:
+        classrooms_qs = base_queryset.filter(
             Q(course__instructor=request.user) | Q(supervisor=request.user)
         ).distinct()
-    elif role == "STUDENT":
-        classrooms = base_queryset.filter(
-            schedules__enrollments__student=request.user
+        template = "classrooms/classroom_preview_instructors.html"  
+    elif role_is_student:
+        classrooms_qs = base_queryset.filter(
+            course__enrollments__student=request.user
         ).distinct()
+        template = "classrooms/classroom_preview_students.html"    
     else:
-        classrooms = base_queryset
+        classrooms_qs = base_queryset
+        template = "classrooms/classroom_preview_students.html"   
 
-    return render(request, "classrooms/classrooms.html", {"classrooms": classrooms})
+    return render(request, template, {"classrooms": classrooms_qs})
 
 
 @login_required
