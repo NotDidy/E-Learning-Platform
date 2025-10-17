@@ -9,71 +9,69 @@ from courses.models import Course, Enrollment, LessonProgress, CreditTransaction
 
 @login_required
 def instructor_report_list(request):
-    """Displays unique students under the instructor’s courses with aggregated progress."""
+    """Show instructor overview of all students and their progress."""
     instructor = request.user
+    try:
+        is_instructor = getattr(instructor, "role", None) == instructor.__class__.Roles.INSTRUCTOR
+    except Exception:
+        is_instructor = False
 
-    if getattr(instructor, "role", None) != User.Roles.INSTRUCTOR:
-        return HttpResponseForbidden("Instructor access required")
+    if not is_instructor:
+        return HttpResponseForbidden("Instructor role required")
 
-    # Get all enrollments for this instructor’s courses
-    enrollments = Enrollment.objects.filter(course__instructor=instructor).select_related("student", "course")
+    courses = Course.objects.filter(instructor=instructor).prefetch_related("enrollments__student")
 
+    course_reports = []
+    all_students = set()
+    total_progress_sum = 0
+    total_students_count = 0
 
-    students = (
-        enrollments.values(
-            "student__id",
-            "student__first_name",
-            "student__last_name",
-            "student__email",
-            "student__student_id",
-        )
-        .annotate(
-            total_courses=Count("course", distinct=True),
-            completed_lessons=Count(
-                "student__lesson_progress",
-                filter=Q(student__lesson_progress__completed=True),
-                distinct=True,
-            ),
-            total_lessons=Count(
-                "student__lesson_progress__lesson",
-                distinct=True,
-            ),
-        )
-        .order_by("student__last_name", "student__first_name")
-        .distinct()
-    )
+    for course in courses:
+        students = []
+        enrollments = Enrollment.objects.filter(course=course).select_related("student")
 
-    student_reports = []
-    for s in students:
-        total = s["total_lessons"]
-        completed = s["completed_lessons"]
-        percent = round((completed / total) * 100) if total else 0
+        for enrollment in enrollments:
+            student = enrollment.student
 
-        # Build initials for avatar
-        first = (s["student__first_name"] or "").strip()
-        last = (s["student__last_name"] or "").strip()
-        initials = (first[:1] + last[:1]).upper() or (s["student__email"][:2].upper())
-        first_course = (
-            Enrollment.objects.filter(student_id=s["student__id"], course__instructor=instructor)
-            .values_list("course_id", flat=True)
-            .first()
-        )
+            # Total credits earned by this student (sum across all lessons)
+            total_credits = (
+                CreditTransaction.objects.filter(student=student)
+                .aggregate(total=Sum("credits"))["total"] or 0
+            )
 
-        student_reports.append({
-            "id": s["student__id"],
-            "first_name": s["student__first_name"],
-            "last_name": s["student__last_name"],
-            "email": s["student__email"],
-            "student_id": s["student__student_id"],
-            "initials": initials,
-            "course_id": first_course,
-            "total_courses": s["total_courses"],
-            "completed_lessons": completed,
-            "overall_percent": percent,
+            # Compute overall progress out of 120 credits
+            progress_percent = round((total_credits / 120) * 100, 1)
+            total_progress_sum += progress_percent
+            total_students_count += 1
+
+            students.append({
+                "id": student.id,
+                "name": student.get_full_name() or student.email,
+                "email": student.email,
+                "credits": total_credits,
+                "progress_percent": progress_percent,
+            })
+
+            all_students.add(student.id)
+
+        course_reports.append({
+            "course": course,
+            "students": students
         })
 
-    context = {"students": student_reports}
+    avg_progress = round(total_progress_sum / total_students_count, 1) if total_students_count else 0
+
+    context = {
+        "course_reports": course_reports,
+        "summary": {
+            "total_students": len(all_students),
+            "courses_taught": courses.count(),
+            "avg_progress": avg_progress,
+        },
+    }
+
     return render(request, "reports/instructor_report_list.html", context)
+
 
 @login_required
 def student_course_report(request, course_id: int, student_id: int):
