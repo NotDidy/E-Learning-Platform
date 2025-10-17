@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Student Progress Reports{% endblock %}
+{% block title %}<strong>Instructor Reports</strong>{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'reports/instructor-report.css' %}">
@@ -9,12 +9,10 @@
 {% endblock %}
 
 {% block content %}
-
-
 <div class="header">
     <div class="logo">
-        <i class="bx bx-bar-chart-alt"></i>
-        <span>Instructor Reports</span>
+        <i class="bx bx-bar-chart"></i>
+        <span><strong>Instructor Reports</strong></span>
     </div>
     <div class="user-profile">
         <div class="user-avatar">
@@ -27,71 +25,70 @@
     </div>
 </div>
 
-<!-- PAGE TITLE -->
 <div class="page-title">
-    <h1>Student Progress Reports</h1>
+    <h1>All Student Progress Overview</h1>
 </div>
 
-<!-- CARD WRAPPER -->
+<!-- SUMMARY CARDS -->
+<div class="progress-overview">
+    <div class="progress-card">
+        <h3>Total Students</h3>
+        <div class="number">{{ summary.total_students }}</div>
+    </div>
+    <div class="progress-card">
+        <h3>Courses Taught</h3>
+        <div class="number">{{ summary.courses_taught }}</div>
+    </div>
+    <div class="progress-card">
+        <h3>Average Progress</h3>
+        <div class="percentage">{{ summary.avg_progress }}%</div>
+    </div>
+</div>
+
+<!-- PER COURSE STUDENT TABLE -->
+{% for report in course_reports %}
 <div class="card">
     <div class="card-header">
-        <h2><i class="bx bx-list-ul"></i> Enrolled Students</h2>
+        <h2><i class="bx bx-book-content"></i> {{ report.course.title }}</h2>
     </div>
-
     <div class="table-container">
         <table class="lessons-table">
             <thead>
             <tr>
                 <th>Student</th>
-                <th>Student ID</th>
                 <th>Email</th>
-                <th>Course</th>
-                <th>Completed Lessons</th>
                 <th>Progress</th>
+                <th>Credits</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            {% for student in students %}
+            {% for s in report.students %}
             <tr>
-                <td>
-                    <div class="student-cell">
-                        <div class="student-avatar">
-                            {{ student.first_name|default:student.email|first|upper }}{{ student.last_name|default:student.email|slice:"1:2"|upper }}
-                        </div>
-                        <span>{{ student.first_name }} {{ student.last_name }}</span>
-                    </div>
+                <td class="student-cell">
+                    <div class="student-avatar">{{ s.name|slice:":2"|upper }}</div>
+                    <span>{{ s.name }}</span>
                 </td>
-                <td>{{ student.student_id|default:"—" }}</td>
-                <td>{{ student.email }}</td>
-                <td>{{ student.course_title }}</td>
-                <td>{{ student.completed_lessons }}</td>
+                <td>{{ s.email }}</td>
                 <td>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ student.overall_percent }}%"></div>
-                    </div>
-                    <span class="progress-label">{{ student.overall_percent }}%</span>
+                    <div class="progress-bar"><div class="progress-fill" style="width:{{ s.progress_percent }}%"></div></div>
+                    <span class="progress-label">{{ s.progress_percent }}%</span>
                 </td>
+                <td>{{ s.credits }}/120</td>
                 <td>
-                    {% if student.course_id %}
-                    <a href="{% url 'reports:student_course_report' student.course_id student.id %}" class="view-btn">
+                    <a class="view-btn" href="{% url 'reports:student_course_report' report.course.id s.id %}">
                         <i class="bx bx-show"></i> View
                     </a>
-                    {% else %}
-                    <span class="disabled-link">No Course</span>
-                    {% endif %}
                 </td>
             </tr>
             {% empty %}
-            <tr>
-                <td colspan="7" class="no-data">
-                    <i class="bx bx-info-circle"></i> No students enrolled under your courses yet.
-                </td>
-            </tr>
+            <tr><td colspan="5" class="no-data">No enrolled students</td></tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-
+{% empty %}
+<p class="no-data">You have no courses assigned yet.</p>
+{% endfor %}
 {% endblock %}
