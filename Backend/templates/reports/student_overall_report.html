@@ -97,7 +97,7 @@
                     <div class="progress-bar-fill" style="width: {{ course.progress }}%"></div>
                 </div>
             </div>
-            <a href="{% url 'course_detail' course.id %}" class="view-details">View Details</a>
+            <a href="{% url 'reports:student_course_report' course.id student.id %}" class="view-details">View Details</a>
         </div>
         {% empty %}
         <p class="no-courses">You are not enrolled in any courses yet.</p>
