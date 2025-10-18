@@ -17,7 +17,24 @@ function toggleThemeMenu(e) {
 }
 
 // Apply selected theme
+function setTheme(theme) {
+    const root = document.documentElement;
+    switch(theme) {
+        case 'light':
+            root.style.setProperty('--body-color', 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)');
+            root.style.setProperty('--sidebar-color', '#FFF');
+            root.style.setProperty('--primary-color', '#695CFE');
+            root.style.setProperty('--primary-color-light', '#F6F5FF');
+            root.style.setProperty('--text-color', '#707070');
+            root.style.setProperty('--black-color', '#0a0909');
+            break;
 
+        
+    }
+
+    localStorage.setItem('selectedTheme', theme);
+    document.getElementById('themeMenu').classList.remove('active');
+}
 
 // Apply saved theme on load
 document.addEventListener('DOMContentLoaded', () => {
