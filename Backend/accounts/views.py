@@ -295,7 +295,7 @@ def student_overall_report(request):
         total_completed += completed_count
         total_credits += credits_earned
 
-    overall_progress = round((total_completed / total_lessons) * 100, 1) if total_lessons else 0
+    overall_progress = round((total_credits / 120) * 100, 1) if total_credits else 0
     lessons_remaining = total_lessons - total_completed
 
     context = {
