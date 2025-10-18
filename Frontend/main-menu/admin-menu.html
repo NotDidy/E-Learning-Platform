@@ -9,6 +9,46 @@
     <link rel = "stylesheet" href="style-menu.css">
 </head>
 
+<script>
+function toggleThemeMenu(e) {
+    e.preventDefault();
+    const menu = document.getElementById('themeMenu');
+    menu.classList.toggle('active');
+}
+
+// Apply selected theme
+
+
+// Apply saved theme on load
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('selectedTheme');
+    if (saved) setTheme(saved);
+});
+</script>
+
+
+<div class="theme-menu-overlay" id="themeMenu">
+    <div class="theme-menu">
+        <h3>Select Theme</h3>
+        <div class="theme-options">
+            <button class="theme-btn light" onclick="setTheme('light')">
+                <i class='bx bx-sun'></i> Light
+            </button>
+            <button class="theme-btn dark" onclick="setTheme('dark')">
+                <i class='bx bx-moon'></i> Dark
+            </button>
+            <button class="theme-btn blue" onclick="setTheme('blue')">
+                <i class='bx bx-water'></i> Blue
+            </button>
+            <button class="theme-btn sepia" onclick="setTheme('sepia')">
+                <i class='bx bx-book'></i> Sepia
+            </button>
+        </div>
+        <button class="close-theme" onclick="toggleThemeMenu(event)">
+            <i class='bx bx-x'></i> Close
+        </button>
+    </div>
+</div>
 
 <body>
     <nav class ="sidebar">
