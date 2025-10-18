@@ -1,179 +1,238 @@
-.instructor-report-page {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    min-height: 100vh;
-    padding: 30px;
-    font-family: 'Poppins', sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+:root {
+  --primary-color: #f07b24;
+  --primary-light: #f6b27a;
+  --secondary-color: #2b2b2b;
+  --bg-color: #f9f9f9;
+  --white: #ffffff;
+  --border-radius: 12px;
+  --text-color: #333;
+  --font-family: "Poppins", sans-serif;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.instructor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* ---------------- HEADER ---------------- */
+.header {
+  background: var(--white);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 3px solid var(--primary-color);
 }
 
-.header-icon {
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    width: 45px;
-    height: 45px;
-    border-radius: 10px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
+.header .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--primary-color);
 }
 
-.btn.btn-orange {
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(255, 138, 101, 0.3);
-    transition: 0.3s ease;
+.header .logo i {
+  font-size: 26px;
 }
 
-.btn.btn-orange:hover {
-    transform: translateY(-2px);
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.report-container {
-    display: flex;
-    justify-content: center;
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
 }
 
-.report-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    width: 100%;
-    max-width: 1100px;
+.user-profile p {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 14px;
 }
 
-.student-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/* ---------------- TITLE ---------------- */
+.page-title {
+  padding: 24px 32px 0 32px;
+}
+
+.page-title h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+/* ---------------- SUMMARY CARDS ---------------- */
+.progress-overview {
+  display: flex;
+  gap: 20px;
+  padding: 24px 32px;
+  flex-wrap: wrap;
+}
+
+.progress-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  flex: 1;
+  min-width: 220px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.progress-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--secondary-color);
+}
+
+.progress-card .number {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.progress-card .percentage {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* ---------------- COURSE CARD ---------------- */
+.card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin: 20px 32px;
+  overflow: hidden;
 }
 
 .card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.lessons-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+}
+
+.lessons-table th,
+.lessons-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaeaea;
+  text-align: left;
+}
+
+.lessons-table th {
+  background: #fafafa;
+  font-weight: 600;
+  font-size: 14px;
+  color: #555;
+}
+
+.lessons-table tr:hover td {
+  background: #fff9f5;
+}
+
+/* ---------------- STUDENT CELL ---------------- */
+.student-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .student-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #695CFE;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 22px;
-    font-weight: 600;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
 }
 
-.student-info h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #222;
-}
-
-.student-email {
-    font-size: 13px;
-    color: #555;
-}
-
-.student-id {
-    font-size: 12px;
-    color: #695CFE;
-}
-
-.student-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.stat {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat .label {
-    font-size: 13px;
-    color: #666;
-}
-
-.stat .value {
-    font-size: 18px;
-    font-weight: 700;
-    color: #695CFE;
-}
-
-.progress-track {
-    height: 8px;
-    background: #eee;
-    border-radius: 5px;
-    margin-top: 4px;
-    overflow: hidden;
+/* ---------------- PROGRESS BAR ---------------- */
+.progress-bar {
+  width: 120px;
+  height: 8px;
+  background: #eaeaea;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .progress-fill {
-    height: 8px;
-    border-radius: 5px;
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    transition: width 0.3s;
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
 }
 
+.progress-label {
+  font-size: 13px;
+  color: #555;
+}
+
+/* ---------------- BUTTONS ---------------- */
 .view-btn {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
-    color: #fff;
-    border: none;
-    text-align: center;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: 0.3s ease;
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.2s;
 }
 
 .view-btn:hover {
-    transform: translateY(-2px);
+  background: #e46f18;
 }
 
-.empty-state {
-    text-align: center;
-    color: #333;
-    padding: 60px 0;
-}
-
-.empty-state i {
-    font-size: 40px;
-    color: #ff8a65;
-    margin-bottom: 10px;
+.no-data {
+  text-align: center;
+  color: #777;
+  padding: 18px;
+  font-size: 14px;
 }
