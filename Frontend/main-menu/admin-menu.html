@@ -19,6 +19,8 @@ function toggleThemeMenu(e) {
 // Apply selected theme
 function setTheme(theme) {
     const root = document.documentElement;
+    document.body.className = ''; 
+    document.body.classList.add(`${theme}-theme`);
     switch(theme) {
         case 'light':
             root.style.setProperty('--body-color', 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)');

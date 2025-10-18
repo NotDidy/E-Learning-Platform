@@ -18,12 +18,14 @@
     --black-color: #0a0909;
     --shadow: 0 4px 20px rgba(0,0,0,0.1);
     --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+    
 
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
+
 
 body.dark {
     --body-color: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -97,6 +99,15 @@ body {
 .sidebar li .text {
     color: var(--text-color);
     transition: var(--tran-02);
+}
+
+body.light-theme .sidebar li a:hover .icon,
+body.light-theme .sidebar li a:hover .text,
+body.blue-theme .sidebar li a:hover .icon,
+body.blue-theme .sidebar li a:hover .text,
+body.sepia-theme .sidebar li a:hover .icon,
+body.sepia-theme .sidebar li a:hover .text {
+    color: #fff;
 }
 
 .sidebar header {
@@ -648,7 +659,7 @@ body.dark .switch::before {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 138, 101, 0.3);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-icon-bg), transparent 70%);
 }
 
 .btn-secondary {
