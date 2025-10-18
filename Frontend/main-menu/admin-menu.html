@@ -47,7 +47,14 @@ function setTheme(theme) {
             root.style.setProperty('--black-color', '#0f172a');
             break;
 
-        
+        case 'sepia':
+            root.style.setProperty('--body-color', 'linear-gradient(135deg, #e0c097 0%, #cbb994 100%)');
+            root.style.setProperty('--sidebar-color', '#f5deb3');
+            root.style.setProperty('--primary-color', '#704214');
+            root.style.setProperty('--primary-color-light', '#f0e0c6');
+            root.style.setProperty('--text-color', '#5c4033');
+            root.style.setProperty('--black-color', '#3e2723');
+            break;
     }
 
     localStorage.setItem('selectedTheme', theme);
