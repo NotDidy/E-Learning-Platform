@@ -20,9 +20,7 @@
             <button class="theme-btn light" onclick="setTheme('light')">
                 <i class='bx bx-sun'></i> Light
             </button>
-            <button class="theme-btn dark" onclick="setTheme('dark')">
-                <i class='bx bx-moon'></i> Dark
-            </button>
+
             <button class="theme-btn blue" onclick="setTheme('blue')">
                 <i class='bx bx-water'></i> Blue
             </button>
@@ -56,12 +54,7 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
-                    <li class="nav-link">
-                        <a href="#" onclick="toggleThemeMenu(event)">
-                            <i class='bx bx-palette icon'></i>
-                            <span class="text nav-text">Themes</span>
-                        </a>
-                    </li>
+                    
                     <li class="nav-link">
                         <a href="#">
                             <i class='bx  bx-book-content icon'  ></i>  
@@ -89,6 +82,10 @@
                 </ul>
             </div> 
             <div class="bottom-content">
+                <div class="theme-icon-button" onclick="toggleThemeMenu(event)" title="Change Theme">
+                    <i class='bx bx-palette'></i>
+                </div>
+                
                 <li class="mode">
                     <div class="moon-sun">
                         <i class='bx  bx-moon icon moon'  ></i> 
