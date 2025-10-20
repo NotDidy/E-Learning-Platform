@@ -102,6 +102,22 @@ body {
     padding: 40px;
     max-width: 900px;
 }
+.lesson-alert {
+    margin-top: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 500;
+    color: #663c00;
+    background: #fff3cd;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    box-shadow: 0 4px 14px rgba(255, 193, 7, 0.15);
+}
+
+.lesson-alert.error {
+    color: #b71c1c;
+    background: #ffebee;
+    border-color: rgba(244, 67, 54, 0.4);
+}
 
 /* Header inside details */
 .course-header h1 {

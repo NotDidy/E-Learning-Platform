@@ -40,9 +40,6 @@
                 {% if course.course_code %}<span class="course-code">{{ course.course_code }}</span>{% endif %}
             </div>
             <div class="course-action">
-                <a class="action-btn preview-btn" href="{% url 'student_course_preview' course.id %}" title="View Course Overview">
-                    <i class='bx bx-show'></i>
-                </a>
                 <a class="action-btn detail-btn" href="{% url 'course_detail' course.id %}" title="Open Course Detail">
                     <i class='bx bx-book-open'></i>
                 </a>

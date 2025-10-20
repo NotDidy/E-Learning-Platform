@@ -23,8 +23,15 @@ class LessonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         course = kwargs.pop("course", None)
         super().__init__(*args, **kwargs)
+        prereq_field = self.fields["prerequisites"]
+        prereq_field.widget = forms.CheckboxSelectMultiple(attrs={"class": "checkbox-grid"})
         if course is not None:
-            self.fields["prerequisites"].queryset = course.lessons.exclude(pk=self.instance.pk)
+            prereq_field.queryset = (
+                course.lessons.exclude(pk=self.instance.pk).order_by("order", "title")
+            )
+        else:
+            prereq_field.queryset = prereq_field.queryset.exclude(pk=self.instance.pk).order_by("order", "title")
+        prereq_field.help_text = "Tick lessons that must be completed before this one."
         self._course_ctx = course
 
     def clean_credit_points(self):

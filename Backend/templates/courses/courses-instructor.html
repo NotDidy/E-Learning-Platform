@@ -43,9 +43,6 @@
                 <a class="action-btn edit-btn" href="{% url 'course_edit' course.id %}">
                     <i class='bx bx-edit'></i>
                 </a>
-                <a class="action-btn preview-btn" href="{% url 'course_preview_instructor' course.id %}" title="Preview Course">
-                    <i class='bx bx-show'></i>
-                </a>
                 <form method="post" action="{% url 'course_delete' course.id %}">
                     {% csrf_token %}
                     <button class="action-btn delete-btn" type="submit">
