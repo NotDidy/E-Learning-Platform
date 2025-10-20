@@ -165,6 +165,53 @@ body {
     margin-bottom: 8px;
 }
 
+.circular-progress-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.circular-progress {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 8;
+}
+
+.progress-ring-circle {
+    fill: none;
+    stroke: white;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 314.159;
+    stroke-dashoffset: 314.159;
+    animation: progressAnimation 2s ease-out forwards;
+}
+
+@keyframes progressAnimation {
+    to {
+        stroke-dashoffset: 103.672;
+    }
+}
+
+.progress-value {
+    position: absolute;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+}
+
 .stat-card .label {
     font-size: 12px;
     opacity: 0.8;
