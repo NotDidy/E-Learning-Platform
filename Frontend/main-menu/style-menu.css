@@ -811,9 +811,9 @@ body.dark .switch::before {
 }
 
 .theme-btn.light { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #111; }
-.theme-btn.dark { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
 .theme-btn.blue { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
 .theme-btn.sepia { background: linear-gradient(135deg, #704214 0%, #c9a36a 100%); color: #111; }
+.theme-btn.forest { background: linear-gradient(135deg, #2c7744 0%, #5a9458 100%); }
 
 .theme-btn:hover {
     transform: translateY(-2px);
