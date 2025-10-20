@@ -1,3 +1,5 @@
+import math
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import Group
@@ -5,6 +7,7 @@ from django.contrib.auth.views import LoginView
 from django.conf import settings
 from django.shortcuts import render, redirect, resolve_url, get_object_or_404
 from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required,user_passes_test
@@ -295,8 +298,14 @@ def student_overall_report(request):
         total_completed += completed_count
         total_credits += credits_earned
 
-    overall_progress = round((total_credits / 120) * 100, 1) if total_credits else 0
+    overall_progress = (total_credits / 120 * 100) if total_credits else 0
+    overall_progress = max(0.0, min(round(overall_progress, 1), 100.0))
     lessons_remaining = total_lessons - total_completed
+    circle_radius = 60
+    progress_circumference = round(2 * math.pi * circle_radius, 2)
+    progress_ratio = overall_progress / 100 if overall_progress else 0
+    progress_offset = round(progress_circumference * (1 - progress_ratio), 2)
+    last_updated = timezone.now()
 
     context = {
         "student": student,
@@ -307,6 +316,9 @@ def student_overall_report(request):
         "active_courses": len(courses_data),
         "lessons_remaining": lessons_remaining,
         "courses": courses_data,
+        "progress_circumference": progress_circumference,
+        "progress_offset": progress_offset,
+        "last_updated": last_updated,
     }
 
     return render(request, "reports/student_overall_report.html", context)

@@ -194,15 +194,7 @@ body {
     stroke: white;
     stroke-width: 8;
     stroke-linecap: round;
-    stroke-dasharray: 314.159;
-    stroke-dashoffset: 314.159;
-    animation: progressAnimation 2s ease-out forwards;
-}
-
-@keyframes progressAnimation {
-    to {
-        stroke-dashoffset: 103.672;
-    }
+    transition: stroke-dashoffset 0.6s ease;
 }
 
 .progress-value {
