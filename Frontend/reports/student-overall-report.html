@@ -30,9 +30,15 @@
 
     <div class="main-container">
         <div class="overall-stats">
-            <div class="stat-card">
+            <div class="stat-card circular-progress-card">
                 <h3><i class='bx bx-book-reader'></i> Overall Progress</h3>
-                <div class="value">67%</div>
+                <div class="circular-progress">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle-bg" cx="60" cy="60" r="50"></circle>
+                        <circle class="progress-ring-circle" cx="60" cy="60" r="50"></circle>
+                    </svg>
+                    <div class="progress-value">67%</div>
+                </div>
                 <div class="label">Across all courses</div>
             </div>
             <div class="stat-card orange">
