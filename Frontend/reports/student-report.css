@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 * {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -7,32 +9,37 @@
 
 :root {
     --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    --primary-color: #695CFE;;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
     --text-color: #444;
     --black-color: #0a0909;
     --shadow: 0 4px 20px rgba(0,0,0,0.1);
     --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
 }
 
-body {
+.student-report-page {
     background: var(--body-color);
     min-height: 100vh;
     padding: 20px;
+    margin-left: 250px;
 }
 
+
 .student-report-header {
-    background: #fff;
+    background: var(--sidebar-color);
     margin: 20px auto;
     border-radius: 20px;
     box-shadow: var(--shadow);
     padding: 25px 30px;
-    position: relative;
     max-width: 1100px;
+    position: relative;
+    overflow: hidden;
 }
 
 .student-report-header::before {
     content: '';
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -75,12 +82,13 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
+    font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: var(--shadow);
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: var(--shadow);
     transition: 0.3s;
 }
 
@@ -123,7 +131,6 @@ body {
 .student-information h1 {
     font-size: 28px;
     color: var(--black-color);
-    margin-bottom: 5px;
 }
 
 .student-id {
@@ -166,12 +173,7 @@ body {
     gap: 6px;
 }
 
-.progress-card .number {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
+.progress-card .number,
 .progress-card .percentage {
     font-size: 32px;
     font-weight: 700;
@@ -209,12 +211,17 @@ body {
     gap: 6px;
 }
 
-.student-section h2 i {
-    font-size: 18px;
-    color: var(--primary-color);
+.section-counter {
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
-.completed-lessons, .active-classrooms {
+.completed-lessons,
+.active-classrooms {
     list-style: none;
     padding-left: 0;
     display: flex;
@@ -222,65 +229,31 @@ body {
     gap: 6px;
 }
 
-.lesson-item, .classroom-item {
+.lesson-item,
+.classroom-item {
     background: #f2f3f8;
     padding: 6px 10px;
     border-left: 3px solid var(--primary-color);
     border-radius: 6px;
     font-size: 13px;
     color: var(--text-color);
-    margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: 0.3s ease;
 }
 
-.lesson-item:hover, .classroom-item:hover {
+.lesson-item:hover,
+.classroom-item:hover {
     background: #eef3ff;
     transform: translateX(5px);
-    cursor: pointer;
 }
 
-.lesson-info, .classroom-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.lesson-id, .classroom-id {
+.lesson-id,
+.classroom-id {
     font-weight: 600;
     color: var(--primary-color);
     font-size: 12px;
-}
-
-.lesson-name, .classroom-name {
-    font-weight: 500;
-    color: var(--black-color);
-}
-
-.completion-date {
-    font-size: 11px;
-    color: #666;
-    font-style: italic;
-}
-
-.completion-status {
-    background: #eaf7ea;
-    color: #2e8032;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.schedule-time {
-    background: #fff3df;
-    color: #db4e02;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 600;
 }
 
 .student-meta {
@@ -315,14 +288,4 @@ body {
 .status-active {
     background: #eaf7ea;
     color: #36973b;
-}
-
-.section-counter {
-    background: var(--primary-color);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-left: auto;
 }

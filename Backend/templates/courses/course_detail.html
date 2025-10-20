@@ -110,7 +110,7 @@
         <ul class="students-list">
             {% for student in students %}
             <li>
-                <a href="{% url 'reports:student_course_report' course.id student.id %}" class="student-item">
+                <a href="{% url 'reports:student_course_report' course.id student.id %}?origin=course_detail" class="student-item">
                     <div>
                         <div class="student-id">{{ student.student_id|default:student.email }}</div>
                         <div class="student-name">{{ student.get_full_name|default:student.email }}</div>

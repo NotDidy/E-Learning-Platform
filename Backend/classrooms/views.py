@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.db.models import Count, Q
 
 from .forms import ClassroomForm, ScheduleForm
 from .models import Classroom, Schedule
@@ -22,17 +23,50 @@ def _lessons_by_course():
 
 
 def is_instructor(user):
-    return user.is_authenticated and user.role == user.Roles.INSTRUCTOR
+    return user.is_authenticated and getattr(user, "role", None) == getattr(user.__class__, "Roles").INSTRUCTOR
 
 
+@login_required
 def classrooms(request):
-    classrooms = Classroom.objects.all()
-    return render(request, "classrooms/classrooms.html", {"classrooms": classrooms})
+    base_queryset = (
+        Classroom.objects.select_related("course", "supervisor")
+        .annotate(student_count=Count("course__enrollments__student", distinct=True))
+        .order_by("name")
+    )
+
+    try:
+        Roles = getattr(request.user.__class__, "Roles")
+        role = getattr(request.user, "role", None)
+        role_is_instructor = (role == Roles.INSTRUCTOR)
+        role_is_student = (role == Roles.STUDENT)
+    except Exception:
+        role_is_instructor = False
+        role_is_student = False
+
+    if role_is_instructor:
+        classrooms_qs = base_queryset.filter(
+            Q(course__instructor=request.user) | Q(supervisor=request.user)
+        ).distinct()
+        template = "classrooms/classroom_preview_instructors.html"  
+    elif role_is_student:
+        classrooms_qs = base_queryset.filter(
+            course__enrollments__student=request.user
+        ).distinct()
+        template = "classrooms/classroom_preview_students.html"    
+    else:
+        classrooms_qs = base_queryset
+        template = "classrooms/classroom_preview_students.html"   
+
+    return render(request, template, {"classrooms": classrooms_qs})
 
 
 @login_required
 def classroom_preview(request, classroom_id):
-    classroom = Classroom.objects.get(id=classroom_id)
+    classroom = (
+        Classroom.objects.select_related("course", "supervisor")
+        .annotate(student_count=Count("schedules__enrollments__student", distinct=True))
+        .get(id=classroom_id)
+    )
     schedules = classroom.schedules.all()
     return render(
         request,

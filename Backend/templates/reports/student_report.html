@@ -1,136 +1,133 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Student Report | {{ student.get_full_name|default:student.email }}{% endblock %}
+{% block title %}Student Progress Report{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'reports/student-report.css' %}">
+<link rel="stylesheet" href="{% static 'reports/student_report.css' %}">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="student-report-page">
-    <div class="student-report-header">
-        <div class="student-title-section">
-            <div class="student-title">
-                <div class="student-icon">
-                    <i class='bx bx-user-detail'></i>
-                </div>
-                Student Progress Report
-            </div>
-            <div class="header-actions">
-                <a class="back-btn" href="{% url 'course_detail' course.id %}">
-                    <i class='bx bx-left-arrow-alt'></i>
-                    Back to Course
-                </a>
-            </div>
-        </div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">
+        <i class="bx bx-user-circle"></i>
+        <span>Student Report</span>
     </div>
-
-    <div class="student-report-container">
-        <div class="student-header">
-            <div class="student-avatar">
-                {{ student.get_full_name|default:student.email|slice:":2"|upper }}
-            </div>
-            <div class="student-information">
-                <h1>{{ student.get_full_name|default:student.email }}</h1>
-                {% if student.student_id %}
-                <span class="student-id">Student ID: {{ student.student_id }}</span>
-                {% endif %}
-                <div class="student-email">{{ student.email }}</div>
-            </div>
+    <div class="user-profile">
+        <div class="user-avatar">
+            {{ request.user.first_name|first|upper }}{{ request.user.first_name|slice:"1:2"|upper }}
         </div>
-
-        <div class="progress-overview">
-            <div class="progress-card">
-                <h3><i class='bx bx-book-open'></i> Completed Lessons</h3>
-                <div class="number">{{ progress.completed_lessons }}</div>
-                <div class="progress-track">
-                    <div class="progress-fill" style="width: {{ progress.completed_lessons_percent|default_if_none:0 }}%"></div>
-                </div>
-            </div>
-            <div class="progress-card">
-                <h3><i class='bx bx-trophy'></i> Overall Progress</h3>
-                <div class="percentage">{{ progress.overall_percent|default_if_none:0 }}%</div>
-                <div class="progress-track">
-                    <div class="progress-fill" style="width: {{ progress.overall_percent|default_if_none:0 }}%"></div>
-                </div>
-            </div>
-            <div class="progress-card">
-                <h3><i class='bx bx-buildings'></i> Active Classrooms</h3>
-                <div class="number">{{ progress.active_classrooms }}</div>
-            </div>
-        </div>
-
-        {% if not progress_available %}
-        <div class="empty-progress">
-            <div class="empty-progress-icon"><i class='bx bx-line-chart'></i></div>
-            <div class="empty-progress-text">
-                Progress tracking will appear once lessons are added to this course.
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="student-section">
-            <h2>
-                <i class='bx bx-check-circle'></i>
-                Completed Lessons
-                <span class="section-counter">{{ completed_lessons|length }}</span>
-            </h2>
-            <ul class="completed-lessons">
-                {% for lesson in completed_lessons %}
-                <li class="lesson-item">
-                    <div class="lesson-info">
-                        <div class="lesson-id">{{ lesson.code }}</div>
-                        <div class="lesson-name">{{ lesson.title }}</div>
-                        <div class="completion-date">Completed: {{ lesson.completed_on|date:"M j, Y" }}</div>
-                    </div>
-                    <div class="completion-status"><i class='bx bx-check'></i> Completed</div>
-                </li>
-                {% empty %}
-                <li class="empty-row">No lessons have been completed yet.</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="student-section">
-            <h2>
-                <i class='bx bx-buildings'></i>
-                Active Classrooms
-                <span class="section-counter">{{ classroom_cards|length }}</span>
-            </h2>
-            <ul class="active-classrooms">
-                {% for classroom in classroom_cards %}
-                <li class="classroom-item">
-                    <div class="classroom-info">
-                        {% if classroom.code %}
-                        <div class="classroom-id">{{ classroom.code }}</div>
-                        {% endif %}
-                        <div class="classroom-name">{{ classroom.name }}</div>
-                        {% if classroom.supervisor %}
-                        <div class="classroom-supervisor">
-                            Supervisor: {{ classroom.supervisor.get_full_name|default:classroom.supervisor.email }}
-                        </div>
-                        {% else %}
-                        <div class="classroom-supervisor">
-                            Supervisor: Unassigned
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="schedule-time">{{ classroom.schedule }}</div>
-                </li>
-                {% empty %}
-                <li class="empty-row">This course does not have any classrooms yet.</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="student-meta">
-            <div class="meta-item"><i class='bx bx-calendar'></i> Enrolled: {{ enrollment.date_enrolled|date:"M j, Y" }}</div>
-            <div class="meta-item"><i class='bx bx-medal'></i> Credits Earned: {{ progress.credits_earned }}</div>
-            <div class="meta-item"><i class='bx bx-book-open'></i> Remaining Lessons: {{ progress.remaining_lessons }}</div>
-            <div class="meta-item"><i class='bx bx-group'></i> Total Enrolled: {{ progress.students_total }}</div>
-            <div class="student-status {% if course.status == 'active' %}status-active{% else %}status-draft{% endif %}">{{ course.get_status_display }}</div>
+        <div>
+            <p><strong>{{ request.user.get_full_name }}</strong></p>
+            <p>{{ request.user.email }}</p>
         </div>
     </div>
 </div>
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <h1>Progress Report - {{ course.title }}</h1>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+
+    <!-- Back Button -->
+    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <h2><i class="bx bx-chart"></i> {{ student.get_full_name|default:student.email }}</h2>
+        {% if back_link %}
+        <a class="back-btn" href="{{ back_link.url }}">
+            <i class="bx bx-left-arrow-alt"></i> {{ back_link.label }}
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Student Info -->
+    <div class="student-info">
+        <div class="student-avatar-large">
+            {{ student.get_full_name|default:student.email|slice:":2"|upper }}
+        </div>
+        <div>
+            <h2>{{ student.get_full_name|default:student.email }}</h2>
+            {% if student.student_id %}
+            <div class="student-id">ID: {{ student.student_id }}</div>
+            {% endif %}
+            <div class="student-email">{{ student.email }}</div>
+        </div>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview">
+        <div class="progress-card">
+            <h3><i class="bx bx-check-square"></i> Completed Lessons</h3>
+            <div class="number">{{ progress.completed_lessons }}</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress.completed_lessons_percent|default:0 }}%"></div>
+            </div>
+        </div>
+        <div class="progress-card">
+            <h3><i class="bx bx-pie-chart-alt-2"></i> Course Progress</h3>
+            <div class="percentage">{{ progress.overall_percent|default:0 }}%</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress.overall_percent|default:0 }}%"></div>
+            </div>
+        </div>
+        <div class="progress-card">
+            <h3><i class="bx bx-buildings"></i> Enrolled Classrooms</h3>
+            <div class="number">{{ progress.enrolled_classrooms }}</div>
+        </div>
+    </div>
+
+    <!-- Completed Lessons Section -->
+    <div class="section">
+        <h2><i class="bx bx-book-open"></i> Completed Lessons ({{ completed_lessons|length }})</h2>
+        <ul class="lesson-list">
+            {% for lesson in completed_lessons %}
+            <li class="lesson-item">
+                <div>
+                    <strong>{{ lesson.code }}</strong> - {{ lesson.title }}
+                    <div class="lesson-date">Completed on {{ lesson.completed_on|date:"M j, Y" }}</div>
+                </div>
+                <span class="status-tag success"><i class="bx bx-check"></i> Done</span>
+            </li>
+            {% empty %}
+            <li class="no-data"><i class="bx bx-info-circle"></i> No lessons completed yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Classrooms Section -->
+    <div class="section">
+        <h2><i class="bx bx-buildings"></i> Enrolled Classrooms ({{ classroom_cards|length }})</h2>
+        <ul class="lesson-list">
+            {% for classroom in classroom_cards %}
+            <li class="lesson-item">
+                <div>
+                    <strong>{{ classroom.code|default:"-" }}</strong> - {{ classroom.name }}
+                    <div class="lesson-date">
+                        {{ classroom.schedule }} &bull; Supervisor:
+                        {{ classroom.supervisor.get_full_name|default:classroom.supervisor.email|default:"Unassigned" }}
+                    </div>
+                </div>
+                <span class="status-tag warning"><i class="bx bx-time-five"></i> Enrolled</span>
+            </li>
+            {% empty %}
+            <li class="no-data"><i class="bx bx-info-circle"></i> You are not enrolled in any classrooms for this course.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Summary Meta -->
+    <div class="meta">
+        <div><i class="bx bx-calendar"></i> Enrolled: {{ enrollment.date_enrolled|date:"M j, Y" }}</div>
+        <div><i class="bx bx-medal"></i> Credits Earned: {{ progress.credits_earned }}</div>
+        <div><i class="bx bx-book-open"></i> Remaining Lessons: {{ progress.remaining_lessons }}</div>
+        <div><i class="bx bx-group"></i> Total Enrolled: {{ progress.students_total }}</div>
+    </div>
+
+</div>
+
 {% endblock %}

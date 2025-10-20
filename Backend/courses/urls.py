@@ -36,6 +36,8 @@ urlpatterns = [
     path("student/courses/<int:pk>/preview/", CoursePreviewStudentView.as_view(), name="student_course_preview"),
     path("lessons/<int:lesson_id>/toggle-progress/", toggle_lesson_progress, name="toggle_lesson_progress"),
     path("lesson-schedule/<int:schedule_id>/enroll/", views.enroll_schedule, name="enroll_schedule"),
+    path("unenroll/<int:schedule_id>/", views.unenroll_schedule, name="unenroll_schedule"),
+
 
 
 ]

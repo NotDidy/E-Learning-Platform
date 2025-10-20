@@ -17,13 +17,15 @@
     --text-color: #707070;
     --black-color: #0a0909;
     --shadow: 0 4px 20px rgba(0,0,0,0.1);
-    --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+    --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+    
 
     --tran-02: all 0.2s ease;
     --tran-03: all 0.3s ease;
     --tran-04: all 0.4s ease;
     --tran-05: all 0.5s ease;
 }
+
 
 body.dark {
     --body-color: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -99,6 +101,15 @@ body {
     transition: var(--tran-02);
 }
 
+body.light-theme .sidebar li a:hover .icon,
+body.light-theme .sidebar li a:hover .text,
+body.blue-theme .sidebar li a:hover .icon,
+body.blue-theme .sidebar li a:hover .text,
+body.sepia-theme .sidebar li a:hover .icon,
+body.sepia-theme .sidebar li a:hover .text {
+    color: #fff;
+}
+
 .sidebar header {
     position: relative;
     padding-bottom: 20px;
@@ -119,7 +130,7 @@ body.dark .sidebar header {
     justify-content: center;
     color: white;
     font-size: 24px;
-    background: var(--orange-gradient)
+    background: var(--accent-gradient)
 }
 
 .sidebar header .image-text{
@@ -222,6 +233,39 @@ header .image-text .header-text {
 body.dark .bottom-content a {
     border-top: 2px solid #444;
 }
+
+.theme-icon-button {
+    background: var(--primary-color-light);
+    color: var(--primary-color);
+    border-radius: 12px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px auto 15px auto;
+    box-shadow: var(--shadow);
+    transition: var(--tran-03);
+}
+
+.theme-icon-button:hover {
+    background: var(--accent-gradient);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Adjust for closed sidebar */
+.sidebar.close .theme-icon-button {
+    width: 50px;
+    height: 50px;
+    margin: 10px auto;
+}
+
+.sidebar.close .theme-icon-button i {
+    font-size: 20px;
+}
+
 
 .home {
     position: relative;
@@ -343,7 +387,7 @@ body.dark .mode-text::before {
 }
 
 body.dark .toggle-switch .switch {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .switch::before {
@@ -381,7 +425,7 @@ body.dark .switch::before {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .dashboard-title {
@@ -389,7 +433,7 @@ body.dark .switch::before {
     font-weight: 700;
     color: var(--black-color);
     margin-bottom: 10px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -404,7 +448,7 @@ body.dark .switch::before {
 
 .admin-badge {
     display:inline-block;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 10px 25px;
     border-radius: 25px;
@@ -440,7 +484,7 @@ body.dark .switch::before {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .card-header {
@@ -463,7 +507,7 @@ body.dark .switch::before {
     width: 50px;
     height: 50px;
     border-radius: 12px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -544,7 +588,7 @@ body.dark .switch::before {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .form-header {
@@ -631,7 +675,7 @@ body.dark .switch::before {
 }
 
 .btn-primary {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 12px 24px;
     border: none;
@@ -648,7 +692,7 @@ body.dark .switch::before {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 138, 101, 0.3);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-icon-bg), transparent 70%);
 }
 
 .btn-secondary {
@@ -701,3 +745,97 @@ body.dark .switch::before {
     }
 }
 
+.theme-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.theme-menu-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.theme-menu {
+    background: var(--sidebar-color);
+    color: var(--black-color);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    width: 350px;
+    max-width: 90%;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {transform: translateY(30px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.theme-menu h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--black-color);
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.theme-btn {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.theme-btn.light { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #111; }
+.theme-btn.dark { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+.theme-btn.blue { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+.theme-btn.sepia { background: linear-gradient(135deg, #704214 0%, #c9a36a 100%); color: #111; }
+
+.theme-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.close-theme {
+    margin-top: 25px;
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.close-theme:hover {
+    background: var(--primary-color);
+    color: #fff;
+}

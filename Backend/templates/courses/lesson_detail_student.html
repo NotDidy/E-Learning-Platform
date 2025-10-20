@@ -19,19 +19,17 @@
     </div>
 
     <div class="header-actions">
-      <div class="progress-container" title="Lesson material completion">
-        <div id="lesson-progress-bar"
-             class="progress-bar"
-             data-progress="{{ lesson_materials_percent|default:0 }}"></div>
+      <div class="progress-wrapper" title="Lesson material completion">
+        <div class="progress-label"><i class='bx bx-target-lock'></i> Progress</div>
+        <div class="progress-container" aria-label="Lesson completion progress">
+          <div id="lesson-progress-bar"
+               class="progress-bar"
+               + data-progress="{{ lesson_materials_percent|default_if_none:'0' }}"></div>
+        </div>
+        <div id="progress-percent" class="progress-percent">
+          {{ lesson_materials_percent|default_if_none:'0' }}%
+        </div>
       </div>
-
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const bar = document.getElementById('lesson-progress-bar');
-          const pct = parseFloat(bar.dataset.progress || '0');
-          bar.style.width = pct + '%';
-        });
-      </script>
 
       <span id="lesson-status-badge"
             class="lesson-status {% if lesson_progress and lesson_progress.completed %}status-published{% endif %}">
@@ -95,7 +93,11 @@
                    data-section="assignment"
                    data-index="{{ forloop.counter0 }}"
                    {% if forloop.counter0 in completed_assignment_idx %}checked{% endif %}>
-            {{ item }}
+            {% if item.url %}
+              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.text }}</a>
+            {% else %}
+              {{ item.text|default:item }}
+            {% endif %}
           </label>
         </li>
       {% empty %}
@@ -104,38 +106,44 @@
     </ul>
   </div>
 
-  {# ---- Classroom Schedule (unchanged) ---- #}
+  {# ---- Classroom Schedule ---- #}
   <div class="lesson-section">
     <h2><i class='bx bx-chalkboard'></i> Classroom Schedule</h2>
     <div class="classroom-schedule">
-    {% for schedule in lesson.schedules.all %}
-      <div class="classroom-session">
-        <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
-        <p><i class='bx bx-time-five'></i>
-          {{ schedule.get_day_display }} {{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}
-        </p>
+      {% for schedule in lesson.schedules.all %}
+        <div class="classroom-session">
+          <p><i class='bx bx-buildings'></i> Classroom: <strong>{{ schedule.classroom.name }}</strong></p>
+          <p><i class='bx bx-time-five'></i>
+            {{ schedule.get_day_display }} {{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}
+          </p>
 
-        {% if schedule.is_full %}
-          <span class="badge bg-danger">Full</span>
-        {% elif enrolled_schedule_id == schedule.id %}
-          <span class="badge bg-success">Enrolled</span>
-        {% else %}
-          <form method="post" action="{% url 'enroll_schedule' schedule.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Enroll</button>
-          </form>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p>No scheduled classroom sessions for this lesson.</p>
-    {% endfor %}
+          {% if enrolled_schedule_id == schedule.id %}
+            <p><strong>Enrolled</strong></p>
+            <a href="{% url 'unenroll_schedule' schedule.id %}" class="btn btn-primary">Unenroll</a>
+          {% elif not enrolled_schedule_id %}
+            <a href="{% url 'enroll_schedule' schedule.id %}" class="btn btn-primary">Enroll</a>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p>No scheduled classroom sessions for this lesson.</p>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const bar = document.getElementById('lesson-progress-bar');
+  const pctLabel = document.getElementById('progress-percent');
+  const initial = parseFloat(bar?.dataset.progress || '0');
+  if (bar) bar.style.width = initial + '%';
+  if (pctLabel) pctLabel.textContent = (isNaN(initial) ? 0 : initial) + '%';
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   const container = document.querySelector('.lesson-details-container');
   const progressBar = document.getElementById('lesson-progress-bar');
+  const pctLabel = document.getElementById('progress-percent');
   const statusBadge = document.getElementById('lesson-status-badge');
   const csrfToken = '{{ csrf_token }}';
   const toggleUrl = "{% url 'toggle_lesson_progress' lesson.id %}";
@@ -174,12 +182,13 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(r => r.ok ? r.json() : r.json().then(j => Promise.reject(j)))
     .then(data => {
       if (typeof data.lesson_materials_percent !== 'undefined') {
-        progressBar.style.width = data.lesson_materials_percent + '%';
+        const p = Number(data.lesson_materials_percent) || 0;
+        progressBar.style.width = p + '%';
+        if (pctLabel) pctLabel.textContent = p + '%';
       }
       if (typeof data.lesson_completed !== 'undefined') {
         setBadge(data.lesson_completed);
       }
-      // server is source of truth
       if (data.inline_completed !== undefined) {
         cb.checked = !!data.inline_completed;
       }
@@ -195,4 +204,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-

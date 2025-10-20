@@ -149,12 +149,17 @@ def student_courses(request):
     if not is_student:
         return HttpResponseForbidden("Student role required")
 
-    enrollments = (
-        Enrollment.objects.filter(student=user, course__status=Course.STATUS_ACTIVE)
-        .select_related("course", "course__instructor")
-        .prefetch_related("course__lessons")
+    courses = (
+        Course.objects.filter(enrollments__student=user, status=Course.STATUS_ACTIVE)
+        .select_related("instructor")
+        .prefetch_related("lessons")
+        .annotate(
+            lesson_count=Count("lessons", distinct=True),
+            classroom_count=Count("classrooms", distinct=True),
+            student_count=Count("enrollments", distinct=True),
+        )
+        .order_by("title")
     )
-    courses = [e.course for e in enrollments]
     return render(request, "courses/course-student.html", {"courses": courses})
 
 
@@ -300,8 +305,30 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
         except Exception:
             is_student = False
         if is_student and Enrollment.objects.filter(student=user, course=lesson.course).exists():
-            
-            # Prerequisite enforcement via sections removed
+            missing_prereqs = (
+                lesson.prerequisites.exclude(
+                    progress_records__student=user,
+                    progress_records__completed=True,
+                )
+                .order_by("order", "title")
+                .distinct()
+            )
+            if missing_prereqs.exists():
+                def _label(pr):
+                    code = (pr.lesson_code or "").strip()
+                    title = (pr.title or "").strip()
+                    if code and title:
+                        return f"{code} – {title}"
+                    return code or title or "a prerequisite lesson"
+
+                missing_titles = ", ".join(_label(pr) for pr in missing_prereqs)
+                messages.warning(
+                    request,
+                    f"Complete these prerequisite lessons first: {missing_titles}.",
+                )
+                course_preview_url = reverse("student_course_preview", args=[lesson.course_id])
+                redirect_url = f"{course_preview_url}?blocked_lesson={lesson.id}"
+                return redirect(redirect_url)
 
             self.object = lesson
             return super().dispatch(request, *args, **kwargs)
@@ -472,6 +499,11 @@ class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        blocked = self.request.GET.get("blocked_lesson")
+        try:
+            ctx["blocked_lesson_id"] = int(blocked) if blocked is not None else None
+        except (TypeError, ValueError):
+            ctx["blocked_lesson_id"] = None
         course: Course = self.object
         user = self.request.user
 
@@ -590,3 +622,12 @@ def enroll_schedule(request, schedule_id):
         f"You enrolled in {schedule.lesson.title} ({schedule.get_day_display()} - {schedule.classroom.name})."
     )
     return redirect('lesson_detail', pk=schedule.lesson.id)
+
+@login_required
+def unenroll_schedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, id=schedule_id)
+    student = request.user
+    ScheduleEnrollment.objects.filter(student=student, schedule=schedule).delete()
+    messages.success(request, f"You have unenrolled from {schedule.lesson.title}.")
+    return redirect("lesson_detail", pk=schedule.lesson.id)
+

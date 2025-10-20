@@ -9,6 +9,31 @@
     <link rel = "stylesheet" href="style-menu.css">
 </head>
 
+<script src="theme.js"></script>
+
+
+
+<div class="theme-menu-overlay" id="themeMenu">
+    <div class="theme-menu">
+        <h3>Select Theme</h3>
+        <div class="theme-options">
+            <button class="theme-btn light" onclick="setTheme('light')">
+                <i class='bx bx-sun'></i> Light
+            </button>
+
+            <button class="theme-btn blue" onclick="setTheme('blue')">
+                <i class='bx bx-water'></i> Blue
+            </button>
+            <button class="theme-btn sepia" onclick="setTheme('sepia')">
+                <i class='bx bx-book'></i> Sepia
+            </button>
+        </div>
+        <button class="close-theme" onclick="toggleThemeMenu(event)">
+            <i class='bx bx-x'></i> Close
+        </button>
+    </div>
+</div>
+
 <body>
     <nav class ="sidebar">
         <header>
@@ -29,6 +54,7 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
+                    
                     <li class="nav-link">
                         <a href="#">
                             <i class='bx  bx-book-content icon'  ></i>  
@@ -56,6 +82,10 @@
                 </ul>
             </div> 
             <div class="bottom-content">
+                <div class="theme-icon-button" onclick="toggleThemeMenu(event)" title="Change Theme">
+                    <i class='bx bx-palette'></i>
+                </div>
+                
                 <li class="mode">
                     <div class="moon-sun">
                         <i class='bx  bx-moon icon moon'  ></i> 
