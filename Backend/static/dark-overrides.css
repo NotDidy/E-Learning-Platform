@@ -581,3 +581,527 @@ body.dark .manage-classroom-btn {
 body.dark .course-actions .action-button {
     color: #e6e9ff;
 }
+
+
+/* ================================
+   STUDENT PROFILE (Dark Mode - Consistent)
+==================================*/
+
+body.dark .student-profile-header {
+    background: #2b2d3c;
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .student-profile-header::before {
+    background: rgba(105,92,254,0.35);
+}
+
+body.dark .student-title,
+body.dark .student-profile-header .student-title {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .student-icon {
+    background: rgba(105,92,254,0.6);
+    color: #f4f6ff;
+}
+
+body.dark .back-btn,
+body.dark .edit-btn {
+    background: rgba(105,92,254,0.3);
+    color: #e6e9ff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+body.dark .back-btn:hover,
+body.dark .edit-btn:hover {
+    background: rgba(105,92,254,0.45);
+}
+
+body.dark .student-profile-container {
+    background: #2b2d3c;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .profile-header {
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+
+body.dark .profile-avatar {
+    background: #695CFE;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(105,92,254,0.3);
+}
+
+body.dark .profile-basic-info h1,
+body.dark .profile-title,
+body.dark .profile-id {
+    color: rgba(234,236,255,0.85);
+}
+
+body.dark .profile-id {
+    background: rgba(105,92,254,0.24);
+}
+
+body.dark .detail-section,
+body.dark .courses-section {
+    background: rgba(43,45,60,0.85);
+    border-left-color: rgba(105,92,254,0.75);
+    color: rgba(214,218,255,0.82);
+}
+
+body.dark .detail-section h3,
+body.dark .courses-section h3 {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .detail-item i,
+body.dark .courses-section h3 i {
+    color: rgba(149,132,255,0.9);
+}
+
+body.dark .detail-label {
+    color: rgba(214,218,255,0.82);
+}
+
+body.dark .detail-value,
+body.dark .course-code,
+body.dark .course-name,
+body.dark .course-status {
+    color: rgba(234,236,255,0.85);
+}
+
+body.dark .course-item {
+    background: rgba(43,45,60,0.85);
+    border-left-color: rgba(105,92,254,0.75);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    color: rgba(214,218,255,0.82);
+}
+
+body.dark .course-item:hover {
+    background: rgba(105,92,254,0.18);
+}
+
+body.dark .profile-status {
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .status-info,
+body.dark .status-item,
+body.dark .status-select {
+    color: rgba(214,218,255,0.82);
+}
+
+body.dark .status-item i {
+    color: rgba(149,132,255,0.9);
+}
+
+body.dark .student-status.status-active {
+    background: rgba(129,199,132,0.28);
+    color: #c8f7ce;
+}
+
+body.dark .student-status.status-inactive {
+    background: rgba(255,196,122,0.38);
+    color: #ffd180;
+}
+
+/* ================================
+   INSTRUCTOR REPORT (Dark Mode)
+==================================*/
+
+body.dark {
+  background: #2b2d3c;
+  color: rgba(214,218,255,0.82);
+  font-family: "Poppins", sans-serif;
+}
+
+body.dark .header {
+  background: rgba(43,45,60,0.95);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  border-bottom: 3px solid rgba(105,92,254,0.5);
+}
+
+body.dark .header .logo {
+  color: #695CFE;
+}
+
+body.dark .user-avatar {
+  background: rgba(105,92,254,0.6);
+  color: #f4f6ff;
+}
+
+body.dark .page-title h1 {
+  color: rgba(234,236,255,0.88);
+}
+
+body.dark .progress-overview {
+  gap: 20px;
+  padding: 24px 32px;
+  flex-wrap: wrap;
+}
+
+body.dark .progress-card {
+  background: rgba(43,45,60,0.85);
+  color: rgba(214,218,255,0.82);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .progress-card h3 {
+  color: rgba(234,236,255,0.88);
+}
+
+body.dark .progress-card .number,
+body.dark .progress-card .percentage {
+  color: #695CFE;
+}
+
+body.dark .card {
+  background: rgba(43,45,60,0.85);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .card-header {
+  background: rgba(105,92,254,0.6);
+  color: #f4f6ff;
+}
+
+body.dark .card-header h2 {
+  color: #f4f6ff;
+}
+
+body.dark .lessons-table {
+  background: rgba(43,45,60,0.85);
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .lessons-table th {
+  background: rgba(105,92,254,0.2);
+  color: #e6e9ff;
+}
+
+body.dark .lessons-table td {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .lessons-table tr:hover td {
+  background: rgba(105,92,254,0.18);
+}
+
+body.dark .student-cell {
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .student-avatar {
+  background: rgba(105,92,254,0.45);
+  color: #f4f6ff;
+}
+
+body.dark .progress-bar {
+  background: rgba(255,255,255,0.1);
+}
+
+body.dark .progress-fill {
+  background: #695CFE;
+}
+
+body.dark .progress-label {
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .view-btn {
+  background: rgba(105,92,254,0.3);
+  color: #e6e9ff;
+}
+
+body.dark .view-btn:hover {
+  background: rgba(105,92,254,0.45);
+}
+
+body.dark .no-data {
+  color: rgba(214,218,255,0.72);
+}
+
+/* ================================
+   STUDENT REPORT DARK MODE
+==================================*/
+
+body.dark {
+    background: #2b2d3c;
+    color: rgba(214,218,255,0.85);
+}
+
+body.dark .header {
+    background: rgba(43,45,60,0.95);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    border-radius: 12px;
+}
+
+body.dark .logo {
+    color: #695CFE;
+}
+
+body.dark .user-avatar,
+body.dark .student-avatar-large {
+    background: rgba(105,92,254,0.6);
+    color: #f4f6ff;
+}
+
+body.dark .page-title h1 {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .card {
+    background: rgba(43,45,60,0.85);
+    color: rgba(214,218,255,0.82);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .card-header h2 {
+    color: #695CFE;
+}
+
+body.dark .back-btn {
+    background-color: rgba(105,92,254,0.3);
+    color: #e6e9ff;
+}
+
+body.dark .back-btn:hover {
+    background-color: rgba(105,92,254,0.45);
+}
+
+body.dark .student-info {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .student-info h2 {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .student-id {
+    color: #695CFE;
+}
+
+body.dark .student-email {
+    color: rgba(180,185,255,0.7);
+}
+
+body.dark .progress-overview {
+    gap: 20px;
+}
+
+body.dark .progress-card {
+    background: rgba(43,45,60,0.85);
+    color: rgba(214,218,255,0.82);
+    border-left: 4px solid #695CFE;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .progress-card h3 {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .progress-card .number,
+body.dark .progress-card .percentage {
+    color: #695CFE;
+}
+
+body.dark .progress-bar {
+    background: rgba(255,255,255,0.1);
+}
+
+body.dark .progress-fill {
+    background-color: #695CFE;
+}
+
+body.dark .section h2 {
+    color: #695CFE;
+}
+
+body.dark .lesson-item {
+    color: rgba(214,218,255,0.82);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .lesson-item:hover {
+    background-color: rgba(105,92,254,0.18);
+}
+
+body.dark .lesson-date {
+    color: rgba(180,185,255,0.7);
+}
+
+body.dark .status-tag.success {
+    background-color: rgba(129,199,132,0.28);
+    color: #c8f7ce;
+}
+
+body.dark .status-tag.warning {
+    background-color: rgba(255,196,122,0.38);
+    color: #ffd180;
+}
+
+body.dark .no-data {
+    color: rgba(214,218,255,0.72);
+}
+
+body.dark .meta {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(214,218,255,0.78);
+}
+
+body.dark .meta i {
+    color: #695CFE;
+}
+
+/* Responsive adjustments are kept as-is */
+
+/* ===============================
+   STUDENT OVERALL PROGRESS DARK MODE
+==================================*/
+
+body.dark {
+    background: #2b2d3c;
+    color: rgba(214,218,255,0.85);
+}
+
+body.dark .page-header,
+body.dark .main-container {
+    background: rgba(43,45,60,0.85);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    color: rgba(214,218,255,0.85);
+}
+
+body.dark .page-title {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .title-icon {
+    background: #695CFE;
+}
+
+body.dark .student-info-badge {
+    background: rgba(64,66,85,0.6);
+}
+
+body.dark .student-info-badge .avatar {
+    background: #695CFE;
+    color: #f4f6ff;
+}
+
+body.dark .stat-card {
+    background: rgba(64,66,85,0.85);
+    color: white;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .stat-card.orange {
+    background: #ff9800;
+    box-shadow: 0 8px 20px rgba(255, 138, 101, 0.3);
+}
+
+body.dark .stat-card.green {
+    background: #36973b;
+    box-shadow: 0 8px 20px rgba(54, 151, 59, 0.3);
+}
+
+body.dark .stat-card.pink {
+    background: #f093fb;
+    box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);
+}
+
+body.dark .stat-card h3,
+body.dark .stat-card .label {
+    color: rgba(214,218,255,0.85);
+}
+
+body.dark .progress-ring-circle-bg {
+    stroke: rgba(255,255,255,0.2);
+}
+
+body.dark .progress-ring-circle {
+    stroke: #695CFE;
+}
+
+body.dark .progress-value {
+    color: #ffffff;
+}
+
+body.dark .section-header h2 {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .section-header h2 i {
+    color: #695CFE;
+}
+
+body.dark .course-card {
+    background: rgba(43,45,60,0.85);
+    color: rgba(214,218,255,0.85);
+    border-left: 5px solid #695CFE;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+body.dark .course-card:hover {
+    background: rgba(64,66,85,0.95);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+body.dark .course-id,
+body.dark .course-status {
+    color: #fff;
+}
+
+body.dark .status-in-progress {
+    background: rgba(255,196,122,0.3);
+    color: #ffd180;
+}
+
+body.dark .status-completed {
+    background: rgba(54,151,59,0.3);
+    color: #c8f7ce;
+}
+
+body.dark .course-name,
+body.dark .stat-value {
+    color: rgba(234,236,255,0.88);
+}
+
+body.dark .progress-bar {
+    background: rgba(255,255,255,0.1);
+}
+
+body.dark .progress-bar-fill {
+    background: #695CFE;
+}
+
+body.dark .view-details {
+    background: #695CFE;
+    color: #fff;
+}
+
+body.dark .view-details:hover {
+    background: #5649d9;
+    transform: scale(1.02);
+}
+
+body.dark .completion-estimate {
+    background: #695CFE;
+}
+
+body.dark .completion-estimate h3,
+body.dark .estimate-item .value,
+body.dark .estimate-item .label {
+    color: #fff;
+}
+
+body.dark .last-updated {
+    color: rgba(214,218,255,0.7);
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .last-updated i {
+    color: #695CFE;
+}
