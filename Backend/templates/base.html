@@ -95,12 +95,9 @@
             </div>
 
             <div class="bottom-content">
-                {# Show "Change Theme" only for students per acceptance criteria #}
-                {% if request.user.role == 'STUDENT' %}
                 <div class="theme-icon-button" onclick="toggleThemeMenu(event)" title="Change Theme" aria-label="Change Theme">
                     <i class='bx bx-palette'></i>
                 </div>
-                {% endif %}
 
                 <li class="mode">
                     <div class="moon-sun">
