@@ -60,7 +60,7 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href= "{% url 'classrooms' %}">
+                        <a href="{% url 'classrooms' %}">
                             <i class='bx bx-calendar-week icon'></i>
                             <span class="text nav-text">Classrooms</span>
                         </a>
@@ -93,13 +93,21 @@
                     {% endblock %}
                 </ul>
             </div>
+
             <div class="bottom-content">
+                {# Show "Change Theme" only for students per acceptance criteria #}
+                {% if request.user.role == 'STUDENT' %}
+                <div class="theme-icon-button" onclick="toggleThemeMenu(event)" title="Change Theme" aria-label="Change Theme">
+                    <i class='bx bx-palette'></i>
+                </div>
+                {% endif %}
+
                 <li class="mode">
                     <div class="moon-sun">
-                        <i class='bx  bx-moon icon moon'  ></i> 
-                        <i class='bx  bx-sun icon sun'  ></i> 
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
                     </div>
-                    <span class="mode-text text"></span> 
+                    <span class="mode-text text"></span>
 
                     <div class="toggle-switch" onclick="toggleDarkMode()">
                         <span class="dm-switch"></span>
@@ -119,7 +127,29 @@
         {% block content %}{% endblock %}
     </section>
 
+    {# Theme selection overlay (loaded once for all pages) #}
+    <div class="theme-menu-overlay" id="themeMenu">
+        <div class="theme-menu">
+            <h3>Select Theme</h3>
+            <div class="theme-options">
+                <button class="theme-btn light" onclick="setTheme('light')">
+                    <i class='bx bx-sun'></i> Light
+                </button>
+                <button class="theme-btn blue" onclick="setTheme('blue')">
+                    <i class='bx bx-water'></i> Blue
+                </button>
+                <button class="theme-btn sepia" onclick="setTheme('sepia')">
+                    <i class='bx bx-book'></i> Sepia
+                </button>
+            </div>
+            <button class="close-theme" onclick="toggleThemeMenu(event)">
+                <i class='bx bx-x'></i> Close
+            </button>
+        </div>
+    </div>
+
     <script src="{% static 'accounts/darkmode.js' %}" defer></script>
+    <script src="{% static 'accounts/theme.js' %}" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
