@@ -42,13 +42,18 @@
         <ul class="lessons-list">
             {% for lesson in lessons %}
             <li class="lesson-item">
-                <div class="lesson-info">
-                    <div class="lesson-id">{{ lesson.lesson_code }}</div>
-                    <div class="lesson-name">{{ lesson.title }}</div>
-                </div>
-                    <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
-                <i class='bx bx-chevron-right'></i>
-            </a>
+                <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
+                    <div class="lesson-info">
+                        <div class="lesson-id">{{ lesson.lesson_code }}</div>
+                        <div class="lesson-name">{{ lesson.title }}</div>
+                    </div>
+                    <i class='bx bx-chevron-right'></i>
+                </a>
+                {% if blocked_lesson_id and lesson.id == blocked_lesson_id %}
+                {% for message in messages %}
+                <div class="lesson-alert {{ message.tags|default:'info' }}">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
             </li>
             {% empty %}
             <p>No lessons available yet.</p>

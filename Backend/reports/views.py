@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum, F, Q
+from django.db.models import Sum, Prefetch
 from django.db.models.functions import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 
 from accounts.models import User
+from classrooms.models import Schedule
 from courses.models import Course, Enrollment, LessonProgress, CreditTransaction
 
 @login_required
@@ -100,13 +102,40 @@ def student_course_report(request, course_id: int, student_id: int):
     # Ensure the student is enrolled
     enrollment = get_object_or_404(Enrollment, course=course, student=student)
 
+    origin = request.GET.get("origin")
+    back_link = None
+    if is_instructor:
+        if origin == "course_detail":
+            back_link = {
+                "url": reverse("course_detail", args=[course.id]),
+                "label": "Back to Course Details",
+            }
+        else:
+            back_link = {
+                "url": reverse("reports:instructor_report_list"),
+                "label": "Back to Reports",
+            }
+    elif is_student:
+        back_link = {
+            "url": reverse("student_overall_report"),
+            "label": "Back to My overall report",
+        }
+
     # Query data
-    classrooms = (
+    enrolled_classrooms_qs = (
         course.classrooms.select_related("supervisor")
-        .prefetch_related("schedules")
-        .annotate(schedule_count=Count("schedules", distinct=True))
+        .filter(schedules__enrollments__student=student)
+        .prefetch_related(
+            Prefetch(
+                "schedules",
+                queryset=Schedule.objects.filter(enrollments__student=student).order_by("day", "start_time"),
+                to_attr="enrolled_schedules",
+            )
+        )
         .order_by("name")
+        .distinct()
     )
+    enrolled_classrooms = list(enrolled_classrooms_qs)
 
     completed_lessons_qs = (
         LessonProgress.objects.filter(
@@ -143,10 +172,10 @@ def student_course_report(request, course_id: int, student_id: int):
     ]
 
     classroom_cards = []
-    for classroom in classrooms:
+    for classroom in enrolled_classrooms:
         schedules = [
             f"{s.get_day_display()[:3]} {s.start_time.strftime('%H:%M')} - {s.end_time.strftime('%H:%M')}"
-            for s in classroom.schedules.all()
+            for s in getattr(classroom, "enrolled_schedules", [])
         ]
         schedule_label = schedules[0] if schedules else "Schedule not set"
         if len(schedules) > 1:
@@ -164,7 +193,7 @@ def student_course_report(request, course_id: int, student_id: int):
         "lessons_total": lessons_total,
         "completed_lessons": completed_lessons_count,
         "completion_percent": completion_percent,
-        "active_classrooms": classrooms.count(),
+        "enrolled_classrooms": len(enrolled_classrooms),
         "students_total": course.enrollments.count(),
         "credits_earned": credits_total,
         "remaining_lessons": max(lessons_total - completed_lessons_count, 0),
@@ -176,11 +205,12 @@ def student_course_report(request, course_id: int, student_id: int):
         "course": course,
         "student": student,
         "enrollment": enrollment,
-        "classrooms": classrooms,
+        "classrooms": enrolled_classrooms,
         "progress_available": lessons_total > 0,
         "progress": progress,
         "completed_lessons": completed_lessons,
         "classroom_cards": classroom_cards,
+        "back_link": back_link,
     }
 
     return render(request, "reports/student_report.html", context)

@@ -55,6 +55,19 @@ body {
     font-size: 30px;
 }
 
+.item .logo-link {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.item .logo-link:hover {
+    opacity: 0.85;
+}
+
 .text-item h2 {
     font-size: 40px;
     line-height: 1;
@@ -173,7 +186,7 @@ body {
 }
 
 .remember-password a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .btn {
@@ -203,8 +216,8 @@ body {
 }
 
 .create-account p a:hover{
-    text-decoration: underline;
-} 
+    text-decoration: none;
+}
 
 .auto-fields {
     margin: 20px 0;

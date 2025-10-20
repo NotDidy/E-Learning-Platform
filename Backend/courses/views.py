@@ -305,8 +305,30 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
         except Exception:
             is_student = False
         if is_student and Enrollment.objects.filter(student=user, course=lesson.course).exists():
-            
-            # Prerequisite enforcement via sections removed
+            missing_prereqs = (
+                lesson.prerequisites.exclude(
+                    progress_records__student=user,
+                    progress_records__completed=True,
+                )
+                .order_by("order", "title")
+                .distinct()
+            )
+            if missing_prereqs.exists():
+                def _label(pr):
+                    code = (pr.lesson_code or "").strip()
+                    title = (pr.title or "").strip()
+                    if code and title:
+                        return f"{code} – {title}"
+                    return code or title or "a prerequisite lesson"
+
+                missing_titles = ", ".join(_label(pr) for pr in missing_prereqs)
+                messages.warning(
+                    request,
+                    f"Complete these prerequisite lessons first: {missing_titles}.",
+                )
+                course_preview_url = reverse("student_course_preview", args=[lesson.course_id])
+                redirect_url = f"{course_preview_url}?blocked_lesson={lesson.id}"
+                return redirect(redirect_url)
 
             self.object = lesson
             return super().dispatch(request, *args, **kwargs)
@@ -477,6 +499,11 @@ class CoursePreviewStudentView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        blocked = self.request.GET.get("blocked_lesson")
+        try:
+            ctx["blocked_lesson_id"] = int(blocked) if blocked is not None else None
+        except (TypeError, ValueError):
+            ctx["blocked_lesson_id"] = None
         course: Course = self.object
         user = self.request.user
 

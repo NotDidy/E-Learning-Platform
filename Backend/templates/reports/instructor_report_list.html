@@ -57,7 +57,7 @@
             <tr>
                 <th>Student</th>
                 <th>Email</th>
-                <th>Progress</th>
+                <th>Overall Progress</th>
                 <th>Credits</th>
                 <th>Action</th>
             </tr>
@@ -76,7 +76,7 @@
                 </td>
                 <td>{{ s.credits }}/120</td>
                 <td>
-                    <a class="view-btn" href="{% url 'reports:student_course_report' report.course.id s.id %}">
+                    <a class="view-btn" href="{% url 'reports:student_course_report' report.course.id s.id %}?origin=instructor_reports">
                         <i class="bx bx-show"></i> View
                     </a>
                 </td>

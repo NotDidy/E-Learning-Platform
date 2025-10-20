@@ -38,13 +38,9 @@
     <!-- Back Button -->
     <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
         <h2><i class="bx bx-chart"></i> {{ student.get_full_name|default:student.email }}</h2>
-        {% if request.user.role == 'INSTRUCTOR' %}
-        <a class="back-btn" href="{% url 'reports:instructor_report_list' %}">
-            <i class="bx bx-left-arrow-alt"></i> Back to Reports
-        </a>
-        {% else %}
-        <a class="back-btn" href="{% url 'student_overall_report' %}">
-            <i class="bx bx-left-arrow-alt"></i> Back to My overall report
+        {% if back_link %}
+        <a class="back-btn" href="{{ back_link.url }}">
+            <i class="bx bx-left-arrow-alt"></i> {{ back_link.label }}
         </a>
         {% endif %}
     </div>
@@ -73,15 +69,15 @@
             </div>
         </div>
         <div class="progress-card">
-            <h3><i class="bx bx-pie-chart-alt-2"></i> Overall Progress</h3>
+            <h3><i class="bx bx-pie-chart-alt-2"></i> Course Progress</h3>
             <div class="percentage">{{ progress.overall_percent|default:0 }}%</div>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: {{ progress.overall_percent|default:0 }}%"></div>
             </div>
         </div>
         <div class="progress-card">
-            <h3><i class="bx bx-buildings"></i> Active Classrooms</h3>
-            <div class="number">{{ progress.active_classrooms }}</div>
+            <h3><i class="bx bx-buildings"></i> Enrolled Classrooms</h3>
+            <div class="number">{{ progress.enrolled_classrooms }}</div>
         </div>
     </div>
 
@@ -105,21 +101,21 @@
 
     <!-- Classrooms Section -->
     <div class="section">
-        <h2><i class="bx bx-buildings"></i> Active Classrooms ({{ classroom_cards|length }})</h2>
+        <h2><i class="bx bx-buildings"></i> Enrolled Classrooms ({{ classroom_cards|length }})</h2>
         <ul class="lesson-list">
             {% for classroom in classroom_cards %}
             <li class="lesson-item">
                 <div>
                     <strong>{{ classroom.code|default:"-" }}</strong> - {{ classroom.name }}
                     <div class="lesson-date">
-                        {{ classroom.schedule }} • Supervisor:
+                        {{ classroom.schedule }} &bull; Supervisor:
                         {{ classroom.supervisor.get_full_name|default:classroom.supervisor.email|default:"Unassigned" }}
                     </div>
                 </div>
-                <span class="status-tag warning"><i class="bx bx-time-five"></i> Active</span>
+                <span class="status-tag warning"><i class="bx bx-time-five"></i> Enrolled</span>
             </li>
             {% empty %}
-            <li class="no-data"><i class="bx bx-info-circle"></i> No classrooms available for this course.</li>
+            <li class="no-data"><i class="bx bx-info-circle"></i> You are not enrolled in any classrooms for this course.</li>
             {% endfor %}
         </ul>
     </div>
