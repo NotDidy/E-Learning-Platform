@@ -16,8 +16,8 @@
             Course Details
         </div>
         <div class="header-actions">
-            <a class="back-btn" href="{% url 'student_courses' %}">
-                <i class='bx bx-left-arrow-alt'></i> Back to Courses
+            <a class="back-btn" href="{% url 'available_courses' %}">
+                <i class='bx bx-left-arrow-alt'></i> Back to Available Courses
             </a>
         </div>
     </div>
@@ -42,7 +42,7 @@
         <ul class="lessons-list">
             {% for lesson in lessons %}
             <li class="lesson-item">
-                <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
+                <a href="#" class="lesson-link">
                     <div class="lesson-info">
                         <div class="lesson-id">{{ lesson.lesson_code }}</div>
                         <div class="lesson-name">{{ lesson.title }}</div>

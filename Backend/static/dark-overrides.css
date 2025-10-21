@@ -729,6 +729,12 @@ body.dark {
   font-family: "Poppins", sans-serif;
 }
 
+body.dark .report-header-card{ 
+    background: rgba(43,45,60,0.95);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    border-bottom: 3px solid rgba(105,92,254,0.5);
+}
+
 body.dark .header {
   background: rgba(43,45,60,0.95);
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
@@ -851,6 +857,12 @@ body.dark .header {
     border-radius: 12px;
 }
 
+body.dark .report-header-card {
+    background: rgba(43,45,60,0.95) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35) !important;
+    border-bottom: 3px solid rgba(105,92,254,0.5) !important;
+}
+
 body.dark .logo {
     color: #695CFE;
 }
@@ -871,8 +883,8 @@ body.dark .card {
     box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
-body.dark .card-header h2 {
-    color: #695CFE;
+body.dark .card-header {
+    background: rgba(43,45,60,0.95) !important;
 }
 
 body.dark .back-btn {
