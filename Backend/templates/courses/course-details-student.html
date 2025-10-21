@@ -42,7 +42,7 @@
         <ul class="lessons-list">
             {% for lesson in lessons %}
             <li class="lesson-item">
-                <a href="#" class="lesson-link">
+                <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
                     <div class="lesson-info">
                         <div class="lesson-id">{{ lesson.lesson_code }}</div>
                         <div class="lesson-name">{{ lesson.title }}</div>
