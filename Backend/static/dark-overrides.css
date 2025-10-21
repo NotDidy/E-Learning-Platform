@@ -756,7 +756,7 @@ body.dark .page-title h1 {
 
 body.dark .progress-overview {
   gap: 20px;
-  padding: 24px 32px;
+  padding: 24px 0;
   flex-wrap: wrap;
 }
 
@@ -773,6 +773,26 @@ body.dark .progress-card h3 {
 body.dark .progress-card .number,
 body.dark .progress-card .percentage {
   color: #695CFE;
+}
+
+body.dark .report-view-toolbar {
+  padding: 0 0 10px;
+}
+
+body.dark .report-view-toggle {
+  background: rgba(43, 45, 60, 0.85);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark .toggle-btn {
+  color: rgba(234, 236, 255, 0.78);
+}
+
+body.dark .toggle-btn.active {
+  background: linear-gradient(135deg, rgba(105, 92, 254, 0.9) 0%, rgba(240, 123, 36, 0.9) 100%);
+  color: #f4f6ff;
+  box-shadow: 0 8px 20px rgba(105, 92, 254, 0.35);
 }
 
 body.dark .card {
@@ -817,6 +837,12 @@ body.dark .student-avatar {
   color: #f4f6ff;
 }
 
+body.dark .report-view-section .student-avatar {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f4f6ff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
 body.dark .progress-bar {
   background: rgba(255,255,255,0.1);
 }
@@ -827,6 +853,41 @@ body.dark .progress-fill {
 
 body.dark .progress-label {
   color: rgba(214,218,255,0.82);
+}
+
+body.dark .students-flat-table {
+  background: rgba(43,45,60,0.85);
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .students-flat-table th {
+  background: rgba(105,92,254,0.2);
+  color: #e6e9ff;
+}
+
+body.dark .students-flat-table td {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .students-flat-table tr:hover td {
+  background: rgba(105,92,254,0.18);
+}
+
+body.dark .courses-chip-list {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 6px;
+  gap: 8px;
+}
+
+body.dark .course-chip {
+  background: rgba(105,92,254,0.28);
+  color: #e6e9ff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .muted {
+  color: rgba(214,218,255,0.6);
 }
 
 body.dark .view-btn {
