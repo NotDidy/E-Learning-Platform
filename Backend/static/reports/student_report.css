@@ -3,7 +3,8 @@
 :root {
   --body-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
   --sidebar-color: #FFF;
-  --primary-color: #f07b24; /* solid orange to match instructor report */
+  --primary-color: #f07b24;
+  --secondary-color: #2b2b2b;
   --primary-color-light: #FFF3E0;
   --toggle-color: #DDD;
   --text-color: #333;
@@ -119,7 +120,7 @@ body {
 .page-title h1 {
   font-size: 24px;
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--secondary-color);
 }
 
 /* ---------------- MAIN CARD ---------------- */
