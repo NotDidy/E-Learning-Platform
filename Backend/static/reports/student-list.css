@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #ff9800;
+  --primary-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+  --text-color: #333;
+  --light-bg: #fff;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --border-color: #eee;
+}
+
+/* ====== Header Section ====== */
+.students-header {
+  background: var(--light-bg);
+  margin: 20px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.students-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--primary-gradient);
+}
+
+.students-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.students-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.students-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+}
+
+/* ====== Student Table ====== */
+.students-container {
+  margin: 20px;
+  background: var(--light-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 25px;
+  overflow-x: auto;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.students-table thead {
+  background: var(--primary-gradient);
+  color: white;
+  text-align: left;
+}
+
+.students-table th,
+.students-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.students-table th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.students-table th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.students-table body tr:hover {
+  background-color: #fff8f0;
+}
+
+.no-data {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+/* ====== Buttons ====== */
+.view-btn {
+  background: var(--primary-gradient);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .students-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .students-title {
+    font-size: 22px;
+  }
+
+  .students-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .students-table th, .students-table td {
+    padding: 10px;
+  }
+}
