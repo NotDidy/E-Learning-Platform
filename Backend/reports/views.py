@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Prefetch
+from django.db.models import Sum, Prefetch, Q
 from django.db.models.functions import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
@@ -229,13 +229,43 @@ def instructor_student_list(request):
     if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
         return HttpResponseForbidden("Instructor role required")
 
-    # Get all students under instructor’s courses
+    courses = Course.objects.filter(instructor=user).order_by("title")
+    search_query = request.GET.get("q", "").strip()
+    selected_course = request.GET.get("course", "").strip()
+
     students = User.objects.filter(
         enrollments__course__instructor=user,
-        role=User.Roles.STUDENT
+        role=User.Roles.STUDENT,
     ).distinct()
 
-    context = {"students": students}
+    course_id: int | None = None
+    if selected_course:
+        try:
+            course_id = int(selected_course)
+        except (TypeError, ValueError):
+            course_id = None
+        if course_id and courses.filter(id=course_id).exists():
+            students = students.filter(enrollments__course_id=course_id)
+        else:
+            selected_course = ""
+
+    if search_query:
+        students = students.filter(
+            Q(first_name__icontains=search_query)
+            | Q(last_name__icontains=search_query)
+            | Q(username__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(student_id__icontains=search_query)
+        )
+
+    students = students.order_by("first_name", "last_name", "email").distinct()
+
+    context = {
+        "students": students,
+        "courses": courses,
+        "search_query": search_query,
+        "selected_course": selected_course,
+    }
     return render(request, "reports/instructor_student_list.html", context)
 
 @login_required

@@ -14,6 +14,25 @@
     </div>
 </div>
 
+<div class="students-actions">
+    <form method="get" class="students-filters">
+        <div class="search-box">
+            <i class='bx bx-search'></i>
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Search students..." aria-label="Search students">
+        </div>
+        <div class="filter-select-wrapper">
+            <label for="course-filter" class="visually-hidden">Filter by course</label>
+            <select id="course-filter" name="course" class="filter-select" aria-label="Filter by course">
+                <option value="">All courses</option>
+                {% for course in courses %}
+                <option value="{{ course.id }}" {% if course.id|stringformat:"s" == selected_course %}selected{% endif %}>{{ course.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="filter-apply-btn">Apply</button>
+    </form>
+</div>
+
 <div class="students-container">
     {% if students %}
     <table class="students-table">
