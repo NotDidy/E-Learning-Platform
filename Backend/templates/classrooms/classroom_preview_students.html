@@ -45,8 +45,15 @@
       </div>
       <div class="detail-row">
         <span class="detail-label"><i class="bx bx-list-ul"></i> Course:</span>
-        <span class="detail-value">{{ c.course.course_code }} – {{ c.course.title }}</span>
+        <span class="detail-value">{{ c.course.course_code }} - {{ c.course.title }}</span>
       </div>
+      {% if c.meeting_link %}
+      <div class="detail-row">
+        <span class="detail-label"><i class="bx bx-video"></i> Meeting Link:</span>
+        <span class="detail-value"><a href="{{ c.meeting_link }}" target="_blank" rel="noopener">Join meeting</a></span>
+      </div>
+      {% endif %}
+    </div>
     </div>
 
     <div class="course-actions">
@@ -76,8 +83,15 @@
       <div class="list-detail-item">
         <i class="bx bx-list-ul"></i>
         <span class="list-detail-label">Course:</span>
-        <span class="list-detail-value">{{ c.course.course_code }} – {{ c.course.title }}</span>
+        <span class="list-detail-value">{{ c.course.course_code }} - {{ c.course.title }}</span>
       </div>
+      {% if c.meeting_link %}
+      <div class="list-detail-item">
+        <i class="bx bx-video"></i>
+        <span class="list-detail-label">Meeting Link:</span>
+        <span class="list-detail-value"><a href="{{ c.meeting_link }}" target="_blank" rel="noopener">Join meeting</a></span>
+      </div>
+      {% endif %}
     </div>
     <div class="list-classroom-actions">
       <a class="action-button view-details-btn" href="{% url 'classroom_preview' c.id %}">

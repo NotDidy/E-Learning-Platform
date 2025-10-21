@@ -186,6 +186,22 @@ body {
   color: var(--black-color);
 }
 
+.info-item a,
+.detail-value a,
+.list-detail-value a,
+.meeting-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.info-item a:hover,
+.detail-value a:hover,
+.list-detail-value a:hover,
+.meeting-link:hover {
+  text-decoration: underline;
+}
+
 .info-item.warning {
   background-color: #fff3cd;
   border-left-color: var(--warning-color);

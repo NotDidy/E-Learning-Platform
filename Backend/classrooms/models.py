@@ -17,6 +17,7 @@ class Classroom(models.Model):
     supervisor = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,limit_choices_to={"role": "INSTRUCTOR"}, related_name="supervised_classrooms")
     duration_weeks = models.PositiveIntegerField(choices=DURATION_CHOICES)
     description = models.TextField(blank=True, null=True)
+    meeting_link = models.URLField(blank=True, null=True, help_text="Optional link for online meetings")
     class_code = models.CharField(max_length=50, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
