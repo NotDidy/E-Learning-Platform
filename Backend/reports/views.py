@@ -28,6 +28,16 @@ def instructor_report_list(request):
     total_progress_sum = 0
     total_students_count = 0
 
+    student_ids = set(
+        Enrollment.objects.filter(course__in=courses).values_list("student_id", flat=True)
+    )
+    student_credit_totals = {
+        row["student"]: row["total"] or 0
+        for row in CreditTransaction.objects.filter(student_id__in=student_ids)
+        .values("student")
+        .annotate(total=Sum("credits"))
+    }
+
     for course in courses:
         students = []
         enrollments = Enrollment.objects.filter(course=course).select_related("student")
@@ -35,16 +45,13 @@ def instructor_report_list(request):
         for enrollment in enrollments:
             student = enrollment.student
 
-            # Total credits earned by this student (sum across all lessons)
-            total_credits = (
-                CreditTransaction.objects.filter(student=student)
-                .aggregate(total=Sum("credits"))["total"] or 0
-            )
+            total_credits = student_credit_totals.get(student.id, 0)
 
             # Compute overall progress out of 120 credits
             progress_percent = round((total_credits / 120) * 100, 1)
-            total_progress_sum += progress_percent
-            total_students_count += 1
+            if student.id not in all_students:
+                total_progress_sum += progress_percent
+                total_students_count += 1
 
             students.append({
                 "id": student.id,
@@ -62,6 +69,7 @@ def instructor_report_list(request):
         })
 
     avg_progress = round(total_progress_sum / total_students_count, 1) if total_students_count else 0
+    avg_progress = max(0.0, min(avg_progress, 100.0))
 
     context = {
         "course_reports": course_reports,

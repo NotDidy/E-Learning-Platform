@@ -35,6 +35,9 @@ class User(AbstractUser):
             self.email = self.email.strip().lower()
             self.username = self.email
 
+        if self.is_superuser or self.is_staff:
+            self.role = self.Roles.ADMIN
+
         if self.role == self.Roles.STUDENT and not self.student_id:
             self.student_id = self._generate_student_id()
 

@@ -188,6 +188,28 @@ body {
   background: #fff9f5;
 }
 
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #ececec;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #7157f8 0%, #f07b24 100%);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
 /* ---------------- BUTTON ---------------- */
 .view-btn {
   background: #7157f8;
