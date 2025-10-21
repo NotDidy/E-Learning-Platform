@@ -17,6 +17,7 @@
     --black-color: #0a0909;
     --shadow: 0 4px 20px rgba(0,0,0,0.1);
     --orange-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+    --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
     --tran-03: all 0.3s ease;
 }
 
@@ -43,7 +44,7 @@ body {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .courses-title-section {
@@ -67,7 +68,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 12px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +116,7 @@ body {
 }
 
 .create-classroom-btn {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 12px 24px;
     border: none;
@@ -165,7 +166,7 @@ body {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .course-card-header {
@@ -262,7 +263,7 @@ body {
 }
 
 .manage-classroom-btn {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     border: none;
 }
@@ -317,7 +318,7 @@ body {
     left: 0;
     bottom: 0;
     width: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .list-classroom-id {
