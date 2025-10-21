@@ -581,12 +581,20 @@ def toggle_lesson_progress(request, lesson_id):
         lp.save(update_fields=["completed", "updated_at"])
 
     credits_awarded_now = 0
-    if all_done and not previously_completed:
+    if all_done:
         txn, created = CreditTransaction.objects.get_or_create(
             student=user, lesson=lesson, defaults={"credits": lesson.credit_points}
         )
         if created:
             credits_awarded_now = lesson.credit_points
+        elif txn.credits != lesson.credit_points:
+            txn.credits = lesson.credit_points
+            txn.save(update_fields=["credits"])
+    elif previously_completed:
+        CreditTransaction.objects.filter(student=user, lesson=lesson).delete()
+
+    student_total_credits = CreditTransaction.objects.filter(student=user).aggregate(total=Sum("credits"))["total"] or 0
+    course_total_credits = CreditTransaction.objects.filter(student=user, lesson__course=lesson.course).aggregate(total=Sum("credits"))["total"] or 0
 
     # Course-level completion (unchanged logic, if you show it)
     total_lessons = lesson.course.lessons.count() or 0
@@ -605,6 +613,8 @@ def toggle_lesson_progress(request, lesson_id):
         "course_total_lessons": total_lessons,
         "percent_course_complete": course_percent,
         "credits_awarded_now": credits_awarded_now,
+        "student_total_credits": student_total_credits,
+        "course_total_credits": course_total_credits,
         "counts": {
             "total": total_items,
             "completed": completed_items,

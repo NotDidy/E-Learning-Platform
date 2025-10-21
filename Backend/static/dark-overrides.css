@@ -1117,3 +1117,76 @@ body.dark .last-updated {
 body.dark .last-updated i {
     color: #695CFE;
 }
+
+/* ================================
+   STUDENTS LIST (Dark Mode)
+==================================*/
+
+body.dark .students-header {
+  background: #2b2d3c;
+  color: rgba(234, 236, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .students-header::before {
+  background: rgba(105, 92, 254, 0.35);
+}
+
+body.dark .students-title {
+  color: rgba(234, 236, 255, 0.88);
+}
+
+body.dark .students-icon {
+  background: rgba(105, 92, 254, 0.6);
+  color: #f4f6ff;
+}
+
+/* ====== Table ====== */
+body.dark .students-container {
+  background: #2b2d3c;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .students-table thead {
+  background: rgba(105, 92, 254, 0.75);
+  color: #fff;
+}
+
+body.dark .students-table th,
+body.dark .students-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .students-table tr:hover {
+  background: rgba(105, 92, 254, 0.18);
+}
+
+/* ====== No Data Text ====== */
+body.dark .no-data {
+  color: rgba(214, 218, 255, 0.7);
+}
+
+/* ====== Buttons ====== */
+body.dark .view-btn {
+  background: rgba(105, 92, 254, 0.4);
+  color: #e6e9ff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .view-btn:hover {
+  background: rgba(105, 92, 254, 0.55);
+  box-shadow: 0 6px 20px rgba(105, 92, 254, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ====== Responsive Fix ====== */
+@media (max-width: 768px) {
+  body.dark .students-container {
+    background: #2b2d3c;
+  }
+
+  body.dark .students-title {
+    color: rgba(234, 236, 255, 0.9);
+  }
+}
