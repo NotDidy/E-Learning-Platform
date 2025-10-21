@@ -38,12 +38,12 @@ function setTheme(theme) {
             break;
         case 'blue':
             root.style.setProperty('--body-color', 'linear-gradient(135deg, #2563eb 0%, #60a5fa 100%)');
-            root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #2563eb 0%, #60a5fa 100%)');
+            root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #2153c0ff 0%, #60a5fa 100%)');
             root.style.setProperty('--accent-icon-bg', '#2563eb');
             break;
         case 'sepia':
             root.style.setProperty('--body-color', 'linear-gradient(135deg, #b08457 0%, #d1a054 100%)');
-            root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #b08457 0%, #d1a054 100%)');
+            root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #94714cff 0%, #e4a951ff 100%)');
             root.style.setProperty('--accent-icon-bg', '#b08457');
             break;
         case 'forest':

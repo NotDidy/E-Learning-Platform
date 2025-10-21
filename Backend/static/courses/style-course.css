@@ -134,7 +134,7 @@
 }
 
 .view-courses {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 12px 24px;
     border: none;
@@ -365,7 +365,7 @@
     left: 0;
     bottom: 0;
     width: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .course-list-item:hover {
@@ -491,7 +491,7 @@
 }
 
 .enroll-btn {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 10px 18px;
     border: none;
@@ -521,7 +521,7 @@
 }
 
 .back-btn {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: #1976d2;
     padding: 10px 20px;
     border: none;
