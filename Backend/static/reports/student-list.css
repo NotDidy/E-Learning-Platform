@@ -9,11 +9,13 @@
 
 :root {
   --primary-color: #ff9800;
-  --primary-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+  --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
   --text-color: #333;
   --light-bg: #fff;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   --border-color: #eee;
+  
+  
 }
 
 /* ====== Header Section ====== */
@@ -34,7 +36,7 @@
   left: 0;
   right: 0;
   height: 5px;
-  background: var(--primary-gradient);
+  background: var(--accent-gradient);
 }
 
 .students-title-section {
@@ -58,7 +60,7 @@
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background: var(--primary-gradient);
+  background: var(--accent-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,7 +85,7 @@
 }
 
 .students-table thead {
-  background: var(--primary-gradient);
+  background: var(--accent-gradient);
   color: white;
   text-align: left;
 }
@@ -115,7 +117,7 @@
 
 /* ====== Buttons ====== */
 .view-btn {
-  background: var(--primary-gradient);
+  background: var(--accent-gradient);
   color: white;
   padding: 8px 14px;
   border-radius: 6px;

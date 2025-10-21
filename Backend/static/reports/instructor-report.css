@@ -7,7 +7,7 @@
   --white: #fff;
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   --border-radius: 16px;
-  --header-bg: #f07b24; /* solid orange */
+  --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
 }
 
 /* ---------------- BODY ---------------- */
@@ -20,7 +20,7 @@ body {
 
 /* ---------------- HEADER CARD ---------------- */
 .report-header-card {
-  background: var(--header-bg);
+  background: var(--accent-gradient);
   margin: 24px 32px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
@@ -146,7 +146,7 @@ body {
 }
 
 .card-header {
-  background: #7157f8;
+  background: var(--accent-gradient);
   color: var(--white);
   padding: 14px 20px;
   display: flex;

@@ -15,6 +15,7 @@
     --shadow: 0 4px 20px rgba(0,0,0,0.1);
     --black-color: #0a0909;
     --white-color: #fff;
+    --accent-gradient: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
 }
 
 body {
@@ -41,7 +42,7 @@ body {
     left: 0;
     right: 0;
     height: 5px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
 }
 
 .courses-title-section {
@@ -65,7 +66,7 @@ body {
     width: 45px;
     height: 45px;
     border-radius: 10px;
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +75,7 @@ body {
 }
 
 .back-btn {
-    background: var(--orange-gradient);
+    background: var(--accent-gradient);
     color: white;
     padding: 10px 20px;
     border: none;
