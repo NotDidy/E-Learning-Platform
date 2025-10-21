@@ -1,60 +1,70 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 :root {
   --primary-color: #f07b24;
-  --primary-light: #f6b27a;
   --secondary-color: #2b2b2b;
-  --bg-color: #f9f9f9;
-  --white: #ffffff;
-  --border-radius: 12px;
   --text-color: #333;
-  --font-family: "Poppins", sans-serif;
-  --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --white: #fff;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --border-radius: 16px;
+  --header-bg: #f07b24; /* solid orange */
 }
 
+/* ---------------- BODY ---------------- */
 body {
-  font-family: var(--font-family);
-  background: var(--bg-color);
-  color: var(--text-color);
+  font-family: 'Poppins', sans-serif;
+  background: #f8f8f8;
   margin: 0;
-  padding: 0;
+  color: var(--text-color);
 }
 
-/* ---------------- HEADER ---------------- */
-.header {
-  background: var(--white);
+/* ---------------- HEADER CARD ---------------- */
+.report-header-card {
+  background: var(--header-bg);
+  margin: 24px 32px;
+  border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+  padding: 28px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 28px;
-  border-bottom: 3px solid var(--primary-color);
+  color: var(--white);
 }
 
-.header .logo {
+.report-header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 20px;
-  color: var(--primary-color);
+  gap: 14px;
 }
 
-.header .logo i {
+.report-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  padding: 10px;
+  border-radius: 12px;
   font-size: 26px;
-}
-
-.user-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+}
+
+.report-header-left h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.report-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .user-avatar {
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: var(--primary-color);
+  background: rgba(255, 255, 255, 0.3);
   color: var(--white);
   display: flex;
   align-items: center;
@@ -63,21 +73,30 @@ body {
   font-size: 18px;
 }
 
-.user-profile p {
-  margin: 0;
-  line-height: 1.2;
-  font-size: 14px;
+.user-info {
+  text-align: right;
 }
 
-/* ---------------- TITLE ---------------- */
+.user-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.user-email {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ---------------- PAGE TITLE ---------------- */
 .page-title {
-  padding: 24px 32px 0 32px;
+  padding: 16px 32px 0 32px;
 }
 
 .page-title h1 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  margin: 0;
   color: var(--secondary-color);
 }
 
@@ -92,11 +111,16 @@ body {
 .progress-card {
   background: var(--white);
   border-radius: var(--border-radius);
-  padding: 20px;
+  padding: 22px;
   flex: 1;
   min-width: 220px;
   box-shadow: var(--shadow);
   text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.progress-card:hover {
+  transform: translateY(-3px);
 }
 
 .progress-card h3 {
@@ -105,19 +129,14 @@ body {
   color: var(--secondary-color);
 }
 
-.progress-card .number {
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
+.progress-card .number,
 .progress-card .percentage {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--primary-color);
 }
 
-/* ---------------- COURSE CARD ---------------- */
+/* ---------------- COURSE CARDS ---------------- */
 .card {
   background: var(--white);
   border-radius: var(--border-radius);
@@ -127,7 +146,7 @@ body {
 }
 
 .card-header {
-  background: var(--primary-color);
+  background: #7157f8;
   color: var(--white);
   padding: 14px 20px;
   display: flex;
@@ -138,7 +157,7 @@ body {
 .card-header h2 {
   margin: 0;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .table-container {
@@ -169,52 +188,9 @@ body {
   background: #fff9f5;
 }
 
-/* ---------------- STUDENT CELL ---------------- */
-.student-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.student-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--primary-light);
-  color: var(--secondary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 13px;
-}
-
-/* ---------------- PROGRESS BAR ---------------- */
-.progress-bar {
-  width: 120px;
-  height: 8px;
-  background: #eaeaea;
-  border-radius: 10px;
-  overflow: hidden;
-  display: inline-block;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--primary-color);
-  transition: width 0.3s ease;
-}
-
-.progress-label {
-  font-size: 13px;
-  color: #555;
-}
-
-/* ---------------- BUTTONS ---------------- */
+/* ---------------- BUTTON ---------------- */
 .view-btn {
-  background: var(--primary-color);
+  background: #7157f8;
   color: var(--white);
   padding: 6px 10px;
   border-radius: 6px;
@@ -227,12 +203,5 @@ body {
 }
 
 .view-btn:hover {
-  background: #e46f18;
-}
-
-.no-data {
-  text-align: center;
-  color: #777;
-  padding: 18px;
-  font-size: 14px;
+  background: #5a3ff0;
 }
