@@ -667,9 +667,13 @@ body.dark .detail-label {
 
 body.dark .detail-value,
 body.dark .course-code,
-body.dark .course-name,
-body.dark .course-status {
+body.dark .course-name {
     color: rgba(234,236,255,0.85);
+}
+
+body.dark .course-status {
+    background: #eaf7ea;
+    color: #2c8031;
 }
 
 body.dark .course-item {
