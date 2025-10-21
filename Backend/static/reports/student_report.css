@@ -36,7 +36,7 @@ body {
 
 /* ---------------- HEADER CARD (MATCHES INSTRUCTOR REPORT) ---------------- */
 .report-header-card {
-  background: var(--primary-color);
+  background: #f07b24 !important; /* solid orange, forced override */
   margin: 24px 32px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
@@ -44,7 +44,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: white;
+  color: #fff;
+  position: relative;
+  z-index: 10;
 }
 
 .report-header-left {
@@ -55,7 +57,7 @@ body {
 
 .report-icon {
   background: rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #fff;
   padding: 10px;
   border-radius: 12px;
   font-size: 26px;
@@ -68,6 +70,7 @@ body {
   font-size: 22px;
   font-weight: 700;
   margin: 0;
+  color: #fff;
 }
 
 .report-header-right {
@@ -80,8 +83,8 @@ body {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,12 +100,14 @@ body {
   margin: 0;
   font-weight: 600;
   font-size: 15px;
+  color: #fff;
 }
 
 .user-email {
   margin: 0;
   font-size: 13px;
-  opacity: 0.85;
+  opacity: 0.9;
+  color: #fff;
 }
 
 /* ---------------- PAGE TITLE ---------------- */
