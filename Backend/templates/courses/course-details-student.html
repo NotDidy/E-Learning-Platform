@@ -16,8 +16,9 @@
             Course Details
         </div>
         <div class="header-actions">
-            <a class="back-btn" href="{% url 'available_courses' %}">
-                <i class='bx bx-left-arrow-alt'></i> Back to Available Courses
+            <a class="back-btn" href="{% if is_enrolled %}{% url 'student_courses' %}{% else %}{% url 'available_courses' %}{% endif %}">
+                <i class='bx bx-left-arrow-alt'></i>
+                <span class="back-btn-label">{{ is_enrolled|yesno:"Back to My Courses,Back to Available Courses" }}</span>
             </a>
         </div>
     </div>
@@ -42,6 +43,7 @@
         <ul class="lessons-list">
             {% for lesson in lessons %}
             <li class="lesson-item">
+                {% if is_enrolled %}
                 <a href="{% url 'lesson_detail' lesson.id %}" class="lesson-link">
                     <div class="lesson-info">
                         <div class="lesson-id">{{ lesson.lesson_code }}</div>
@@ -49,6 +51,15 @@
                     </div>
                     <i class='bx bx-chevron-right'></i>
                 </a>
+                {% else %}
+                <div class="lesson-link lesson-link-disabled" aria-disabled="true">
+                    <div class="lesson-info">
+                        <div class="lesson-id">{{ lesson.lesson_code }}</div>
+                        <div class="lesson-name">{{ lesson.title }}</div>
+                    </div>
+                    <i class='bx bx-chevron-right'></i>
+                </div>
+                {% endif %}
                 {% if blocked_lesson_id and lesson.id == blocked_lesson_id %}
                 {% for message in messages %}
                 <div class="lesson-alert {{ message.tags|default:'info' }}">{{ message }}</div>
