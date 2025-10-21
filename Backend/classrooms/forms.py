@@ -7,7 +7,7 @@ from courses.models import Lesson
 class ClassroomForm(forms.ModelForm):
     class Meta:
         model = Classroom
-        fields = ["name", "course", "supervisor", "duration_weeks", "description", "class_code"]
+        fields = ["name", "course", "supervisor", "duration_weeks", "description", "meeting_link", "class_code"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,6 +24,7 @@ class ClassroomForm(forms.ModelForm):
             "supervisor": {"id": "supervisor"},
             "duration_weeks": {"id": "duration"},
             "description": {"placeholder": "Add a description for this class...", "rows": 4, "id": "description"},
+            "meeting_link": {"placeholder": "https://example.com/meeting-link", "id": "meetingLink"},
             "class_code": {"placeholder": "Please enter the class access code:", "id": "classCode"},
         }
 
@@ -33,6 +34,7 @@ class ClassroomForm(forms.ModelForm):
             "supervisor": "Supervisor",
             "duration_weeks": "Class Duration",
             "description": "Class Description (Optional)",
+            "meeting_link": "Online Meeting Link (Optional)",
             "class_code": "Class Access Code (Optional)",
         }
 

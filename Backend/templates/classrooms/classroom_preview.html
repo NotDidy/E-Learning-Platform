@@ -40,6 +40,12 @@
                 <h3>Students Enrolled</h3>
                 <p>{{ classroom.student_count|default:0 }}</p>
             </div>
+            {% if classroom.meeting_link %}
+            <div class="info-item">
+                <h3>Online Meeting</h3>
+                <p><a href="{{ classroom.meeting_link }}" target="_blank" rel="noopener" class="meeting-link">Join meeting</a></p>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="card">
