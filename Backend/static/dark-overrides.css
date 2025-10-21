@@ -672,8 +672,8 @@ body.dark .course-name {
 }
 
 body.dark .course-status {
-    background: #eaf7ea;
-    color: #2c8031;
+    background: #eaf7ea !important;
+    color: #2c8031 !important;
 }
 
 body.dark .course-item {
@@ -695,6 +695,14 @@ body.dark .status-info,
 body.dark .status-item,
 body.dark .status-select {
     color: rgba(214,218,255,0.82);
+}
+
+body.dark select.status-select,
+body.dark .status-select,
+body.dark option {
+    background-color: #2b2d3c !important;
+    color: #eaeaff !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
 }
 
 body.dark .status-item i {

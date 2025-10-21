@@ -55,6 +55,9 @@ function setTheme(theme) {
 
     localStorage.setItem('selectedTheme', theme);
     document.getElementById('themeMenu').classList.remove('active');
+    if (typeof window.syncDarkToggleAvailability === 'function') {
+        window.syncDarkToggleAvailability();
+    }
 }
 
 // Load saved theme (and keep dark mode if enabled)
@@ -63,4 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const darkOn = localStorage.getItem('darkMode') === 'true';
     setTheme(savedTheme);
     document.body.classList.toggle('dark', darkOn);
+    if (typeof window.syncDarkToggleAvailability === 'function') {
+        window.syncDarkToggleAvailability();
+    }
 });
