@@ -30,9 +30,16 @@
 
 <div class="main-container">
     <div class="overall-stats">
-        <div class="stat-card">
+        <div class="stat-card circular-progress-card">
             <h3><i class='bx bx-book-reader'></i> Overall Progress</h3>
-            <div class="value">{{ overall_progress }}%</div>
+            <div class="circular-progress">
+                <svg class="progress-ring" width="140" height="140">
+                    <circle class="progress-ring-circle-bg" cx="70" cy="70" r="60"></circle>
+                    <circle class="progress-ring-circle" cx="70" cy="70" r="60"
+                            style="stroke-dasharray: {{ progress_circumference|floatformat:2 }}; stroke-dashoffset: {{ progress_offset|floatformat:2 }}"></circle>
+                </svg>
+                <div class="progress-value">{{ overall_progress|floatformat:1 }}%</div>
+            </div>
             <div class="label">Across all courses</div>
         </div>
         <div class="stat-card orange">
