@@ -129,11 +129,10 @@
         <i class="bx bx-info-circle"></i> View Details
       </a>
       {% if c.id in editable_classrooms %}
-      <a class="action-button edit-btn" href="{% url 'manage_classroom' c.id %}">
-        <i class="bx bx-edit"></i> Edit
-      </a>
+      <a class="action-button edit-btn" href="{% url 'manage_classroom' c.id %}"><i class="bx bx-edit"></i> Edit</a>
       {% endif %}
     </div>
+  </div>
   {% empty %}
   <p style="margin:20px;">No classrooms yet.</p>
   {% endfor %}
