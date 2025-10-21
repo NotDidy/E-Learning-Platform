@@ -522,7 +522,7 @@
 
 .back-btn {
     background: var(--accent-gradient);
-    color: #1976d2;
+    color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
@@ -534,11 +534,18 @@
     gap: 6px;
     box-shadow: var(--shadow);
     transition: var(--tran-03);
+    text-decoration: none;
+}
+
+.back-btn:visited {
+    color: #fff;
+    text-decoration: none;
 }
 
 .back-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(255,138,101,0.3);
+    text-decoration: none;
 }
 
 .modal {

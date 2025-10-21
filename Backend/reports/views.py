@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Prefetch
+from django.db.models import Sum, Prefetch, Q
 from django.db.models.functions import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
@@ -24,7 +24,7 @@ def instructor_report_list(request):
     courses = Course.objects.filter(instructor=instructor).prefetch_related("enrollments__student")
 
     course_reports = []
-    all_students = set()
+    all_students_map: dict[int, dict] = {}
     total_progress_sum = 0
     total_students_count = 0
 
@@ -40,7 +40,11 @@ def instructor_report_list(request):
 
     for course in courses:
         students = []
-        enrollments = Enrollment.objects.filter(course=course).select_related("student")
+        enrollments = (
+            Enrollment.objects.filter(course=course)
+            .select_related("student")
+            .order_by("student__first_name", "student__last_name", "student__email")
+        )
 
         for enrollment in enrollments:
             student = enrollment.student
@@ -49,9 +53,23 @@ def instructor_report_list(request):
 
             # Compute overall progress out of 120 credits
             progress_percent = round((total_credits / 120) * 100, 1)
-            if student.id not in all_students:
+            progress_percent = max(0.0, min(progress_percent, 100.0))
+
+            if student.id not in all_students_map:
                 total_progress_sum += progress_percent
                 total_students_count += 1
+                all_students_map[student.id] = {
+                    "id": student.id,
+                    "name": student.get_full_name() or student.email,
+                    "email": student.email,
+                    "credits": total_credits,
+                    "progress_percent": progress_percent,
+                    "courses": set(),
+                }
+            else:
+                # Keep latest aggregated stats up to date
+                all_students_map[student.id]["credits"] = total_credits
+                all_students_map[student.id]["progress_percent"] = progress_percent
 
             students.append({
                 "id": student.id,
@@ -61,7 +79,7 @@ def instructor_report_list(request):
                 "progress_percent": progress_percent,
             })
 
-            all_students.add(student.id)
+            all_students_map[student.id]["courses"].add(course.title)
 
         course_reports.append({
             "course": course,
@@ -71,10 +89,27 @@ def instructor_report_list(request):
     avg_progress = round(total_progress_sum / total_students_count, 1) if total_students_count else 0
     avg_progress = max(0.0, min(avg_progress, 100.0))
 
+    all_students_list = []
+    for data in all_students_map.values():
+        courses_list = sorted(data["courses"])
+        all_students_list.append({
+            "id": data["id"],
+            "name": data["name"],
+            "email": data["email"],
+            "credits": data["credits"],
+            "progress_percent": data["progress_percent"],
+            "courses": courses_list,
+            "courses_display": ", ".join(courses_list) if courses_list else "—",
+            "courses_count": len(courses_list),
+        })
+
+    all_students_list.sort(key=lambda s: (s["name"] or "").lower())
+
     context = {
         "course_reports": course_reports,
+        "all_students": all_students_list,
         "summary": {
-            "total_students": len(all_students),
+            "total_students": len(all_students_map),
             "courses_taught": courses.count(),
             "avg_progress": avg_progress,
         },
@@ -229,13 +264,43 @@ def instructor_student_list(request):
     if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
         return HttpResponseForbidden("Instructor role required")
 
-    # Get all students under instructor’s courses
+    courses = Course.objects.filter(instructor=user).order_by("title")
+    search_query = request.GET.get("q", "").strip()
+    selected_course = request.GET.get("course", "").strip()
+
     students = User.objects.filter(
         enrollments__course__instructor=user,
-        role=User.Roles.STUDENT
+        role=User.Roles.STUDENT,
     ).distinct()
 
-    context = {"students": students}
+    course_id: int | None = None
+    if selected_course:
+        try:
+            course_id = int(selected_course)
+        except (TypeError, ValueError):
+            course_id = None
+        if course_id and courses.filter(id=course_id).exists():
+            students = students.filter(enrollments__course_id=course_id)
+        else:
+            selected_course = ""
+
+    if search_query:
+        students = students.filter(
+            Q(first_name__icontains=search_query)
+            | Q(last_name__icontains=search_query)
+            | Q(username__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(student_id__icontains=search_query)
+        )
+
+    students = students.order_by("first_name", "last_name", "email").distinct()
+
+    context = {
+        "students": students,
+        "courses": courses,
+        "search_query": search_query,
+        "selected_course": selected_course,
+    }
     return render(request, "reports/instructor_student_list.html", context)
 
 @login_required

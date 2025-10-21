@@ -401,6 +401,17 @@ body {
     transform: translateX(5px);
 }
 
+.lesson-item .lesson-link.lesson-link-disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.65;
+}
+
+.lesson-item .lesson-link.lesson-link-disabled:hover {
+    background: #f5f6fc;
+    transform: none;
+}
+
 .lesson-item:hover {
     background: transparent;
     transform: none;
