@@ -214,3 +214,37 @@ def student_course_report(request, course_id: int, student_id: int):
     }
 
     return render(request, "reports/student_report.html", context)
+
+@login_required
+def instructor_student_list(request):
+    user = request.user
+    if getattr(user, "role", None) != User.Roles.INSTRUCTOR:
+        return HttpResponseForbidden("Instructor role required")
+
+    # Get all students under instructor’s courses
+    students = User.objects.filter(
+        enrollments__course__instructor=user,
+        role=User.Roles.STUDENT
+    ).distinct()
+
+    context = {"students": students}
+    return render(request, "reports/instructor_student_list.html", context)
+
+@login_required
+def instructor_student_profile(request, student_id):
+    user = request.user
+    try:
+        is_instructor = getattr(user, "role", None) == user.__class__.Roles.INSTRUCTOR
+    except Exception:
+        is_instructor = False
+    if not is_instructor:
+        return HttpResponseForbidden("Instructor role required")
+
+    student = get_object_or_404(User, id=student_id)
+    courses = Course.objects.filter(instructor=user, enrollments__student=student).distinct()
+
+    context = {
+        "student": student,
+        "courses": courses,
+    }
+    return render(request, "reports/student_profile.html", context)
