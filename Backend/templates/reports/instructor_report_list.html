@@ -152,11 +152,7 @@
                         <span class="progress-label">{{ student.progress_percent }}%</span>
                     </td>
                     <td>{{ student.credits }}/120</td>
-                    <td>
-                        <a class="view-btn" href="{% url 'reports:student_profile' student.id %}">
-                            <i class="bx bx-show"></i> View
-                        </a>
-                    </td>
+
                 </tr>
                 {% empty %}
                 <tr><td colspan="6" class="no-data">No student data available.</td></tr>
