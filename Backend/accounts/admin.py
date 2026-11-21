@@ -1,4 +1,4 @@
-from django.contrib import admin
+﻿from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = User
 
-    list_display = ("email", "first_name", "last_name", "role", "is_staff", "is_active")
+    list_display = ("email", "student_id", "first_name", "last_name", "role", "is_staff", "is_active")
     list_filter = ("role", "is_staff", "is_active", "groups")
     ordering = ("email",)
     search_fields = ("email", "first_name", "last_name")

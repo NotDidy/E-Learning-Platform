@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Student Overall Progress" content="width=device-width,initial-scale=1.0">
+    <title>Student Report</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href="student-overall-report.css">
+</head>
+
+<body>
+    <div class="page-header">
+        <div class="header-content">
+            <div class="page-title">
+                <div class="title-icon">
+                    <i class='bx bx-line-chart'></i>
+                </div>
+                My Report
+            </div>
+            <div class="student-info-badge">
+                <div class="avatar">BT</div>
+                <div class="info">
+                    <div class="name">Brandon Tan</div>
+                    <div class="id">S067</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="overall-stats">
+            <div class="stat-card circular-progress-card">
+                <h3><i class='bx bx-book-reader'></i> Overall Progress</h3>
+                <div class="circular-progress">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle-bg" cx="60" cy="60" r="50"></circle>
+                        <circle class="progress-ring-circle" cx="60" cy="60" r="50"></circle>
+                    </svg>
+                    <div class="progress-value">67%</div>
+                </div>
+                <div class="label">Across all courses</div>
+            </div>
+            <div class="stat-card orange">
+                <h3><i class='bx bx-medal'></i> Total Credits</h3>
+                <div class="value">58</div>
+                <div class="label">Credits earned</div>
+            </div>
+            <div class="stat-card green">
+                <h3><i class='bx bx-check-double'></i> Lessons Completed</h3>
+                <div class="value">23</div>
+                <div class="label">Out of 45 total</div>
+            </div>
+            <div class="stat-card pink">
+                <h3><i class='bx bx-book-bookmark'></i> Active Courses</h3>
+                <div class="value">3</div>
+                <div class="label">Currently enrolled</div>
+            </div>
+        </div>
+
+        <!-- Completion Estimate -->
+        <div class="completion-estimate">
+            <h3><i class='bx bx-time-five'></i> Estimated Completion</h3>
+            <div class="estimate-content">
+                <div class="estimate-item">
+                    <div class="value">22</div>
+                    <div class="label">Lessons Remaining</div>
+                </div>
+                <div class="estimate-item">
+                    <div class="value">6-8</div>
+                    <div class="label">Weeks to Complete</div>
+                </div>
+                <div class="estimate-item">
+                    <div class="value">Dec 2025</div>
+                    <div class="label">Expected Completion</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2>
+                <i class='bx bx-book-open'></i>
+                Course Progress
+            </h2>
+            <span class="course-count">3 Courses</span>
+        </div>
+
+        <div class="courses-grid">
+            <div class="course-card" onclick="navigateToCourse('python')">
+                <div class="course-header">
+                    <span class="course-id">CS101</span>
+                    <span class="course-status status-in-progress">In Progress</span>
+                </div>
+                <div class="course-name">Python Programming Fundamentals</div>
+                <div class="course-stats">
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-check-circle'></i>
+                            Completed Lessons
+                        </span>
+                        <span class="stat-value">5 / 8</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-medal'></i>
+                            Credits Earned
+                        </span>
+                        <span class="stat-value">23 / 30</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-buildings'></i>
+                            Active Classrooms
+                        </span>
+                        <span class="stat-value">2</span>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Course Progress</span>
+                        <span class="progress-percentage">80%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 80%"></div>
+                    </div>
+                </div>
+                <button class="view-details">
+                    View Details <i class='bx bx-right-arrow-alt'></i>
+                </button>
+            </div>
+
+            <div class="course-card" onclick="navigateToCourse('webdev')">
+                <div class="course-header">
+                    <span class="course-id">CS201</span>
+                    <span class="course-status status-in-progress">In Progress</span>
+                </div>
+                <div class="course-name">Web Development Basics</div>
+                <div class="course-stats">
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-check-circle'></i>
+                            Completed Lessons
+                        </span>
+                        <span class="stat-value">12 / 20</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-medal'></i>
+                            Credits Earned
+                        </span>
+                        <span class="stat-value">20 / 35</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-buildings'></i>
+                            Active Classrooms
+                        </span>
+                        <span class="stat-value">1</span>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Course Progress</span>
+                        <span class="progress-percentage">60%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+                <button class="view-details">
+                    View Details <i class='bx bx-right-arrow-alt'></i>
+                </button>
+            </div>
+
+            <!-- Course 3: Data Structures -->
+            <div class="course-card" onclick="navigateToCourse('datastructures')">
+                <div class="course-header">
+                    <span class="course-id">CS301</span>
+                    <span class="course-status status-in-progress">In Progress</span>
+                </div>
+                <div class="course-name">Data Structures & Algorithms</div>
+                <div class="course-stats">
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-check-circle'></i>
+                            Completed Lessons
+                        </span>
+                        <span class="stat-value">6 / 17</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-medal'></i>
+                            Credits Earned
+                        </span>
+                        <span class="stat-value">15 / 40</span>
+                    </div>
+                    <div class="course-stat">
+                        <span class="stat-label">
+                            <i class='bx bx-buildings'></i>
+                            Active Classrooms
+                        </span>
+                        <span class="stat-value">2</span>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Course Progress</span>
+                        <span class="progress-percentage">35%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 35%"></div>
+                    </div>
+                </div>
+                <button class="view-details">
+                    View Details <i class='bx bx-right-arrow-alt'></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            <i class='bx bx-refresh'></i> Last updated: October 14, 2025 at 10:30 AM
+        </div>
+    </div>
+
+    <script>
+        function navigateToCourse(courseId) {
+            alert(`Navigating to ${courseId} detailed report...\n\nThis would link to the individual course progress page you provided.`);
+        }
+
+        function updateProgressData() {
+            console.log('Progress data updated automatically');
+        }
+
+        setInterval(updateProgressData, 300000);
+    </script>
+</body>
+</html>

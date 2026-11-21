@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Student Report</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href="student-profile.css">
+</head>
+
+<body>
+    <div class="student-profile-header">
+        <div class="student-title-section">
+            <div class="student-title">
+                <div class="student-icon">
+                    <i class='bx  bx-user'  ></i> 
+                </div>
+                Student Profile
+            </div>
+            <div class="header-actions">
+                <button class="back-btn">
+                    <i class='bx  bx-arrow-left-square'  ></i>
+                    Back to HomePage 
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="student-profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">BT</div>
+            <div class="profile-basic-info">
+                <h1>Brandon Tan</h1>
+                <div class="profile-id">Student ID: S001</div>
+            </div>
+        </div>
+
+        <div class="profile-details">
+            <div class="detail-section">
+                <h3>
+                    <i class='bx  bx-form'  ></i> 
+                    Student Information
+                </h3>
+                <div class="detail-item">
+                    <i class='bx  bx-user'  ></i>
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value">Brandon Tan</span>
+                </div>
+                <div class="detail-item">
+                    <i class='bx  bx-envelope'  ></i> 
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">btan0092@student.hydra.edu</span>
+                </div>
+                <div class="detail-item">
+                    <i class='bx  bx-book-bookmark'  ></i> 
+                    <span class="detail-label">Student ID:</span>
+                    <span class="detail-value">S001</span>
+                </div>
+                <div class="detail-item">
+                    <i class='bx  bx-calendar-alt'  ></i> 
+                    <span class="detail-label">Account Created:</span>
+                    <span class="detail-value">August 20, 2022</span>
+                </div>
+                <div class="detail-item">
+                    <i class='bx  bx-check-circle'  ></i> 
+                    <span class="detail-label">Status:</span>
+                    <div class="status-dropdown">
+                        <select id="studentStatus" class="status-select status-active">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="courses-section">
+            <h3>
+                <i class='bx  bx-book-alt'  ></i> 
+                Courses Enrolled
+                <span style="background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; margin-left: auto;">3</span>
+            </h3>
+            <ul class="course-list">
+                <li class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">FIT1045 - Introduction to Python</div>
+                    </div>
+                    <div class="course-status">Enrolled</div>
+                </li>
+                <li class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">FIT1008 - Introduction to bending</div>
+                    </div>
+                    <div class="course-status">Enrolled</div>
+                </li>
+                <li class="course-item">
+                    <div class="course-info">
+                        <div class="course-name">FIT2004 - Introduction to Advance Bending</div>
+                    </div>
+                    <div class="course-status">Enrolled</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>

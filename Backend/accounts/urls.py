@@ -23,4 +23,7 @@ urlpatterns = [
     path("admin/instructors/<int:instructor_id>/status/", views.set_instructor_status, name="set_instructor_status"),
     path("instructor/dashboard/", views.instructor_dashboard, name="instructor_dashboard"),
     path("instructor/courses/", views.instructor_courses, name="instructor_courses"),
+    path("profile/", views.student_profile, name="student_profile"),
+    path("report/", views.student_overall_report, name="student_overall_report"),
+
 ]

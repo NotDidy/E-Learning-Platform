@@ -1,0 +1,243 @@
+<html lang="en">
+
+<head>
+    <title>Course Edit Page</title>
+    <link rel="stylesheet" href="course-edit.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+
+
+<body>
+  <div class="lesson-details-header">
+    <div class="lessons-title-section">
+      <div class="lessons-title">
+        <div class="lesson-icon">
+          <i class='bx bx-edit'></i>
+        </div>
+        Edit Course
+      </div>
+      <div class="header-actions">
+        <button class="back-btn">
+          <i class='bx bx-left-arrow-alt'></i>
+          Back to Courses
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-details-container">
+    <form class="edit-form">
+      <div class="form-group">
+        <label>Course Title</label>
+        <input type="text" value="Complete Python Programming Course" required>
+      </div>
+      <div class="form-group">
+        <label>Course ID</label>
+        <input type="text" value="CS101" disabled>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea rows="5" required>A comprehensive Python programming course designed for beginners to advanced learners. This course covers everything from basic syntax to advanced concepts like web development, data analysis, and machine learning.</textarea>
+      </div>
+      <div class="lesson-section">
+        <h2><i class='bx bx-book-open'></i> Lessons</h2>
+        <div id="lessons-list">
+          <div class="lesson-select-row">
+            <select required>
+              <option value="L001">L001</option>
+              <option value="L002">L002</option>
+              <option value="L003">L003</option>
+            </select>
+            <input type="text" value="Introduction to Python Programming" placeholder="Lesson Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="lesson-select-row">
+            <select required>
+              <option value="L001">L001</option>
+              <option value="L002" selected>L002</option>
+              <option value="L003">L003</option>
+            </select>
+            <input type="text" value="Variables and Data Types" placeholder="Lesson Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="lesson-select-row">
+            <select required>
+              <option value="L001">L001</option>
+              <option value="L002">L002</option>
+              <option value="L003" selected>L003</option>
+            </select>
+            <input type="text" value="Control Structures and Loops" placeholder="Lesson Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addLesson()">+ Add Lesson</button>
+      </div>
+      <div class="lesson-section">
+        <h2><i class='bx bx-user-circle'></i> Enrolled Students</h2>
+        <div id="students-list">
+          <div class="row">
+            <input type="text" value="S001" placeholder="Student ID" required>
+            <input type="text" value="Alice Johnson" placeholder="Student Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" value="S002" placeholder="Student ID" required>
+            <input type="text" value="Bob Smith" placeholder="Student Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="row">
+            <input type="text" value="S003" placeholder="Student ID" required>
+            <input type="text" value="Carol Wilson" placeholder="Student Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addStudent()">+ Add Student</button>
+      </div>
+      <div class="lesson-section">
+        <h2><i class='bx bx-buildings'></i> Assigned Classrooms</h2>
+        <div id="classrooms-list">
+          <div class="row">
+            <input type="text" value="CL001" placeholder="Classroom ID" required>
+            <input type="text" value="Room A-204" placeholder="Classroom Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Number of Lessons</label>
+            <input type="number" value="3" min="0" required>
+          </div>
+          
+          <div class="row">
+            <input type="text" value="CL002" placeholder="Classroom ID" required>
+            <input type="text" value="Room B-101" placeholder="Classroom Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Number of Lessons</label>
+            <input type="number" value="2" min="0" required>
+          </div>
+          
+          <div class="row">
+            <input type="text" value="CL003" placeholder="Classroom ID" required>
+            <input type="text" value="Lab C-310" placeholder="Classroom Name" required>
+            <button type="button" class="remove-btn"><i class='bx bx-minus-circle'></i></button>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Number of Lessons</label>
+            <input type="number" value="4" min="0" required>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addClassroom()">+ Add Classroom</button>
+      </div>
+      <div class="form-group" style="margin-top: 25px;">
+        <label>Duration (weeks)</label>
+        <input type="number" value="12" min="1" required>
+      </div>
+      <div class="form-group">
+        <label>Credits</label>
+        <input type="number" value="15" min="1">
+      </div>
+      <div class="form-group">
+        <label>Instructor</label>
+        <input type="text" value="Prof. Sarah Connor" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="save-btn"><i class='bx bx-save'></i> Save Changes</button>
+        <button type="button" class="cancel-btn"><i class='bx bx-x-circle'></i> Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function addLesson() {
+      const container = document.getElementById("lessons-list");
+      const row = document.createElement("div");
+      row.className = "lesson-select-row";
+      row.innerHTML = `
+        <select required>
+          <option value="">Select Lesson ID</option>
+          <option value="L001">L001</option>
+          <option value="L002">L002</option>
+          <option value="L003">L003</option>
+          <option value="L004">L004</option>
+          <option value="L005">L005</option>
+          <option value="L006">L006</option>
+          <option value="L007">L007</option>
+          <option value="L008">L008</option>
+        </select>
+        <input type="text" placeholder="Lesson Name" required>
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      container.appendChild(row);
+    }
+
+    function addStudent() {
+      const container = document.getElementById("students-list");
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <input type="text" placeholder="Student ID" required>
+        <input type="text" placeholder="Student Name" required>
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      container.appendChild(row);
+    }
+
+    function addClassroom() {
+      const container = document.getElementById("classrooms-list");
+      
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "row";
+      rowDiv.innerHTML = `
+        <input type="text" placeholder="Classroom ID" required>
+        <input type="text" placeholder="Classroom Name" required>
+        <button type="button" class="remove-btn" onclick="removeClassroom(this)">
+          <i class='bx bx-minus-circle'></i>
+        </button>`;
+      
+      const formGroupDiv = document.createElement("div");
+      formGroupDiv.className = "form-group";
+      formGroupDiv.style.marginBottom = "15px";
+      formGroupDiv.innerHTML = `
+        <label>Number of Lessons</label>
+        <input type="number" min="0" required>`;
+      
+      container.appendChild(rowDiv);
+      container.appendChild(formGroupDiv);
+    }
+
+    function removeClassroom(btn) {
+      const row = btn.parentNode;
+      const formGroup = row.nextElementSibling;
+      row.remove();
+      if (formGroup && formGroup.classList.contains('form-group')) {
+        formGroup.remove();
+      }
+    }
+
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      if (btn.closest('#classrooms-list')) {
+        btn.onclick = function() { removeClassroom(this); }
+      } else {
+        btn.onclick = function () { this.parentNode.remove(); }
+      }
+    });
+
+    document.querySelector('.edit-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Course changes saved successfully!');
+    });
+
+    document.querySelector('.cancel-btn').addEventListener('click', function() {
+      if(confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+        window.history.back();
+      }
+    });
+
+    document.querySelector('.back-btn').addEventListener('click', function() {
+      window.history.back();
+    });
+  </script>
+</body>

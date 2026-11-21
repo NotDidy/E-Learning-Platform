@@ -3,33 +3,6 @@
 {% block title %}Instructor Dashboard{% endblock %}
 {% block role_label %}Instructor Page{% endblock %}
 
-{% block menu_links %}
-    <li class="nav-link">
-        <a href="{% url 'instructor_courses' %}">
-            <i class='bx bx-book-content icon'></i>
-            <span class="text nav-text">Courses</span>
-        </a>
-    </li>
-    <li class="nav-link">
-        <a href="#">
-            <i class='bx bx-calendar-week icon'></i>
-            <span class="text nav-text">Classrooms</span>
-        </a>
-    </li>
-    <li class="nav-link">
-        <a href="#">
-            <i class='bx bx-user icon'></i>
-            <span class="text nav-text">Students</span>
-        </a>
-    </li>
-    <li class="nav-link">
-        <a href="#">
-            <i class='bx bx-bar-chart icon'></i>
-            <span class="text nav-text">Reports</span>
-        </a>
-    </li>
-{% endblock %}
-
 {% block content %}
     <div id="dashboard-main">
         <div class="white-cover">
@@ -37,14 +10,6 @@
             <p class="welcome-message">Welcome Instructor!</p>
             <div class="admin-badge">Instructor Access</div>
         </div>
-
-        {% if messages %}
-        <div class="errors" style="margin:12px 0; padding:10px; border-radius:6px; background:rgba(0,0,0,0.05);">
-            {% for message in messages %}
-                {{ message }}<br/>
-            {% endfor %}
-        </div>
-        {% endif %}
 
         <div class="create-course-card">
             <div class="card-header">

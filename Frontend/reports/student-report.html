@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Student Report</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href="student-report.css">
+</head>
+
+<body>
+    <div class="student-report-header">
+        <div class="student-title-section">
+            <div class="student-title">
+                <div class="student-icon">
+                    <i class='bx bx-user-detail'></i>
+                </div>
+                Student Progress Report
+            </div>
+            <div class="header-actions">
+                <button class="back-btn">
+                    <i class='bx bx-left-arrow-alt'></i>
+                    Back to Courses
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="student-report-container">
+        <div class="student-header">
+            <div class="student-avatar">BT</div>
+            <div class="student-information">
+                <h1>Brandon Tan</h1>
+                <span class="student-id">Student ID: S067</span>
+                <div class="student-email">btan0092@student.monash.edu</div>
+            </div>
+        </div>
+
+        <div class="progress-overview">
+            <div class="progress-card">
+                <h3><i class='bx bx-book-open'></i> Completed Lessons</h3>
+                <div class="number">5</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+            </div>
+            <div class="progress-card">
+                <h3><i class='bx bx-trophy'></i> Overall Progress</h3>
+                <div class="percentage">80%</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+            </div>
+            <div class="progress-card">
+                <h3><i class='bx bx-buildings'></i> Active Classrooms</h3>
+                <div class="number">2</div>
+            </div>
+        </div>
+
+        <div class="student-section">
+            <h2>
+                <i class='bx bx-check-circle'></i>
+                Completed Lessons
+                <span class="section-counter">6</span>
+            </h2>
+            <ul class="completed-lessons">
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">L001</div>
+                        <div class="lesson-name">Introduction to Python Programming</div>
+                        <div class="completion-date">Completed: Sep 5, 2025</div>
+                    </div>
+                    <div class="completion-status">✓ Completed</div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">L002</div>
+                        <div class="lesson-name">Basic Printings</div>
+                        <div class="completion-date">Completed: Sep 8, 2025</div>
+                    </div>
+                    <div class="completion-status">✓ Completed</div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">L003</div>
+                        <div class="lesson-name">Variables and Control Structures</div>
+                        <div class="completion-date">Completed: Sep 11, 2025</div>
+                    </div>
+                    <div class="completion-status">✓ Completed</div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">L004</div>
+                        <div class="lesson-name">Loops and Conditions</div>
+                        <div class="completion-date">Completed: Sep 14, 2025</div>
+                    </div>
+                    <div class="completion-status">✓ Completed</div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-info">
+                        <div class="lesson-id">L005</div>
+                        <div class="lesson-name">Recursions</div>
+                        <div class="completion-date">Completed: Sep 20, 2025</div>
+                    </div>
+                    <div class="completion-status">✓ Completed</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="student-section">
+            <h2>
+                <i class='bx bx-buildings'></i>
+                Active Classrooms
+                <span class="section-counter">2</span>
+            </h2>
+            <ul class="active-classrooms">
+                <li class="classroom-item">
+                    <div class="classroom-info">
+                        <div class="classroom-id">CL001</div>
+                        <div class="classroom-location">Room A-204</div>
+                    </div>
+                    <div class="schedule-time">Mon 10:00 - 13:00</div>
+                </li>
+                <li class="classroom-item">
+                    <div class="classroom-info">
+                        <div class="classroom-id">CL004</div>
+                        <div class="classroom-location">Room B-268</div>
+                    </div>
+                    <div class="schedule-time">Fri 10:00 - 13:00</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="student-meta">
+            <div class="meta-item"><i class='bx bx-calendar'></i> Enrolled: Aug 20, 2025</div>
+            <div class="meta-item"><i class='bx bx-medal'></i> Total Credits: 23</div>
+            <div class="student-status status-active">Active</div>
+        </div>
+    </div>
+</body>
+

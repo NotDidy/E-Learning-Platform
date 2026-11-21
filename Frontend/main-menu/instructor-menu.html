@@ -8,6 +8,30 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel = "stylesheet" href="style-menu.css">
 </head>
+<script src="theme.js"></script>
+
+
+
+<div class="theme-menu-overlay" id="themeMenu">
+    <div class="theme-menu">
+        <h3>Select Theme</h3>
+        <div class="theme-options">
+            <button class="theme-btn light" onclick="setTheme('light')">
+                <i class='bx bx-sun'></i> Light
+            </button>
+            
+            <button class="theme-btn blue" onclick="setTheme('blue')">
+                <i class='bx bx-water'></i> Blue
+            </button>
+            <button class="theme-btn sepia" onclick="setTheme('sepia')">
+                <i class='bx bx-book'></i> Sepia
+            </button>
+        </div>
+        <button class="close-theme" onclick="toggleThemeMenu(event)">
+            <i class='bx bx-x'></i> Close
+        </button>
+    </div>
+</div>
 
 <body>
     <nav class ="sidebar">
@@ -29,6 +53,8 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
+                    
+
                     <li class="nav-link">
                         <a href="{% url 'instructor_courses' %}">
                             <i class='bx  bx-book-content icon'  ></i>  
@@ -36,7 +62,7 @@
                         </a>
                     </li>
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{% url 'classrooms' %}">
                             <i class='bx  bx-calendar-week icon'  ></i> 
                             <span class="text nav-text">Classrooms</span>
                         </a>
@@ -56,9 +82,24 @@
                 </ul>
             </div> 
             <div class="bottom-content">
+                <div class="theme-icon-button" onclick="toggleThemeMenu(event)" title="Change Theme">
+                    <i class='bx bx-palette'></i>
+                </div>
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx  bx-moon icon moon'  ></i> 
+                        <i class='bx  bx-sun icon sun'  ></i> 
+                    </div>
+                    <span class="mode-text text"></span> 
+
+                    <div class="toggle-switch" onclick="toggleDarkMode()">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
                 <li class="">
                     <a href="#">
-                        <<i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
+                        <i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
                         <span class="text nav-text">Logout</span>
                     </a>
                 </li>
@@ -70,17 +111,10 @@
         <div id ="dashboard-main">
             <div class="white-cover">
                 <h1 class="dashboard-title">Dashboard</h1>
-                <p class="welcome message">Welcome Instructor!</p>
+                <p class="welcome-message">Welcome Instructor!</p>
                 <div class="admin-badge">Instructor Access</div>
             </div>
         </div>
     </section>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('close');
-        }
-    </script>
-
 </body>
 </html>

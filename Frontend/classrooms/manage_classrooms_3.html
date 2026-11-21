@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Lessons | Course Manager</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #695CFE;
+            --purple-color: #9C27B0;
+            --success-color: #4CAF50;
+            --success-hover: #3d8b40;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --danger-hover: #d32f2f;
+            --info-color: #2196F3;
+            --info-hover: #1976D2;
+            --text-color: #707070;
+            --black-color: #0a0909;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --shadow-hover: 0 6px 25px rgba(0,0,0,0.15);
+            --cancel-color: #f0f0f0;
+            --cancel-text: #888;
+            --cancel-hover: #e0e0e0;
+            --tran-02: all 0.2s ease;
+            --tran-03: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--black-color);
+        }
+
+        .logo i { font-size: 24px; color: var(--primary-color); }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--tran-03);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .btn:active { 
+            transform: translateY(0);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn i { font-size: 16px; }
+
+        .btn-orange { 
+            background-color: var(--warning-color); 
+            color: white; 
+        }
+        
+        .btn-purple { 
+            background-color: var(--purple-color); 
+            color: white; 
+        }
+        
+        .btn-purple:hover { 
+            background-color: #7B1FA2; 
+        }
+        
+        .btn-success { 
+            background-color: var(--success-color); 
+            color: white; 
+        }
+        
+        .btn-success:hover { 
+            background-color: var(--success-hover); 
+        }
+        
+        .btn-success.assigned {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-success.assigned:hover {
+            background-color: #ccc;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-success.assigned::after {
+            display: none;
+        }
+        
+        .btn-info { 
+            background-color: var(--info-color); 
+            color: white; 
+        }
+        
+        .btn-info:hover { 
+            background-color: var(--info-hover); 
+        }
+        
+        .btn-danger { 
+            background-color: var(--danger-color); 
+            color: white; 
+        }
+        
+        .btn-danger:hover { 
+            background-color: var(--danger-hover); 
+        }
+        
+        .btn-cancel { 
+            background-color: var(--cancel-color); 
+            color: var(--cancel-text); 
+        }
+        
+        .btn-cancel:hover { 
+            background-color: var(--cancel-hover); 
+        }
+
+        .page-title { margin: 20px 0 30px; }
+        .page-title h1 { color: var(--black-color); font-size: 28px; margin-bottom: 10px; }
+        .page-title .class-info {
+            font-size: 16px;
+            color: var(--black-color);
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .page-title .class-info i { color: var(--purple-color); margin-right: 8px; }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--tran-03);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .card-header h2 { 
+            font-size: 20px; 
+            color: var(--black-color); 
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .card-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--purple-color);
+            border-radius: 3px;
+        }
+        
+        .card-header .section-desc {
+            font-size: 14px;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+        
+        .card-body { margin-top: 20px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--black-color);
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: var(--tran-03);
+        }
+        .form-control:focus {
+            border-color: var(--purple-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+        }
+
+        .lessons-list { margin-top: 20px; }
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+            transition: var(--tran-03); /* 只保留颜色变化的过渡效果 */
+        }
+        .lesson-item:hover { 
+            background-color: #f5f3ff; 
+            border-color: #e9dfff;
+            /* 移除了 translateX 效果，只保留颜色变化 */
+        }
+        .lesson-item .lesson-info { flex-grow: 1; }
+        .lesson-item .lesson-info h3 {
+            font-size: 16px;
+            color: var(--black-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .lesson-item .lesson-info p { font-size: 13px; color: var(--text-color); margin-bottom: 3px; }
+        .lesson-item .lesson-info .schedule {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            color: var(--info-color);
+            margin-top: 5px;
+        }
+        .lesson-item .lesson-info .schedule i { margin-right: 5px; }
+        .lesson-item .lesson-actions { display: flex; gap: 10px; }
+        .btn-sm { padding: 6px 12px; font-size: 13px; }
+        
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+            margin-left: 10px;
+            transition: var(--tran-02);
+        }
+        .badge-success { background-color: #e8f5e9; color: var(--success-color); }
+        .badge-available { background-color: #e3f2fd; color: var(--info-color); }
+        .badge-assigned { background-color: #ffebee; color: var(--danger-color); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show { 
+            display: block;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 550px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transform: translateY(-30px);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 5px 0 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-title { font-size: 18px; font-weight: 600; color: var(--black-color); }
+        .close-modal { 
+            background: none; 
+            border: none; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: var(--text-color);
+            transition: var(--tran-02);
+        }
+        .close-modal:hover {
+            color: var(--danger-color);
+            transform: rotate(90deg);
+        }
+        .modal-body { margin-bottom: 20px; }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 10px 0 0;
+            border-top: 1px solid #eee;
+        }
+        
+        .no-lessons {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-color);
+            font-style: italic;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            transition: var(--tran-03);
+        }
+        
+        .no-lessons:hover {
+            border-color: var(--purple-color);
+            background-color: #f5f3ff;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            color: white;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success-color);
+        }
+        
+        .notification.error {
+            background-color: var(--danger-color);
+        }
+
+        @media (max-width: 768px) {
+            .card { padding: 20px; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn { width: 100%; justify-content: center; }
+            .lesson-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .lesson-item .lesson-actions { width: 100%; justify-content: space-between; }
+            .lesson-item .lesson-info .schedule {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"><i class='bx bx-book-open'></i><h2>Course Manager</h2></div>
+            <a href="classrooms.html" class="btn btn-orange"><i class='bx bx-arrow-left'></i> Back to Classrooms</a>
+        </div>
+
+        <div class="page-title">
+            <h1>Assign Lessons</h1>
+            <div class="class-info"><i class='bx bx-class'></i><span id="classNameHeader">5801 - FIT2009 - Fundamental Programming</span></div>
+        </div>
+
+        <!-- TOP SECTION: Assigned Lessons -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Assigned Lessons</h2>
+                    <p class="section-desc">Lessons currently assigned to this class</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="assignedLessonsContainer" class="lessons-list">
+                    <!-- Example Assigned Lesson 1 -->
+                    <div class="lesson-item" data-id="1">
+                        <div class="lesson-info">
+                            <h3>Introduction to Programming Concepts <span class="badge badge-success">Assigned</span></h3>
+                            <p>Basic introduction to programming principles, history, and key concepts.</p>
+                            <p><i class='bx bx-clock'></i> Duration: 60 minutes</p>
+                            <div class="schedule">
+                                <span><i class='bx bx-calendar'></i> Sep 22, 2023</span>
+                                <span><i class='bx bx-calendar-week'></i> Friday</span>
+                                <span><i class='bx bx-time-five'></i> 10:00 AM - 11:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="lesson-actions">
+                            <button class="btn btn-sm btn-info edit-lesson"><i class='bx bx-edit'></i> Edit</button>
+                            <button class="btn btn-sm btn-danger unassign-lesson"><i class='bx bx-trash'></i> Unassign</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Example Assigned Lesson 2 -->
+                    <div class="lesson-item" data-id="2">
+                        <div class="lesson-info">
+                            <h3>Variables and Data Types <span class="badge badge-success">Assigned</span></h3>
+                            <p>Learn about different data types, variable declaration, and type conversion.</p>
+                            <p><i class='bx bx-clock'></i> Duration: 45 minutes</p>
+                            <div class="schedule">
+                                <span><i class='bx bx-calendar'></i> Sep 24, 2023</span>
+                                <span><i class='bx bx-calendar-week'></i> Sunday</span>
+                                <span><i class='bx bx-time-five'></i> 2:30 PM - 3:15 PM</span>
+                            </div>
+                        </div>
+                        <div class="lesson-actions">
+                            <button class="btn btn-sm btn-info edit-lesson"><i class='bx bx-edit'></i> Edit</button>
+                            <button class="btn btn-sm btn-danger unassign-lesson"><i class='bx bx-trash'></i> Unassign</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Assigned Lessons Message -->
+                <div id="noAssignedLessonsMsg" class="no-lessons" style="display: none;">
+                    <i class='bx bx-book' style="font-size: 24px; margin-bottom: 10px;"></i><br>
+                    No lessons have been assigned to this class yet.
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM SECTION: Available Lessons to Assign -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Available Lessons to Assign</h2>
+                    <p class="section-desc">Lessons that haven't been assigned to this class yet</p>
+                </div>
+                <button class="btn btn-purple" id="addLessonBtn"><i class='bx bx-plus-circle'></i> Add New Lesson</button>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="lessonSelector">Select a lesson to assign to this class</label>
+                    <select id="lessonSelector" class="form-control">
+                        <option value="">-- Select a Lesson --</option>
+                        <option value="1">Introduction to Programming Concepts</option>
+                        <option value="2">Variables and Data Types</option>
+                        <option value="3">Control Structures</option>
+                        <option value="4">Functions and Methods</option>
+                        <option value="5">Arrays and Collections</option>
+                        <option value="6">Object-Oriented Programming Basics</option>
+                        <option value="7">Error Handling</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" id="assignSelectedBtn"><i class='bx bx-link'></i> Assign Selected Lesson</button>
+                
+                <!-- All Available Lessons List -->
+                <div class="mt-4">
+                    <h4 class="mb-3"><i class='bx bx-list-ul'></i> Browse All Available Lessons</h4>
+                    <div id="availableLessonsList" class="lessons-list">
+                        <!-- Available Lesson 1 -->
+                        <div class="lesson-item" data-id="1">
+                            <div class="lesson-info">
+                                <h3>Introduction to Programming Concepts <span class="badge badge-assigned">Already Assigned</span></h3>
+                                <p>Basic introduction to programming principles, history, and key concepts.</p>
+                                <p><i class='bx bx-clock'></i> Duration: 60 minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson assigned" data-id="1" disabled>
+                                    <i class='bx bx-check'></i> Assigned
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Available Lesson 2 -->
+                        <div class="lesson-item" data-id="2">
+                            <div class="lesson-info">
+                                <h3>Variables and Data Types <span class="badge badge-assigned">Already Assigned</span></h3>
+                                <p>Learn about different data types, variable declaration, and type conversion.</p>
+                                <p><i class='bx bx-clock'></i> Duration: 45 minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson assigned" data-id="2" disabled>
+                                    <i class='bx bx-check'></i> Assigned
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Available Lesson 3 -->
+                        <div class="lesson-item" data-id="3">
+                            <div class="lesson-info">
+                                <h3>Control Structures <span class="badge badge-available">Available</span></h3>
+                                <p>Study conditional statements, loops, and flow control in programming.</p>
+                                <p><i class='bx bx-clock'></i> Duration: 50 minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson" data-id="3">
+                                    <i class='bx bx-link'></i> Assign
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Available Lesson 4 -->
+                        <div class="lesson-item" data-id="4">
+                            <div class="lesson-info">
+                                <h3>Functions and Methods <span class="badge badge-available">Available</span></h3>
+                                <p>Understand function definition, parameters, return values and method calls.</p>
+                                <p><i class='bx bx-clock'></i> Duration: 55 minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson" data-id="4">
+                                    <i class='bx bx-link'></i> Assign
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Available Lesson 5 -->
+                        <div class="lesson-item" data-id="5">
+                            <div class="lesson-info">
+                                <h3>Arrays and Collections <span class="badge badge-available">Available</span></h3>
+                                <p>Explore array structures, lists, and other collection types.</p>
+                                <p><i class='bx bx-clock'></i> Duration: 60 minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson" data-id="5">
+                                    <i class='bx bx-link'></i> Assign
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div id="notification" class="notification">
+        <i class='bx bx-check-circle'></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <!-- Add/Edit Lesson Modal -->
+    <div id="lessonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"><i class='bx bx-book'></i> Add New Lesson</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="lessonForm">
+                    <input type="hidden" id="lessonId">
+                    <div class="form-group">
+                        <label for="lessonName">Lesson Name *</label>
+                        <input type="text" id="lessonName" name="lessonName" class="form-control" placeholder="Enter lesson title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonDescription">Description</label>
+                        <textarea id="lessonDescription" name="lessonDescription" class="form-control" rows="3" placeholder="Enter lesson description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonDuration">Duration (minutes) *</label>
+                        <input type="number" id="lessonDuration" name="lessonDuration" class="form-control" placeholder="e.g., 45" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonDate">Date *</label>
+                        <input type="date" id="lessonDate" name="lessonDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonTime">Start Time *</label>
+                        <input type="time" id="lessonTime" name="lessonTime" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" id="cancelModalBtn">Cancel</button>
+                <button class="btn btn-purple" id="saveLessonBtn">Save Lesson</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirm Unassign Modal -->
+    <div id="unassignModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class='bx bx-trash'></i> Confirm Unassign</h3>
+                <button class="close-modal" id="closeUnassignModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to unassign the lesson <strong id="lessonNameToUnassign">Introduction to Programming Concepts</strong> from this class?</p>
+                <p style="margin-top:10px; color:#856404;">This will remove the lesson from the class schedule but not delete it permanently.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" id="cancelUnassignBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmUnassignBtn">Unassign</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const lessonModal = document.getElementById('lessonModal');
+            const unassignModal = document.getElementById('unassignModal');
+            const addLessonBtn = document.getElementById('addLessonBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelModalBtn = document.getElementById('cancelModalBtn');
+            const saveLessonBtn = document.getElementById('saveLessonBtn');
+            const closeUnassignModalBtn = document.getElementById('closeUnassignModalBtn');
+            const cancelUnassignBtn = document.getElementById('cancelUnassignBtn');
+            const confirmUnassignBtn = document.getElementById('confirmUnassignBtn');
+            const lessonSelector = document.getElementById('lessonSelector');
+            const assignSelectedBtn = document.getElementById('assignSelectedBtn');
+            const assignedLessonsContainer = document.getElementById('assignedLessonsContainer');
+            const availableLessonsList = document.getElementById('availableLessonsList');
+            const noAssignedLessonsMsg = document.getElementById('noAssignedLessonsMsg');
+            const modalTitle = document.getElementById('modalTitle');
+            const lessonIdInput = document.getElementById('lessonId');
+            const lessonNameInput = document.getElementById('lessonName');
+            const lessonDescriptionInput = document.getElementById('lessonDescription');
+            const lessonDurationInput = document.getElementById('lessonDuration');
+            const lessonDateInput = document.getElementById('lessonDate');
+            const lessonTimeInput = document.getElementById('lessonTime');
+            const lessonNameToUnassign = document.getElementById('lessonNameToUnassign');
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+
+            // State
+            let currentLessonId = null;
+            const today = new Date().toISOString().split('T')[0];
+            lessonDateInput.value = today;
+
+            // Predefined Lesson Data
+            const lessonData = {
+                '1': {
+                    name: 'Introduction to Programming Concepts',
+                    description: 'Basic introduction to programming principles, history, and key concepts.',
+                    duration: 60
+                },
+                '2': {
+                    name: 'Variables and Data Types',
+                    description: 'Learn about different data types, variable declaration, and type conversion.',
+                    duration: 45
+                },
+                '3': {
+                    name: 'Control Structures',
+                    description: 'Study conditional statements, loops, and flow control in programming.',
+                    duration: 50
+                },
+                '4': {
+                    name: 'Functions and Methods',
+                    description: 'Understand function definition, parameters, return values and method calls.',
+                    duration: 55
+                },
+                '5': {
+                    name: 'Arrays and Collections',
+                    description: 'Explore array structures, lists, and other collection types.',
+                    duration: 60
+                },
+                '6': {
+                    name: 'Object-Oriented Programming Basics',
+                    description: 'Introduction to classes, objects, inheritance and polymorphism.',
+                    duration: 75
+                },
+                '7': {
+                    name: 'Error Handling',
+                    description: 'Learn about error handling techniques, exceptions and debugging.',
+                    duration: 45
+                }
+            };
+
+            // Initialize Page
+            checkAssignedLessonsStatus();
+            bindAvailableLessonEvents();
+            bindAssignedLessonEvents();
+
+            // Show notification
+            function showNotification(message, isSuccess = true) {
+                notificationMessage.textContent = message;
+                notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // ------------------------------
+            // Core Function: Assign Lesson
+            // ------------------------------
+            function assignLesson(lessonId) {
+                // Check if lesson is already assigned
+                if (document.querySelector(`#assignedLessonsContainer .lesson-item[data-id="${lessonId}"]`)) {
+                    showNotification('This lesson is already assigned to the class', false);
+                    return;
+                }
+
+                // Get lesson details
+                const lesson = lessonData[lessonId];
+                if (!lesson) return;
+
+                // Generate default schedule
+                const defaultDate = new Date();
+                defaultDate.setDate(defaultDate.getDate() + parseInt(lessonId));
+                const formattedDefaultDate = defaultDate.toISOString().split('T')[0];
+                const defaultTime = '10:00';
+
+                // Calculate end time and format dates/times
+                const startTime = new Date(`${formattedDefaultDate}T${defaultTime}`);
+                const endTime = new Date(startTime.getTime() + lesson.duration * 60000);
+                const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+                const formattedDate = new Date(formattedDefaultDate).toLocaleDateString('en-US', dateOptions);
+                const dayOfWeek = new Date(formattedDefaultDate).toLocaleDateString('en-US', { weekday: 'long' });
+                const formattedStartTime = startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                const formattedEndTime = endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+                // Create assigned lesson element
+                const assignedLesson = document.createElement('div');
+                assignedLesson.className = 'lesson-item';
+                assignedLesson.setAttribute('data-id', lessonId);
+                assignedLesson.innerHTML = `
+                    <div class="lesson-info">
+                        <h3>${lesson.name} <span class="badge badge-success">Assigned</span></h3>
+                        <p>${lesson.description}</p>
+                        <p><i class='bx bx-clock'></i> Duration: ${lesson.duration} minutes</p>
+                        <div class="schedule">
+                            <span><i class='bx bx-calendar'></i> ${formattedDate}</span>
+                            <span><i class='bx bx-calendar-week'></i> ${dayOfWeek}</span>
+                            <span><i class='bx bx-time-five'></i> ${formattedStartTime} - ${formattedEndTime}</span>
+                        </div>
+                    </div>
+                    <div class="lesson-actions">
+                        <button class="btn btn-sm btn-info edit-lesson"><i class='bx bx-edit'></i> Edit</button>
+                        <button class="btn btn-sm btn-danger unassign-lesson"><i class='bx bx-trash'></i> Unassign</button>
+                    </div>
+                `;
+
+                // Add to assigned lessons container and bind events
+                assignedLessonsContainer.appendChild(assignedLesson);
+                bindAssignedLessonEvents(assignedLesson);
+
+                // Update available lessons list - mark as assigned
+                const availableLesson = document.querySelector(`#availableLessonsList .lesson-item[data-id="${lessonId}"]`);
+                if (availableLesson) {
+                    const badge = availableLesson.querySelector('.badge');
+                    badge.className = 'badge badge-assigned';
+                    badge.textContent = 'Already Assigned';
+                    
+                    const assignBtn = availableLesson.querySelector('.assign-available-lesson');
+                    assignBtn.className = 'btn btn-sm btn-success assign-available-lesson assigned';
+                    assignBtn.innerHTML = '<i class=\'bx bx-check\'></i> Assigned';
+                    assignBtn.disabled = true;
+                }
+
+                // Update UI state and show success message
+                checkAssignedLessonsStatus();
+                showNotification(`Lesson "${lesson.name}" has been assigned successfully!`);
+            }
+
+            // ------------------------------
+            // Event: Assign from Dropdown
+            // ------------------------------
+            assignSelectedBtn.addEventListener('click', function() {
+                const selectedLessonId = lessonSelector.value;
+                if (!selectedLessonId) {
+                    showNotification('Please select a lesson first', false);
+                    return;
+                }
+                
+                // Add visual feedback to button click
+                this.classList.add('btn-success-hover');
+                setTimeout(() => {
+                    this.classList.remove('btn-success-hover');
+                    assignLesson(selectedLessonId);
+                }, 200);
+            });
+
+            // ------------------------------
+            // Event: Assign from Available List
+            // ------------------------------
+            function bindAvailableLessonEvents() {
+                document.querySelectorAll('.assign-available-lesson:not(.assigned)').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const lessonId = this.getAttribute('data-id');
+                        
+                        // Add visual feedback to button click
+                        this.classList.add('btn-success-hover');
+                        setTimeout(() => {
+                            this.classList.remove('btn-success-hover');
+                            assignLesson(lessonId);
+                        }, 200);
+                    });
+                });
+            }
+
+            // ------------------------------
+            // Event: Add/Edit Lesson Modal
+            // ------------------------------
+            addLessonBtn.addEventListener('click', function() {
+                // Add visual feedback to button click
+                this.classList.add('btn-purple-hover');
+                setTimeout(() => {
+                    this.classList.remove('btn-purple-hover');
+                    
+                    // Reset form for new lesson
+                    document.getElementById('lessonForm').reset();
+                    lessonIdInput.value = '';
+                    lessonDateInput.value = today;
+                    modalTitle.innerHTML = '<i class="bx bx-book"></i> Add New Lesson';
+                    currentLessonId = null;
+                    lessonModal.classList.add('show');
+                }, 200);
+            });
+
+            // Edit existing assigned lesson
+            function bindAssignedLessonEvents(targetElement = null) {
+                const elements = targetElement ? [targetElement] : document.querySelectorAll('#assignedLessonsContainer .lesson-item');
+                
+                elements.forEach(item => {
+                    // Edit lesson
+                    const editBtn = item.querySelector('.edit-lesson');
+                    editBtn.addEventListener('click', function() {
+                        // Add visual feedback to button click
+                        this.classList.add('btn-info-hover');
+                        setTimeout(() => {
+                            this.classList.remove('btn-info-hover');
+                            
+                            currentLessonId = item.getAttribute('data-id');
+                            const lesson = lessonData[currentLessonId] || {};
+                            
+                            // Populate form with lesson data
+                            lessonIdInput.value = currentLessonId;
+                            lessonNameInput.value = lesson.name || '';
+                            lessonDescriptionInput.value = lesson.description || '';
+                            lessonDurationInput.value = lesson.duration || '';
+                            
+                            // Update modal title
+                            modalTitle.innerHTML = '<i class="bx bx-edit"></i> Edit Lesson';
+                            lessonModal.classList.add('show');
+                        }, 200);
+                    });
+
+                    // Unassign lesson (open confirmation modal)
+                    const unassignBtn = item.querySelector('.unassign-lesson');
+                    unassignBtn.addEventListener('click', function() {
+                        // Add visual feedback to button click
+                        this.classList.add('btn-danger-hover');
+                        setTimeout(() => {
+                            this.classList.remove('btn-danger-hover');
+                            
+                            currentLessonId = item.getAttribute('data-id');
+                            const lessonName = item.querySelector('h3').textContent.trim().replace(' Assigned', '');
+                            lessonNameToUnassign.textContent = lessonName;
+                            unassignModal.classList.add('show');
+                        }, 200);
+                    });
+                });
+            }
+
+            // ------------------------------
+            // Event: Save Lesson (Add/Edit)
+            // ------------------------------
+            saveLessonBtn.addEventListener('click', function() {
+                // Validate required fields
+                if (!lessonNameInput.value || !lessonDurationInput.value || !lessonDateInput.value || !lessonTimeInput.value) {
+                    showNotification('Please fill in all required fields', false);
+                    return;
+                }
+
+                // Add visual feedback to button click
+                this.classList.add('btn-purple-hover');
+                setTimeout(() => {
+                    this.classList.remove('btn-purple-hover');
+                    
+                    const lessonId = lessonIdInput.value || Date.now().toString(); // Use timestamp for new lessons
+                    const updatedLesson = {
+                        name: lessonNameInput.value,
+                        description: lessonDescriptionInput.value || 'No description available.',
+                        duration: parseInt(lessonDurationInput.value)
+                    };
+
+                    // Update lesson data (in-memory)
+                    lessonData[lessonId] = updatedLesson;
+
+                    // Calculate formatted schedule for display
+                    const startTime = new Date(`${lessonDateInput.value}T${lessonTimeInput.value}`);
+                    const endTime = new Date(startTime.getTime() + updatedLesson.duration * 60000);
+                    const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+                    const formattedDate = new Date(lessonDateInput.value).toLocaleDateString('en-US', dateOptions);
+                    const dayOfWeek = new Date(lessonDateInput.value).toLocaleDateString('en-US', { weekday: 'long' });
+                    const formattedStartTime = startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                    const formattedEndTime = endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+                    if (currentLessonId) {
+                        // Edit existing assigned lesson
+                        const existingLesson = document.querySelector(`#assignedLessonsContainer .lesson-item[data-id="${currentLessonId}"]`);
+                        if (existingLesson) {
+                            const lessonInfo = existingLesson.querySelector('.lesson-info');
+                            lessonInfo.querySelector('h3').innerHTML = `${updatedLesson.name} <span class="badge badge-success">Assigned</span>`;
+                            lessonInfo.querySelector('p').textContent = updatedLesson.description;
+                            lessonInfo.querySelector('.bx-clock').parentElement.textContent = `Duration: ${updatedLesson.duration} minutes`;
+                            lessonInfo.querySelector('.schedule').innerHTML = `
+                                <span><i class='bx bx-calendar'></i> ${formattedDate}</span>
+                                <span><i class='bx bx-calendar-week'></i> ${dayOfWeek}</span>
+                                <span><i class='bx bx-time-five'></i> ${formattedStartTime} - ${formattedEndTime}</span>
+                            `;
+                        }
+                        showNotification('Lesson updated successfully!');
+                    } else {
+                        // Add new lesson to available list
+                        const newAvailableLesson = document.createElement('div');
+                        newAvailableLesson.className = 'lesson-item';
+                        newAvailableLesson.setAttribute('data-id', lessonId);
+                        newAvailableLesson.innerHTML = `
+                            <div class="lesson-info">
+                                <h3>${updatedLesson.name} <span class="badge badge-available">Available</span></h3>
+                                <p>${updatedLesson.description}</p>
+                                <p><i class='bx bx-clock'></i> Duration: ${updatedLesson.duration} minutes</p>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-success assign-available-lesson" data-id="${lessonId}">
+                                    <i class='bx bx-link'></i> Assign
+                                </button>
+                            </div>
+                        `;
+                        availableLessonsList.appendChild(newAvailableLesson);
+                        bindAvailableLessonEvents();
+
+                        // Add new option to dropdown
+                        const newOption = document.createElement('option');
+                        newOption.value = lessonId;
+                        newOption.textContent = updatedLesson.name;
+                        lessonSelector.appendChild(newOption);
+
+                        showNotification('New lesson added successfully!');
+                    }
+
+                    // Close modal
+                    lessonModal.classList.remove('show');
+                }, 200);
+            });
+
+            // ------------------------------
+            // Event: Confirm Unassign
+            // ------------------------------
+            confirmUnassignBtn.addEventListener('click', function() {
+                // Add visual feedback to button click
+                this.classList.add('btn-danger-hover');
+                setTimeout(() => {
+                    this.classList.remove('btn-danger-hover');
+                    
+                    if (currentLessonId) {
+                        const lessonToRemove = document.querySelector(`#assignedLessonsContainer .lesson-item[data-id="${currentLessonId}"]`);
+                        if (lessonToRemove) {
+                            const lessonName = lessonToRemove.querySelector('h3').textContent.trim().replace(' Assigned', '');
+                            lessonToRemove.remove();
+                            
+                            // Update available lessons list - mark as available
+                            const availableLesson = document.querySelector(`#availableLessonsList .lesson-item[data-id="${currentLessonId}"]`);
+                            if (availableLesson) {
+                                const badge = availableLesson.querySelector('.badge');
+                                badge.className = 'badge badge-available';
+                                badge.textContent = 'Available';
+                                
+                                const assignBtn = availableLesson.querySelector('.assign-available-lesson');
+                                assignBtn.className = 'btn btn-sm btn-success assign-available-lesson';
+                                assignBtn.innerHTML = '<i class=\'bx bx-link\'></i> Assign';
+                                assignBtn.disabled = false;
+                                bindAvailableLessonEvents();
+                            }
+                            
+                            showNotification(`Lesson "${lessonName}" has been unassigned successfully!`);
+                        }
+                    }
+                    unassignModal.classList.remove('show');
+                    checkAssignedLessonsStatus();
+                    currentLessonId = null;
+                }, 200);
+            });
+
+            // ------------------------------
+            // Helper: Check Assigned Lessons Status
+            // ------------------------------
+            function checkAssignedLessonsStatus() {
+                const assignedLessons = document.querySelectorAll('#assignedLessonsContainer .lesson-item');
+                if (assignedLessons.length === 0) {
+                    noAssignedLessonsMsg.style.display = 'block';
+                    assignedLessonsContainer.style.display = 'none';
+                } else {
+                    noAssignedLessonsMsg.style.display = 'none';
+                    assignedLessonsContainer.style.display = 'block';
+                }
+            }
+
+            // ------------------------------
+            // Event: Close Modals
+            // ------------------------------
+            closeModalBtn.addEventListener('click', () => lessonModal.classList.remove('show'));
+            cancelModalBtn.addEventListener('click', () => lessonModal.classList.remove('show'));
+            closeUnassignModalBtn.addEventListener('click', () => unassignModal.classList.remove('show'));
+            cancelUnassignBtn.addEventListener('click', () => unassignModal.classList.remove('show'));
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === lessonModal) {
+                    lessonModal.classList.remove('show');
+                }
+                if (event.target === unassignModal) {
+                    unassignModal.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
