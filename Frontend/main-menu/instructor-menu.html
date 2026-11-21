@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href="style-menu.css">
+</head>
+
+<body>
+    <nav class ="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <h2 class="logo"><i class='bx  bx-devices'  ></i></h2>
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Hydra Explorer</span>
+                    <span class="profession">Instructor Page</span>
+                </div>
+            </div>
+
+            <i class='bx bx-caret-left bx-flip-horizontal'  onclick="toggleSidebar()"></i> 
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="{% url 'instructor_courses' %}">
+                            <i class='bx  bx-book-content icon'  ></i>  
+                            <span class="text nav-text">Courses</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-calendar-week icon'  ></i> 
+                            <span class="text nav-text">Classrooms</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-user icon'  ></i>  
+                            <span class="text nav-text">Students</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx  bx-bar-chart icon'  ></i> 
+                            <span class="text nav-text">Report</span>
+                        </a>
+                    </li>
+                </ul>
+            </div> 
+            <div class="bottom-content">
+                <li class="">
+                    <a href="#">
+                        <<i class='bx  bx-arrow-out-left-square-half icon'  ></i> 
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div id ="dashboard-main">
+            <div class="white-cover">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <p class="welcome message">Welcome Instructor!</p>
+                <div class="admin-badge">Instructor Access</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('close');
+        }
+    </script>
+
+</body>
+</html>

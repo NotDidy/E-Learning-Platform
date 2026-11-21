@@ -17,12 +17,25 @@ class Course(models.Model):
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="courses"
     )
+
+    #new field
+    is_draft = models.BooleanField(
+        default=True,
+        help_text="If true, the course is a draft and not visible to students"
+    )
+    published_at = models.DateTimeField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
         db_table = "course"
+
+    def publish(self, when):
+            self.is_draft = False
+            self.published_at = when
+            self.save(update_fields=["is_draft", "published_at"])
 
     def __str__(self) -> str:
         return self.title
