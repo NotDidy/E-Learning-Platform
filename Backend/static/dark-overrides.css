@@ -667,9 +667,13 @@ body.dark .detail-label {
 
 body.dark .detail-value,
 body.dark .course-code,
-body.dark .course-name,
-body.dark .course-status {
+body.dark .course-name {
     color: rgba(234,236,255,0.85);
+}
+
+body.dark .course-status {
+    background: #eaf7ea !important;
+    color: #2c8031 !important;
 }
 
 body.dark .course-item {
@@ -691,6 +695,14 @@ body.dark .status-info,
 body.dark .status-item,
 body.dark .status-select {
     color: rgba(214,218,255,0.82);
+}
+
+body.dark select.status-select,
+body.dark .status-select,
+body.dark option {
+    background-color: #2b2d3c !important;
+    color: #eaeaff !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
 }
 
 body.dark .status-item i {
@@ -717,6 +729,12 @@ body.dark {
   font-family: "Poppins", sans-serif;
 }
 
+body.dark .report-header-card{ 
+    background: rgba(43,45,60,0.95);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    border-bottom: 3px solid rgba(105,92,254,0.5);
+}
+
 body.dark .header {
   background: rgba(43,45,60,0.95);
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
@@ -738,7 +756,7 @@ body.dark .page-title h1 {
 
 body.dark .progress-overview {
   gap: 20px;
-  padding: 24px 32px;
+  padding: 24px 0;
   flex-wrap: wrap;
 }
 
@@ -755,6 +773,26 @@ body.dark .progress-card h3 {
 body.dark .progress-card .number,
 body.dark .progress-card .percentage {
   color: #695CFE;
+}
+
+body.dark .report-view-toolbar {
+  padding: 0 0 10px;
+}
+
+body.dark .report-view-toggle {
+  background: rgba(43, 45, 60, 0.85);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark .toggle-btn {
+  color: rgba(234, 236, 255, 0.78);
+}
+
+body.dark .toggle-btn.active {
+  background: linear-gradient(135deg, rgba(105, 92, 254, 0.9) 0%, rgba(240, 123, 36, 0.9) 100%);
+  color: #f4f6ff;
+  box-shadow: 0 8px 20px rgba(105, 92, 254, 0.35);
 }
 
 body.dark .card {
@@ -799,6 +837,12 @@ body.dark .student-avatar {
   color: #f4f6ff;
 }
 
+body.dark .report-view-section .student-avatar {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f4f6ff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
 body.dark .progress-bar {
   background: rgba(255,255,255,0.1);
 }
@@ -809,6 +853,41 @@ body.dark .progress-fill {
 
 body.dark .progress-label {
   color: rgba(214,218,255,0.82);
+}
+
+body.dark .students-flat-table {
+  background: rgba(43,45,60,0.85);
+  color: rgba(214,218,255,0.82);
+}
+
+body.dark .students-flat-table th {
+  background: rgba(105,92,254,0.2);
+  color: #e6e9ff;
+}
+
+body.dark .students-flat-table td {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .students-flat-table tr:hover td {
+  background: rgba(105,92,254,0.18);
+}
+
+body.dark .courses-chip-list {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 6px;
+  gap: 8px;
+}
+
+body.dark .course-chip {
+  background: rgba(105,92,254,0.28);
+  color: #e6e9ff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+body.dark .muted {
+  color: rgba(214,218,255,0.6);
 }
 
 body.dark .view-btn {
@@ -839,6 +918,12 @@ body.dark .header {
     border-radius: 12px;
 }
 
+body.dark .report-header-card {
+    background: rgba(43,45,60,0.95) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35) !important;
+    border-bottom: 3px solid rgba(105,92,254,0.5) !important;
+}
+
 body.dark .logo {
     color: #695CFE;
 }
@@ -859,8 +944,8 @@ body.dark .card {
     box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
-body.dark .card-header h2 {
-    color: #695CFE;
+body.dark .card-header {
+    background: rgba(43,45,60,0.95) !important;
 }
 
 body.dark .back-btn {
@@ -1104,4 +1189,77 @@ body.dark .last-updated {
 
 body.dark .last-updated i {
     color: #695CFE;
+}
+
+/* ================================
+   STUDENTS LIST (Dark Mode)
+==================================*/
+
+body.dark .students-header {
+  background: #2b2d3c;
+  color: rgba(234, 236, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .students-header::before {
+  background: rgba(105, 92, 254, 0.35);
+}
+
+body.dark .students-title {
+  color: rgba(234, 236, 255, 0.88);
+}
+
+body.dark .students-icon {
+  background: rgba(105, 92, 254, 0.6);
+  color: #f4f6ff;
+}
+
+/* ====== Table ====== */
+body.dark .students-container {
+  background: #2b2d3c;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .students-table thead {
+  background: rgba(105, 92, 254, 0.75);
+  color: #fff;
+}
+
+body.dark .students-table th,
+body.dark .students-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(234, 236, 255, 0.85);
+}
+
+body.dark .students-table tr:hover {
+  background: rgba(105, 92, 254, 0.18);
+}
+
+/* ====== No Data Text ====== */
+body.dark .no-data {
+  color: rgba(214, 218, 255, 0.7);
+}
+
+/* ====== Buttons ====== */
+body.dark .view-btn {
+  background: rgba(105, 92, 254, 0.4);
+  color: #e6e9ff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .view-btn:hover {
+  background: rgba(105, 92, 254, 0.55);
+  box-shadow: 0 6px 20px rgba(105, 92, 254, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ====== Responsive Fix ====== */
+@media (max-width: 768px) {
+  body.dark .students-container {
+    background: #2b2d3c;
+  }
+
+  body.dark .students-title {
+    color: rgba(234, 236, 255, 0.9);
+  }
 }

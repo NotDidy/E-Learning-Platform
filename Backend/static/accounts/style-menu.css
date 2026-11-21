@@ -377,7 +377,8 @@ body.dark .mode-text::before {
     display: none;
 }
 
-.toggle-switch .switch {
+.toggle-switch .switch,
+.toggle-switch .dm-switch {
     position: relative;
     height: 22px;
     width: 44px;
@@ -386,11 +387,13 @@ body.dark .mode-text::before {
     transition: var(--tran-03);
 }
 
-body.dark .toggle-switch .switch {
+body.dark .toggle-switch .switch,
+body.dark .toggle-switch .dm-switch {
     background: var(--accent-gradient);
 }
 
-.switch::before {
+.switch::before,
+.dm-switch::before {
     content: '';
     position: absolute;
     height: 15px;
@@ -403,8 +406,16 @@ body.dark .toggle-switch .switch {
     transition: var(--tran-03);
 }
 
-body.dark .switch::before {
+body.dark .switch::before,
+body.dark .dm-switch::before {
     left: 24px;
+    background: #fff;
+}
+
+.toggle-switch.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .white-cover {
@@ -527,7 +538,7 @@ body.dark .switch::before {
 
 .card-description {
     font-size: 16px;
-    color: var(--text-color);
+    color: black;
     margin-bottom: 20px;
     line-height: 1.6;
 }

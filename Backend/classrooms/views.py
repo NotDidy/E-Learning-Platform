@@ -47,17 +47,25 @@ def classrooms(request):
         classrooms_qs = base_queryset.filter(
             Q(course__instructor=request.user) | Q(supervisor=request.user)
         ).distinct()
-        template = "classrooms/classroom_preview_instructors.html"  
+        template = "classrooms/classroom_preview_instructors.html"
+        editable_ids = set(
+            Classroom.objects.filter(course__instructor=request.user).values_list("id", flat=True)
+        )
+        context_extra = {"editable_classrooms": editable_ids}
     elif role_is_student:
         classrooms_qs = base_queryset.filter(
             course__enrollments__student=request.user
         ).distinct()
-        template = "classrooms/classroom_preview_students.html"    
+        template = "classrooms/classroom_preview_students.html"
+        context_extra = {}
     else:
         classrooms_qs = base_queryset
-        template = "classrooms/classroom_preview_students.html"   
+        template = "classrooms/classroom_preview_students.html"
+        context_extra = {}
 
-    return render(request, template, {"classrooms": classrooms_qs})
+    context = {"classrooms": classrooms_qs}
+    context.update(context_extra)
+    return render(request, template, context)
 
 
 @login_required
