@@ -47,6 +47,13 @@ function setTheme(theme) {
             root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #b08457 0%, #d1a054 100%)');
             root.style.setProperty('--accent-icon-bg', '#b08457');
             break;
+        
+        case 'forest':
+            root.style.setProperty('--body-color', 'linear-gradient(135deg, #2c7744 0%, #5a9458 100%)');
+            root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #43a047 0%, #66bb6a 100%)');
+            root.style.setProperty('--accent-icon-bg', '#43a047');
+            break;
+
     }
 
     localStorage.setItem('selectedTheme', theme);
